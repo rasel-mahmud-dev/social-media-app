@@ -1,0 +1,6 @@
+
+export const ACTION_TYPES = {
+    LOGIN: "LOGIN",
+    FETCH_BIODATA: "FETCH_BIODATA",
+    LOGOUT: "LOGOUT"
+}

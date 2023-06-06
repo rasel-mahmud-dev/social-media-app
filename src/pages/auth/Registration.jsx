@@ -1,98 +1,109 @@
-import  React from "react";
+import React, {useReducer} from "react";
 import {Link} from "react-router-dom";
-import api from "../../../../../apis";
+import {loginOrRegistrationAction} from "src/store/actions/authAction.js";
+import {useDispatch} from "react-redux";
+
 
 const Registration = () => {
 
-    const [userData, setUserData] = React.useState({
-        firstName: "",
-        lastName: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
+
+    const dispatch = useDispatch()
+
+    const [state, setState] = useReducer((prev, action)=>({...prev, ...action}), {
+        isLoading: false,
+        errorMessage: ""
     })
 
-
-    function handleChange(e){
-        setUserData({
-            ...userData,
-            [e.target.name]: e.target.value.trim()
-        })
-    }
     function handleSubmit(e){
         e.preventDefault()
-        let complete = true;
-        for (const userDataKey in userData) {
-            if(!userData[userDataKey]){
-                complete = false
+
+        setState({errorMessage: ""})
+
+        const firstName = e.target.firstName.value
+        const lastName = e.target.lastName.value
+        const email = e.target.email.value
+        const password = e.target.password.value
+        const confirmPassword = e.target.confirmPassword.value
+
+        if(!email) return setState({errorMessage: "Email Requried"})
+        if(!password) return setState({errorMessage: "Password Requried"})
+        if(!confirmPassword) return setState({errorMessage: "confirmPassword Requried"})
+        if(!firstName) return setState({errorMessage: "firstName Requried"})
+        if(!lastName) return setState({errorMessage: "lastName Requried"})
+
+        if(password !== confirmPassword) return setState({errorMessage: "Password Does'nt match "})
+
+        dispatch(loginOrRegistrationAction({
+            type: "registration",
+            data: {
+                firstName,
+                lastName,
+                email,
+                password,
             }
-        }
-        if(complete){
-            if(userData.password !== userData.confirmPassword){
-                alert("password not matched")
-                return;
-            }
-            api.post("/api/users", {
-                first_name: userData.firstName,
-                last_name: userData.lastName,
-                email: userData.email,
-                password: userData.password,
-            }).then(data=>{
-                console.log(data)
-            })
-        }
+        }))
+
+        // api.post("/api/users", {
+        //     first_name: userData.firstName,
+        //     last_name: userData.lastName,
+        //     email: userData.email,
+        //     password: userData.password,
+        // }).then(data=>{
+        //     console.log(data)
+        // })
     }
 
     return (
         <div>
-            <div className="max-w-screen-2xl mx-auto">
+            <div className="py-20">
+                <div className="max-w-lg mx-auto card">
+                    <h1 className="text-2xl font-semibold text-center">Create a new account.</h1>
 
-                <div className="bg-white px-6 py-4 rounded-5 max-w-xl mx-auto">
-                    <h1 className="text-2xl font-400 text-primary text-center">Create a new account.</h1>
-                    <form onSubmit={handleSubmit} className="py-5">
+                    {state.errorMessage && (
+                        <div
+                            className="p-4 mt-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                            role="alert">
+                            <span className="font-medium">{state.errorMessage}</span>
+                        </div>
+                    )}
 
-                        <div className="flex mb-2 ">
-                            <label className="font-medium min-w-100px block text-sm font-400 text-gray-dark-4" htmlFor="">First Name</label>
+
+                    <form onSubmit={handleSubmit} className="pb-5">
+
+                        <div className=" mb-2 ">
+                            <label className="font-medium block text-sm font-400 text-gray-dark-4" htmlFor="">First Name</label>
                             <input
-                                value={userData.firstName}
-                                onChange={handleChange}
                                 placeholder="Enter Your First Name."
                                 className="input-elem" type="text" name="firstName" />
                         </div>
 
-                        <div className="flex mb-2 ">
-                            <label className="font-medium min-w-100px block text-sm font-400 text-gray-dark-4" htmlFor="">Last Name</label>
+                        <div className=" mb-2 ">
+                            <label className="font-medium block text-sm font-400 text-gray-dark-4" htmlFor="">Last Name</label>
                             <input
-                                value={userData.lastName}
-                                onChange={handleChange}
                                 placeholder="Enter Your Last Name."
                                 className="input-elem " type="text" name="lastName" />
                         </div>
 
-                        <div className="flex mb-2 ">
-                            <label className="font-medium min-w-100px block text-sm font-400 text-gray-dark-4" htmlFor="">Email</label>
+                        <div className=" mb-2 ">
+                            <label className="font-medium  block text-sm font-400 text-gray-dark-4" htmlFor="">Email</label>
                             <input
-                                value={userData.email}
-                                onChange={handleChange}
                                 placeholder="Enter Your Email."
                                 className="input-elem "
                                 type="email" name="email" />
                         </div>
-                        <div  className="flex mb-2 ">
-                            <label className="font-medium min-w-100px block text-sm font-400 text-gray-dark-4 " htmlFor="">Password</label>
+                        <div  className=" mb-2 ">
+                            <label className="font-medium  block text-sm font-400 text-gray-dark-4 " htmlFor="">Password</label>
                             <input
-                                value={userData.password}
-                                onChange={handleChange}
+
                                 placeholder="Enter Your Password."
                                 className="input-elem "
                                 type="text" name="password"
                             />
                         </div>
-                        <div  className="flex mb-2 ">
-                            <label className="font-medium min-w-100px block text-sm font-400 text-gray-dark-4" htmlFor="confirmPassword">Confirm Password</label>
+                        <div  className=" mb-2 ">
+                            <label className="font-medium  block text-sm font-400 text-gray-dark-4" htmlFor="confirmPassword">Confirm Password</label>
                             <input
-                                value={userData.confirmPassword}
-                                onChange={handleChange}
+
                                 placeholder="Enter Your Password."
                                 className="input-elem "
                                 type="text" name="confirmPassword"
@@ -100,12 +111,12 @@ const Registration = () => {
                         </div>
                         <div className="mt-2 mb-3">
                             <h4 className="text-sm font-400">Already have a account?
-                                <span className="cursor-pointer text-blue-400 p-px ml-0.5 "><Link to="/auth/login">Click</Link></span>
+                                <span className="cursor-pointer text-blue-400 p-px ml-0.5 "><Link to="/login">Click</Link></span>
                                 Login Page </h4>
 
                         </div>
                         <div>
-                            <button className="bg-primary px-4 py-1.5 rounded-2 text-sm text-white cursor-pointer">Registration</button>
+                            <button className="btn btn-primary  text-sm  cursor-pointer">Registration</button>
                         </div>
                     </form>
                 </div>

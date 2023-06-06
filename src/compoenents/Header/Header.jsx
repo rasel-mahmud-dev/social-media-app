@@ -6,8 +6,15 @@ import {BiGlobe, BiHome, BiInfoSquare, BiMessage, BiNotification, BiUser, BiVide
 import {GiBigGear} from "react-icons/gi";
 import MenuDropdown from "../Dropdown/MenuDropdown.jsx";
 import Avatar from "../Avatar/Avatar.jsx";
+import {useSelector} from "react-redux";
+import {FaSignInAlt} from "react-icons/fa";
+import {Link} from "react-router-dom";
 
 const Header = () => {
+
+
+    const auth = useSelector(state=>state.authState)
+    console.log(auth)
     return (
         <>
         <div className="header">
@@ -47,14 +54,20 @@ const Header = () => {
                             <li className="list-none icon-box bg-transparent"><BiMessage/></li>
                             <li className="list-none icon-box bg-transparent"><GiBigGear/></li>
 
-                            <MenuDropdown render={()=>(
+                            {auth ? <MenuDropdown render={()=>(
                                 <div>
                                     sdfsdf
                                     sdf
                                 </div>
                             )}>
-                                <Avatar className="!h-9 !w-9" imgClass="!h-9 !w-9 !text-xs" username={"Rasel Mahmhd"}/>
-                            </MenuDropdown>
+                                <Avatar className="!h-9 !w-9" src={auth?.avatar} imgClass="!h-9 !w-9 !text-xs" username={auth.fullName}/>
+                            </MenuDropdown> : (
+                                <li>
+                                    <Link to="/login">
+                                        <FaSignInAlt />
+                                    </Link>
+                                </li>
+                            ) }
                     </div>
                     </div>
                 </div>

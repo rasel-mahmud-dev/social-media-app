@@ -1,79 +1,78 @@
-import  React, {useEffect} from "react";
+import React, {useReducer} from "react";
 import {Link} from "react-router-dom";
-import api from "src/apis";
-import { useDispatch } from "react-redux"
 
-const Login = (props) => {
+import {useDispatch} from "react-redux"
+import {loginOrRegistrationAction} from "src/store/actions/authAction.js";
+
+const Login = () => {
 
     const dispatch = useDispatch()
 
-    const [userData, setUserData] = React.useState({
-        email: "",
-        password: "",
+
+    const [state, setState] = useReducer((prev, action) => ({...prev, ...action}), {
+        isLoading: false,
+        errorMessage: ""
     })
 
-
-    function handleChange(e){
-        setUserData({
-            ...userData,
-            [e.target.name]: e.target.value.trim()
-        })
-    }
-    function handleSubmit(e){
+    function handleSubmit(e) {
         e.preventDefault()
-        let complete = true;
-        for (const userDataKey in userData) {
-            if(!userData[userDataKey]){
-                complete = false
+        setState({errorMessage: ""})
+
+        const email = e.target.email.value
+        const password = e.target.password.value
+
+        if (!email) return setState({errorMessage: "Email Requried"})
+        if (!password) return setState({errorMessage: "Password Requried"})
+
+
+        dispatch(loginOrRegistrationAction({
+            type: "login",
+            data: {
+                email, password,
             }
-        }
-        if(complete){
-            api.post("/api/login", {
-                email: userData.email,
-                password: userData.password,
-            }).then(data=>{
-                dispatch({
-                    type: "LOGIN",
-                    payload: {
-                        ...data.data
-                    }
-                })
-            })
-        } else {
-            alert("please full all field")
-        }
+        }))
+
+
     }
 
     return (
-        <div>
-            <div className="max-w-screen-2xl mx-auto">
-                <div className="bg-white px-6 py-4 rounded-5 max-w-xl mx-auto">
-                    <h1 className="text-2xl font-400 text-gray-light-7 text-center">Login in your Account.</h1>
-                    <form onSubmit={handleSubmit} className="py-10">
-                        <div className=" flex mb-2">
-                            <label className="font-medium min-w-100px block text-sm font-400 text-gray-dark-4" htmlFor="">Email</label>
-                            <input
-                                onChange={handleChange}
-                                value={userData.email}
-                                placeholder="Enter Your Email."
-                                className="input-elem" type="text" name="email" />
+        <div className="py-20">
+            <div className="max-w-lg mx-auto card">
+                <div className="">
+                    <h1 className="text-2xl font-semibold text-center">Login in your Account.</h1>
+
+                    {state.errorMessage && (
+                        <div
+                            className="p-4 mt-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+                            role="alert">
+                            <span className="font-medium">{state.errorMessage}</span>
                         </div>
-                        <div className="mb-2 flex">
-                            <label className="font-medium min-w-100px block text-sm font-400 text-gray-dark-4 " htmlFor="">Password</label>
+                    )}
+
+                    <form onSubmit={handleSubmit} className="pb-5">
+                        <div className="mb-4">
+                            <label className="font-medium  block w-full text-sm font-400 text-gray-dark-4"
+                                   htmlFor="">Email</label>
                             <input
-                                onChange={handleChange}
-                                value={userData.password}
+                                placeholder="Enter Your Email."
+                                className="input-elem" type="text" name="email"/>
+                        </div>
+                        <div className="mb-2 ">
+                            <label className="font-medium  block text-sm font-400 text-gray-dark-4 "
+                                   htmlFor="">Password</label>
+                            <input
                                 placeholder="Enter Your Password."
-                                className="w-full input-elem"
+                                className=" input-elem"
                                 type="text" name="password"
                             />
                         </div>
-                        <div className="mt-2 mb-3">
+                        <div className="mb-6">
                             <h4 className="text-sm font-400">Not have a account?
-                                <span className="cursor-pointer text-blue-400 p-px ml-0.5 "><Link to="/auth/registration">Create a account new account</Link></span></h4>
+                                <span className="cursor-pointer text-blue-400 p-px ml-0.5 "><Link to="/registration">Create a account new account</Link></span>
+                            </h4>
                         </div>
                         <div>
-                            <button className="btn">Login</button>
+                            <button className="btn btn-primary ">Login</button>
                         </div>
                     </form>
                 </div>
@@ -82,5 +81,6 @@ const Login = (props) => {
         </div>
     );
 };
+
 
 export default Login;

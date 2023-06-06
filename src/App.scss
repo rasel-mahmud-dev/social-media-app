@@ -44,14 +44,14 @@
 .btn{
   outline: none;
   border: none;
-  padding: 6px 20px;
+  padding: 8px 20px;
   border-radius: 100px;
   font-size: 14px;
   background: #ececec;
 }
 .btn-primary{
-  color: white;
-  background-image: linear-gradient(to right, #4144ff, #4570d3);
+  color: white !important;
+  background-image: linear-gradient(to right, #4144ff, #4570d3) !important;
 }
 
 .online {
@@ -79,5 +79,24 @@
 @keyframes zoomInOut {
   0%{ width: 10px }
   100%{ border: 20px; }
+
+}
+
+
+.min-w-100px{
+  min-width: 100px;
+}
+
+.input-elem{
+  outline: none;
+
+  &[type='text'], &[type='email'], &[type='url'], &[type='password'], &[type='number'], &[type='date'], &[type='datetime-local'], &[type='month'], &[type='search'], &[type='tel'], &[type='time'], &[type='week'], &[multiple], &textarea, &select {
+    background: #ffffff;
+    width: 100%;
+    border-radius: 7px;
+    border: 1px solid var(--primary-400);
+    padding: 6px 10px;
+
+  }
 
 }

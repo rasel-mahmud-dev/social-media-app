@@ -14,7 +14,7 @@ const PendingFriendRequestCard = () => {
 
 
     return (
-        <div className="card w-[250px]">
+        <div className="card">
 
             <div className="card-meta">
                 <h4>Friend Request</h4>
