@@ -1,0 +1,8 @@
+
+.sidebar{
+  background: white;
+  min-width: 300px;
+  height: calc(100vh - var(--header-height));
+  box-shadow: var(--card-shadow);
+  padding: 16px;
+}
