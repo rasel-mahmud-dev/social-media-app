@@ -1,64 +1,82 @@
-import React from 'react';
+import  React, {useEffect} from "react";
+import {Link} from "react-router-dom";
+import api from "src/apis";
+import { useDispatch } from "react-redux"
 
-const Login = () => {
+const Login = (props) => {
+
+    const dispatch = useDispatch()
+
+    const [userData, setUserData] = React.useState({
+        email: "",
+        password: "",
+    })
+
+
+    function handleChange(e){
+        setUserData({
+            ...userData,
+            [e.target.name]: e.target.value.trim()
+        })
+    }
+    function handleSubmit(e){
+        e.preventDefault()
+        let complete = true;
+        for (const userDataKey in userData) {
+            if(!userData[userDataKey]){
+                complete = false
+            }
+        }
+        if(complete){
+            api.post("/api/login", {
+                email: userData.email,
+                password: userData.password,
+            }).then(data=>{
+                dispatch({
+                    type: "LOGIN",
+                    payload: {
+                        ...data.data
+                    }
+                })
+            })
+        } else {
+            alert("please full all field")
+        }
+    }
+
     return (
         <div>
-            <div className="bg-white shadow-md rounded px-8 py-6 w-full max-w-md">
-                <h2 className="text-2xl font-bold mb-6">Log In</h2>
-                <form>
-                    <div className="mb-6">
-                        <label
-                            htmlFor="email"
-                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                        >
-                            Your email
-                        </label>
-                        <input
-                            type="email"
-                            id="email"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            placeholder="name@flowbite.com"
-                            required=""
-                        />
-                    </div>
-                    <div className="mb-6">
-                        <label
-                            htmlFor="password"
-                            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                        >
-                            Your password
-                        </label>
-                        <input
-                            type="password"
-                            id="password"
-                            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            required=""
-                        />
-                    </div>
-                    <div className="flex items-start mb-6">
-                        <div className="flex items-center h-5">
+            <div className="max-w-screen-2xl mx-auto">
+                <div className="bg-white px-6 py-4 rounded-5 max-w-xl mx-auto">
+                    <h1 className="text-2xl font-400 text-gray-light-7 text-center">Login in your Account.</h1>
+                    <form onSubmit={handleSubmit} className="py-10">
+                        <div className=" flex mb-2">
+                            <label className="font-medium min-w-100px block text-sm font-400 text-gray-dark-4" htmlFor="">Email</label>
                             <input
-                                id="remember"
-                                type="checkbox"
-                                defaultValue=""
-                                className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
-                                required=""
+                                onChange={handleChange}
+                                value={userData.email}
+                                placeholder="Enter Your Email."
+                                className="input-elem" type="text" name="email" />
+                        </div>
+                        <div className="mb-2 flex">
+                            <label className="font-medium min-w-100px block text-sm font-400 text-gray-dark-4 " htmlFor="">Password</label>
+                            <input
+                                onChange={handleChange}
+                                value={userData.password}
+                                placeholder="Enter Your Password."
+                                className="w-full input-elem"
+                                type="text" name="password"
                             />
                         </div>
-                        <label
-                            htmlFor="remember"
-                            className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                        >
-                            Remember me asd
-                        </label>
-                    </div>
-                    <button
-                        type="submit"
-                        className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    >
-                        Submit
-                    </button>
-                </form>
+                        <div className="mt-2 mb-3">
+                            <h4 className="text-sm font-400">Not have a account?
+                                <span className="cursor-pointer text-blue-400 p-px ml-0.5 "><Link to="/auth/registration">Create a account new account</Link></span></h4>
+                        </div>
+                        <div>
+                            <button className="btn">Login</button>
+                        </div>
+                    </form>
+                </div>
 
             </div>
         </div>

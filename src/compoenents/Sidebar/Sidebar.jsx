@@ -1,10 +1,10 @@
 import React from 'react';
 import "./sidebar.scss"
 
-const Sidebar = () => {
+const Sidebar = ({className, children}) => {
     return (
-        <div className="sidebar">
-            asdfsdfsd
+        <div className={`sidebar ${className}`}>
+            {children}
         </div>
     );
 };

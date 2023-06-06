@@ -2,8 +2,10 @@ import React from 'react';
 
 import "./style.scss";
 import {HiOutlineMenu} from "react-icons/hi";
-import {BiHome, BiMessage, BiNotification, BiUser, BiVideo} from "react-icons/bi";
+import {BiGlobe, BiHome, BiInfoSquare, BiMessage, BiNotification, BiUser, BiVideo} from "react-icons/bi";
 import {GiBigGear} from "react-icons/gi";
+import MenuDropdown from "../Dropdown/MenuDropdown.jsx";
+import Avatar from "../Avatar/Avatar.jsx";
 
 const Header = () => {
     return (
@@ -11,7 +13,7 @@ const Header = () => {
         <div className="header">
             <nav className=" border-gray-200 dark:bg-gray-900">
 
-                <div className="w-full flex flex-wrap items-center justify-between mx-auto p-4">
+                <div className="grid grid-cols-2 items-center justify-between mx-auto p-4">
 
                     <div className=" flex flex-wrap items-center justify-between  p-4 gap-x-10">
                         <a href="https://flowbite.com/" className="flex items-center">
@@ -25,35 +27,34 @@ const Header = () => {
 
 
                         {/*search input*/}
-                        <div>
-                            <input type="text" placeholder="Search content"  className="text-sm bg-white rounded-full"/>
+                        <div className="flex-1">
+                            <input type="text" placeholder="Search content"  className="w-full text-sm bg-neutral-100  border-none  rounded-full"/>
                         </div>
 
                         <div className="flex items-center gap-x-4">
                             <li className="list-none icon-box"><BiHome/></li>
                             <li className="list-none icon-box"><BiUser/></li>
                             <li className="list-none icon-box"><BiVideo/></li>
+                            <li className="list-none icon-box"><BiInfoSquare/></li>
+                            <li className="list-none icon-box"><BiGlobe/></li>
                         </div>
                     </div>
 
 
-                    <div className="flex items-center md:order-2">
+                    <div className="flex items-center justify-end md:order-2">
                         <div className="flex items-center gap-x-4">
                             <li className="list-none icon-box bg-transparent"><BiNotification/></li>
                             <li className="list-none icon-box bg-transparent"><BiMessage/></li>
                             <li className="list-none icon-box bg-transparent"><GiBigGear/></li>
 
-                            <li
-
-                                className="flex mr-3 text-sm bg-gray-800 rounded-full md:mr-0 focus:ring-4 focus:ring-gray-300 dark:focus:ring-gray-600"
-                            >
-                                <span className="sr-only">Open user menu</span>
-                                <img
-                                    className="w-8 h-8 rounded-full"
-                                    src="/docs/images/people/profile-picture-3.jpg"
-                                    alt="user photo"
-                                />
-                            </li>
+                            <MenuDropdown render={()=>(
+                                <div>
+                                    sdfsdf
+                                    sdf
+                                </div>
+                            )}>
+                                <Avatar className="!h-9 !w-9" imgClass="!h-9 !w-9 !text-xs" username={"Rasel Mahmhd"}/>
+                            </MenuDropdown>
                     </div>
                     </div>
                 </div>

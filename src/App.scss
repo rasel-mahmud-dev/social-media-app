@@ -2,7 +2,7 @@
 
 .content{
   width: 100%;
-  max-width: 800px;
+  max-width: 1000px;
   margin: auto;
   padding: 20px;
 }
@@ -52,4 +52,32 @@
 .btn-primary{
   color: white;
   background-image: linear-gradient(to right, #4144ff, #4570d3);
+}
+
+.online {
+  width: 10px;
+  height: 10px;
+  background: #4570d3;
+  border-radius: 100%;
+  position: relative;
+
+  div {
+    display: block;
+    top: 50%;
+    border-radius: 100%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    animation: zoomInOut 2s linear;
+    animation-iteration-count: infinite;
+    animation-play-state: running;
+    background: #ff2222;
+  }
+}
+
+
+@keyframes zoomInOut {
+  0%{ width: 10px }
+  100%{ border: 20px; }
+
 }

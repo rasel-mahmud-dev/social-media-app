@@ -5,4 +5,10 @@
   height: calc(100vh - var(--header-height));
   box-shadow: var(--card-shadow);
   padding: 16px;
+
+
+  &.white{
+    box-shadow: none;
+    background: transparent;
+  }
 }
