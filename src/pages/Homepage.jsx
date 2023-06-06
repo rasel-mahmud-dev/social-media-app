@@ -25,18 +25,7 @@ const Homepage = () => {
         dispatch(fetchPeoplesAction())
     }, [])
 
-    const [friends] = useState([
-        {avatar: "2343", fullName: "Masdf SD"},
-        {avatar: "2343", fullName: "Masdf SD"},
-        {avatar: "2343", fullName: "Masdf SD"},
-        {avatar: "2343", fullName: "M SD"},
-        {avatar: "2343", fullName: "M SD"},
-        {avatar: "2343", fullName: "M SD"},
-        {avatar: "2343", fullName: "M SD"},
-        {avatar: "2343", fullName: "M SD"},
-        {avatar: "2343", fullName: "M SD"},
-        {avatar: "2343", fullName: "M SD"},
-    ])
+
 
     const [isOpenAddPostModal, setOpenAddPostModal] = useState(false)
 

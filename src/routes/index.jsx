@@ -5,6 +5,7 @@ import Login from "pages/auth/Login";
 import Registration from "pages/auth/Registration.jsx";
 import PrivateRoute from "src/Middleware/PrivateRoute.jsx";
 import FindPeoples from "pages/FindPeoples/FindPeoples.jsx";
+import MyFriendList from "pages/MyFriendList/MyFriendList.jsx";
 
 const router = createBrowserRouter([
     {
@@ -13,6 +14,7 @@ const router = createBrowserRouter([
         children: [
             {path: "", element: <PrivateRoute> <Homepage/> </PrivateRoute> },
             {path: "find-peoples", element: <PrivateRoute> <FindPeoples/> </PrivateRoute> },
+            {path: "friends", element: <PrivateRoute> <MyFriendList/> </PrivateRoute> },
             {path: "login", element: <Login/> },
             {path: "registration", element: <Registration/> }
         ]

@@ -1,11 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {fetchCurrentAuthAction, loginOrRegistrationAction, fetchProfileAction} from "../actions/authAction";
+import {fetchAuthFiendsAction} from "src/store/actions/userAction.js";
 
 
 const initialState = {
     auth: null,
     authLoaded: false,
-    profile: null
+    profile: null,
+    friends: []
 };
 
 export const authSlice = createSlice({
@@ -62,6 +64,13 @@ export const authSlice = createSlice({
         builder.addCase(fetchProfileAction.fulfilled, (state, action) => {
             if(action.payload){
                 state.profile = action.payload
+            }
+        })
+
+        // handle fetch current user bio data
+        builder.addCase(fetchAuthFiendsAction.fulfilled, (state, action) => {
+            if(action.payload){
+                state.friends = action.payload
             }
         })
     }

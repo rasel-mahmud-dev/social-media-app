@@ -1,24 +1,23 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {addFriendAction, fetchPeoplesAction} from "src/store/actions/userAction.js";
+import {addFriendAction, fetchAuthFiendsAction, removeFriendAction} from "src/store/actions/userAction.js";
 import {Link} from "react-router-dom";
 import Avatar from "src/compoenents/Avatar/Avatar.jsx";
 import HomeLayout from "layout/HomeLayout.jsx";
 
-const FindPeoples = () => {
+const MyFriendList = () => {
 const dispatch = useDispatch()
 
-    const { peoples } = useSelector(state=>state.feedState)
+    const { friends } = useSelector(state=>state.authState)
 
     useEffect(()=>{
-        dispatch(fetchPeoplesAction())
+        dispatch(fetchAuthFiendsAction())
     }, [])
 
-    console.log(peoples)
+    console.log(friends)
 
-    function handleAddFriend(_id) {
-        console.log(_id)
-        dispatch(addFriendAction(_id))
+    function handleRemoveFriend(_id) {
+        dispatch(removeFriendAction(_id))
     }
 
     return (
@@ -26,12 +25,11 @@ const dispatch = useDispatch()
             <div className="card">
 
                 <div className="card-meta">
-                    <h4>Friend Request</h4>
-                    <Link to="/">See all</Link>
+                    <h4>My Friends</h4>
                 </div>
 
                 <div className="mt-6">{
-                    peoples.map((people, i) => (
+                    friends.map((people, i) => (
                     <div className="mb-5" key={i}>
 
                         <div className="flex items-center mb-2">
@@ -43,7 +41,7 @@ const dispatch = useDispatch()
                         </div>
 
                         <div className="flex items-center gap-x-2">
-                            <button onClick={()=>handleAddFriend(people._id)} className="btn btn-primary">Add Friend</button>
+                            <button onClick={()=>handleRemoveFriend(people._id)} className="btn btn-primary">UnFriend</button>
                             <button className="btn">Profile</button>
                         </div>
                     </div>
@@ -55,4 +53,4 @@ const dispatch = useDispatch()
     );
 };
 
-export default FindPeoples;
+export default MyFriendList;

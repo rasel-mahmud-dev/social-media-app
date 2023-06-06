@@ -5,6 +5,7 @@ import PendingFriendRequestCard from "src/compoenents/FindFriendCard/PendingFrie
 import {useDispatch, useSelector} from "react-redux";
 import {fetchFeedsAction} from "src/store/actions/feedAction.js";
 import {fetchPeoplesAction} from "src/store/actions/userAction.js";
+import {Link} from "react-router-dom";
 
 const HomeLayout = ({children}) => {
 
@@ -91,6 +92,7 @@ const HomeLayout = ({children}) => {
 
                         <div className="card-meta">
                             <h4>Friends</h4>
+                            <Link to="/friends">See all</Link>
                         </div>
 
                         {friends.map((friend)=>(
