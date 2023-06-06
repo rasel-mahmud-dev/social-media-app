@@ -23,14 +23,14 @@ const Header = () => {
                 <div className="grid grid-cols-2 items-center justify-between mx-auto p-4">
 
                     <div className=" flex flex-wrap items-center justify-between  p-4 gap-x-10">
-                        <a href="https://flowbite.com/" className="flex items-center">
+                        <Link to="/" className="flex items-center">
                             <img
                                 src="https://flowbite.com/docs/images/logo.svg"
                                 className="h-8 mr-3"
                                 alt="Flowbite Logo"
                             />
                             <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Flowbite</span>
-                        </a>
+                        </Link>
 
 
                         {/*search input*/}
@@ -39,8 +39,8 @@ const Header = () => {
                         </div>
 
                         <div className="flex items-center gap-x-4">
-                            <li className="list-none icon-box"><BiHome/></li>
-                            <li className="list-none icon-box"><BiUser/></li>
+                            <Link to="/"><li className="list-none icon-box"><BiHome/></li></Link>
+                            <Link to="/find-peoples"><li className="list-none icon-box"><BiUser/></li></Link>
                             <li className="list-none icon-box"><BiVideo/></li>
                             <li className="list-none icon-box"><BiInfoSquare/></li>
                             <li className="list-none icon-box"><BiGlobe/></li>
