@@ -2,7 +2,7 @@ import {createSlice} from '@reduxjs/toolkit';
 
 
 const initialState = {
-    isOpenSidebar: false,
+    openSidebar: "",  // "left-sidebar" // "right-sidebar"
     lang: "en"
 };
 
@@ -13,23 +13,14 @@ export const appSlice = createSlice({
         updateAccessToken(state, action) {
             state.accessToken = action.payload;
         },
-        toggleSidebar(state) {
-            state.isOpenSidebar = !state.isOpenSidebar
+        openSidebarAction(state, action) {
+            state.openSidebar = action.payload
         },
-        toggleLang(state, action) {
-            if (action.payload) {
-                state.lang = action.payload
-            } else {
-                let lang = state.lang === "en" ? "bn" : "en"
-                state.lang = lang
-                localStorage.setItem("lang", lang)
-            }
-        }
     }
 });
 
 
 // Action creators are generated for each case reducer function
-export const {toggleSidebar, toggleLang} = appSlice.actions
+export const {openSidebarAction} = appSlice.actions
 
 export default appSlice.reducer

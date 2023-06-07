@@ -7,6 +7,7 @@ export const loginOrRegistrationAction = createAsyncThunk("authSlice/login", asy
     try{
         // here type should be login or registration
         let {status, data} = await apis.post(`/auth/${payload.type}`, payload.data)
+        console.log(status, data)
         if(status === 201){
             if(data.token){
                localStorage.setItem("token", data.token )

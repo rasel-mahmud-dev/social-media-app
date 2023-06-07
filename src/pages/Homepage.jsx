@@ -14,6 +14,7 @@ const Homepage = () => {
 
 
     const feedState = useSelector(state => state.feedState)
+    const {auth} = useSelector(state => state.authState)
 
 
     useEffect(() => {
@@ -44,13 +45,13 @@ const Homepage = () => {
                             <div>
 
                                 <div className=" flex items-center gap-x-2 border-b border-neutral-600/10 mb-3 pb-3">
-                                    <Avatar className="!w-9 !h-9" imgClass="!w-9 !h-9" username="Ava"></Avatar>
-                                    <h2 className="py-2 bg-neutral-100 rounded-full px-3 w-full"
-                                        onClick={() => setOpenAddPostModal(true)}>What on you mind</h2>
+                                    <Avatar className="!w-9 !h-9" imgClass="!w-9 !h-9" src={auth?.avatar} username={auth?.fullName}></Avatar>
+                                    <h2 className="py-2 bg-neutral-100 rounded-full px-3 w-full text-sm text-neutral-600"
+                                        onClick={() => setOpenAddPostModal(true)}>What on your mind, {auth?.firstName}?</h2>
                                 </div>
 
 
-                                <div className="flex items-center justify-around">
+                                <div className="flex items-center justify-around text-sm font-medium">
                                     <li className="list-none flex items-center gap-x-1">
                                         <i className="icon2 video-icon"></i>
                                         <span>Videos</span>

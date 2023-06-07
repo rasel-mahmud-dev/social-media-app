@@ -1,11 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import Sidebar from "src/compoenents/Sidebar/Sidebar.jsx";
 import Avatar from "src/compoenents/Avatar/Avatar.jsx";
-import PendingFriendRequestCard from "src/compoenents/FindFriendCard/PendingFriendRequestCard.jsx";
+import PendingFriendRequestCard from "src/compoenents/PendingFriendRequestCard/PendingFriendRequestCard.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchFeedsAction} from "src/store/actions/feedAction.js";
-import {fetchAuthFriendsAction, fetchPeoplesAction} from "src/store/actions/userAction.js";
+import {confirmFriendRequestAction, fetchAuthFriendsAction, fetchPeoplesAction} from "src/store/actions/userAction.js";
 import {Link} from "react-router-dom";
+import {openSidebarAction} from "src/store/slices/appSlice.js";
+import ActiveFriend from "src/compoenents/ActiveFriend/ActiveFriend.jsx";
+import ChatWithFriend from "src/compoenents/ChatWithFriend/ChatWithFriend.jsx";
+import {openChatUserAction} from "src/store/slices/chatSlice.js";
 
 const HomeLayout = ({children}) => {
 
@@ -18,6 +22,8 @@ const HomeLayout = ({children}) => {
     }, [])
 
     const {friends, pendingFriends, auth } = useSelector(state=>state.authState)
+    const {openSidebar } = useSelector(state=>state.appState)
+    const {openChatUser } = useSelector(state=>state.chatState)
 
     const menuItems = [
         {cls: "friend-icon", label: "Friends", to: "/friends", },
@@ -27,24 +33,26 @@ const HomeLayout = ({children}) => {
         {cls: "feed-icon", label: "Feed", to: "/", }
     ]
 
+    function handleStartChat(friend){
+        dispatch(openChatUserAction(friend))
+    }
 
     return (
         <div>
             <div className="flex justify-between ">
-                <Sidebar className="white">
-
+                <Sidebar className="white left-sidebar" isOpen={openSidebar === "left-sidebar"} onClose={()=>dispatch(openSidebarAction(""))}>
 
                     <div className="card !px-2">
-
-
-
                         <div className="card-meta !px-2">
                             <h4>Home</h4>
                         </div>
 
                         <li  className="flex items-center gap-x-1 my-1 py-2  px-2 menu-item-hover">
                             <Avatar className="!w-10 !h-10" imgClass="!w-10 !h-10 text-xs" src={auth.avatar} username={auth.fullName} />
-                            <span className="font-medium text-sm text-neutral-600">{auth.fullName}</span>
+                            <div>
+                                <span className="font-medium text-sm text-neutral-600">{auth.fullName}</span>
+                                <h5 className="text-[10px] text-neutral-600">{auth._id}</h5>
+                            </div>
                         </li>
                         {menuItems.map((item, index)=>(
                             item.to ? (
@@ -72,26 +80,25 @@ const HomeLayout = ({children}) => {
                     </div>
 
 
-                    <div className="card mt-3">
-
-                        <div className="card-meta">
+                    <div className="card !px-2 mt-3">
+                        <div className="card-meta !px-2">
                             <h4>Account</h4>
                         </div>
 
-                        <div className="flex items-center gap-x-2 ">
+                        <li  className="flex items-center gap-x-1 my-1 py-2 px-2 menu-item-hover">
                             <Avatar imgClass="text-xs" className="!w-9 !h-9" username="ER SDF"/>
                             <label htmlFor="" className="text-sm">Setting</label>
-                        </div>
+                        </li>
 
-                        <div className="flex items-center gap-x-2 ">
+                        <li  className="flex items-center gap-x-1 my-1 py-2 px-2 menu-item-hover">
                             <Avatar imgClass="text-xs" className="!w-9 !h-9" username="ER SDF"/>
                             <label htmlFor="" className="text-sm">Setting</label>
-                        </div>
+                        </li>
 
-                        <div className="flex items-center gap-x-2 ">
-                            <Avatar imgClass="text-xs" className="!w-9 !h-9" username="ER SDF"/>
-                            <label htmlFor="" className="text-sm">Setting</label>
-                        </div>
+                        <li  className="flex items-center gap-x-1 my-1 py-2 px-2 menu-item-hover">
+                                <Avatar imgClass="text-xs" className="!w-9 !h-9" username="ER SDF"/>
+                                <label htmlFor="" className="text-sm">Setting</label>
+                        </li>
 
                     </div>
 
@@ -109,35 +116,17 @@ const HomeLayout = ({children}) => {
                     </div>
                 </div>
 
-                <Sidebar className="white">
-                    <div className="card">
+                <Sidebar className="white right-sidebar" isOpen={openSidebar === "right-sidebar"} onClose={()=>dispatch(openSidebarAction(""))}>
 
-                        <div className="card-meta">
-                            <h4>Active Friends</h4>
-                            <Link to="/friends">See all</Link>
-                        </div>
+                    <ActiveFriend handleStartChat={handleStartChat} auth={auth} friends={friends}/>
 
-                        {friends.map((friend)=>(
-                            <div key={friend.id} className="flex items-center justify-between mb-2">
-                                <div className="flex items-center gap-x-2 ">
-                                    <Avatar imgClass="text-xs" className="!w-9 !h-9" username="ER SDF"/>
-                                    <label htmlFor="" className="text-sm">{friend.fullName}</label>
-                                </div>
-                                <span className="online">
-                               </span>
-                            </div>
-                        ))}
-                    </div>
+                    <PendingFriendRequestCard  className="mt-4" auth={auth} pendingFriends={pendingFriends} />
 
 
-                    <PendingFriendRequestCard pendingFriends={pendingFriends} />
-
-
+                    {openChatUser && <ChatWithFriend openChatUser={openChatUser} /> }
 
 
                 </Sidebar>
-
-
 
             </div>
         </div>

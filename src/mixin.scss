@@ -1,0 +1,11 @@
+@mixin getDown($size){
+  @media screen and (max-width: #{$size}) {
+    @content()
+  }
+}
+
+@mixin getUp($size){
+  @media screen and (max-width: #{$size}) {
+    @content()
+  }
+}

@@ -1,10 +1,34 @@
+@import "mixin";
+
 
 
 .content{
   width: 100%;
-  max-width: 500px;
   margin: auto;
+  padding-top: 16px;
+  @include getDown(900px){
+    padding-top: 0;
+  }
+
+  max-height: calc(100vh - var(--header-height));
+  overflow-y: auto;
+  &::-webkit-scrollbar{
+    background-color: transparent;
+  }
 }
+
+
+@media  screen and (min-width: 900px) {
+  .content{
+    max-width: 500px;
+  }
+}
+@media  screen and (min-width: 1300px) {
+  .content{
+    max-width: 700px;
+  }
+}
+
 
 
 .icon-box{
@@ -168,5 +192,29 @@
     border: none !important;
     outline: none !important;
 
+  }
+}
+
+.tab-button{
+  list-style-type: none;
+  padding: 8px 20px;
+  border-radius: 6px;
+  background-color: white;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.home-layout-link{
+  overflow-x: auto;
+  li{
+    white-space: nowrap;
+    &.active{
+      background: var(--primary-400);
+      color: white;
+    }
+  }
+  @include getDown(600px){
+    margin-top: 14px;
+    padding: 0 10px;
   }
 }

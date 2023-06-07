@@ -1,11 +1,14 @@
 import React from 'react';
 import "./sidebar.scss"
 
-const Sidebar = ({className, children}) => {
+const Sidebar = ({className, children, isOpen, onClose}) => {
     return (
-        <div className={`sidebar ${className}`}>
-            {children}
-        </div>
+       <>
+        {isOpen && <div onClick={()=>onClose && onClose()} className="sidebar-backdrop"></div> }
+           <div className={`sidebar  ${isOpen ? "open-mobile-sidebar" : ""} ${className}`}>
+               {children}
+           </div>
+       </>
     );
 };
 

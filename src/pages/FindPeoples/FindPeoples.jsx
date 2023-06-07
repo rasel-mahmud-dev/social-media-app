@@ -1,41 +1,52 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {addFriendAction, fetchPeoplesAction} from "src/store/actions/userAction.js";
+import {
+    addFriendAction,
+    confirmFriendRequestAction,
+    fetchPeoplesAction,
+    removeFriendAction
+} from "src/store/actions/userAction.js";
 import Avatar from "src/compoenents/Avatar/Avatar.jsx";
 import HomeLayout from "layout/HomeLayout.jsx";
-import {Link} from "react-router-dom";
+
+
+import HomeLayoutLink from "pages/HomeLayoutLink/HomeLayoutLink.jsx";
 
 const FindPeoples = () => {
     const dispatch = useDispatch()
 
     const {peoples} = useSelector(state => state.feedState)
-    const {pendingFriends} = useSelector(state => state.authState)
+    const {pendingFriends, auth} = useSelector(state => state.authState)
 
     useEffect(() => {
         dispatch(fetchPeoplesAction())
     }, [])
 
-    console.log(peoples)
 
-    function handleAddFriend(_id) {
-        console.log(_id)
-        dispatch(addFriendAction(_id))
+    function isInFriend(peopleId) {
+        return pendingFriends.findIndex(fri => fri.senderId === peopleId || fri.receiverId === peopleId) !== -1
     }
 
-    function checkPendingFriends(peopleId) {
-        return pendingFriends.findIndex(fri => fri.senderId === peopleId) !== -1
+    function isYouSend(peopleId) {
+        let item = pendingFriends.find(fri => fri.senderId === auth._id && fri.receiverId === peopleId)
+        return item
     }
 
+
+    // get friend id from request sender user
+    function getFriendId(peopleId) {
+        let item = pendingFriends.find(fri => fri.senderId === auth._id && fri.receiverId === peopleId)
+        console.log(peopleId)
+        return item._id
+    }
 
     return (
         <HomeLayout>
+            <HomeLayoutLink/>
             <div className="card">
 
                 <div className="card-meta">
-                    <div className="flex items-center gap-x-2">
-                        <h4>Find Peoples</h4>
-                        <Link to="/friends"><h4>My Friends</h4></Link>
-                    </div>
+                    <h4>Find Peoples ({peoples.length})</h4>
                 </div>
 
                 <div className="mt-6">{
@@ -52,8 +63,29 @@ const FindPeoples = () => {
                             </div>
 
                             <div className="flex items-center gap-x-2">
-                                <button onClick={() => handleAddFriend(people._id)}
-                                        className="btn btn-primary"> {checkPendingFriends(people._id) ? "Accept" : "Add Friend"}</button>
+                                {
+                                    isInFriend(people._id) ? (
+                                        isYouSend(people._id) ?
+                                            (<button onClick={() => dispatch(removeFriendAction({
+                                                    friendId: getFriendId(people._id),
+                                                    user: people
+                                                }))}
+                                                     className="btn btn-primary">Cancel Request</button>
+
+                                            )
+                                            : (
+
+                                                <button onClick={() => dispatch(confirmFriendRequestAction({
+                                                    friendId: getFriendId(people._id),
+                                                    userId: people._id
+                                                }))}
+                                                        className="btn btn-primary">Accept Request</button>
+                                            )
+                                    ) : (
+                                        <button onClick={() => dispatch(addFriendAction(people._id))}
+                                                className="btn btn-primary">Add Request</button>
+                                    )
+                                }
                                 <button className="btn">Profile</button>
                             </div>
                         </div>

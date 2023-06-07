@@ -7,6 +7,7 @@ import {usersApi} from "./services/usersApi";
 import authReducer from "./slices/authSlice";
 import appReducer from "./slices/appSlice";
 import feedReduce from "./slices/feedSlice";
+import chatReducer from "./slices/chatSlice";
 
 
 
@@ -14,6 +15,7 @@ export const store = configureStore({
     reducer: {
         authState: authReducer,
         appState: appReducer,
+        chatState: chatReducer,
         feedState: feedReduce,
         // Add the generated reducer as a specific top-level slice
         [usersApi.reducerPath]: usersApi.reducer,

@@ -2,6 +2,8 @@
 // fetch
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import apis from "src/apis/index.js";
+import {addPeople, removePeople} from "src/store/slices/feedSlice.js";
+
 
 export const fetchPeoplesAction = createAsyncThunk("authSlice/fetchPeoples", async (payload, thunkAPI)=>{
     try{
@@ -35,8 +37,8 @@ export const fetchAuthFriendsAction = createAsyncThunk("authSlice/fetchAuthFrien
 export const addFriendAction = createAsyncThunk("authSlice/add-friend", async (payload, thunkAPI)=>{
     try{
         let {status, data} = await apis.post("/users/add-friend", {friendId: payload})
-        console.log(data)
         if(status === 201){
+            thunkAPI.dispatch(removePeople(payload))
             return data
         }
     } catch (ex){
@@ -47,29 +49,27 @@ export const addFriendAction = createAsyncThunk("authSlice/add-friend", async (p
 
 
 
-export const confirmFriendRequestAction = createAsyncThunk("authSlice/add-friend", async (payload, thunkAPI)=>{
+export const confirmFriendRequestAction = createAsyncThunk("authSlice/confirm-friend", async (payload, thunkAPI)=>{
     try{
-        let {status, data} = await apis.post("/users/accept-request", payload)
-        console.log(data)
+        let {status, data} = await apis.post("/users/accept-request", {friendId: payload.friendId})
+
         if(status === 201){
-            return data
+            thunkAPI.dispatch(removePeople(payload.userId))
+            return {...data, friendId: payload.friendId}
         }
     } catch (ex){
         // send error message with reject type in reducer
         return thunkAPI.rejectWithValue( ex.message)
     }
 })
-
-
-
-
 
 
 export const removeFriendAction = createAsyncThunk("authSlice/remove-friend", async (payload, thunkAPI)=>{
     try{
-        let {status, data} = await apis.post("/users/remove-friend", {friendId: payload})
+        let {status} = await apis.post("/users/remove-friend", {friendId: payload.friendId})
         if(status === 201){
-            return data
+            thunkAPI.dispatch(addPeople(payload.user))
+            return payload
         }
     } catch (ex){
         // send error message with reject type in reducer

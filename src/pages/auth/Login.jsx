@@ -1,5 +1,5 @@
 import React, {useReducer} from "react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 
 import {useDispatch} from "react-redux"
 import {loginOrRegistrationAction} from "src/store/actions/authAction.js";
@@ -7,6 +7,8 @@ import {loginOrRegistrationAction} from "src/store/actions/authAction.js";
 const Login = () => {
 
     const dispatch = useDispatch()
+
+    const navigate = useNavigate();
 
 
     const [state, setState] = useReducer((prev, action) => ({...prev, ...action}), {
@@ -30,7 +32,13 @@ const Login = () => {
             data: {
                 email, password,
             }
-        }))
+        })).unwrap().then(()=>{
+            navigate("/")
+        }).catch((message)=>{
+            setState({
+                message: message
+            })
+        })
 
 
     }

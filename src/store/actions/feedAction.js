@@ -17,10 +17,6 @@ export const fetchFeedsAction = createAsyncThunk("authSlice/updateBiodata", asyn
 })
 
 
-
-
-
-
 export const createFeedAction = createAsyncThunk("authSlice/createFeed", async (payload, thunkAPI)=>{
     try{
         let {status, data} = await apis.post("/feed/create", payload)
