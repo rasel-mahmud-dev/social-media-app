@@ -1,13 +1,14 @@
 import React from 'react';
-import {BiCamera, BiImage, BiPen, BiVideo} from "react-icons/bi";
+import {BiCamera, BiImage, BiVideo} from "react-icons/bi";
 import Avatar from "../Avatar/Avatar.jsx";
-import {FaEllipsisH, FaEllipsisV} from "react-icons/fa";
 import {createFeedAction} from "src/store/actions/feedAction.js";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 
 const AddPost = () => {
 
     const dispatch = useDispatch()
+
+    const {auth} = useSelector(state=>state.authState)
 
 
     function handlePost(e){
@@ -29,39 +30,34 @@ const AddPost = () => {
     return (
         <div>
             <form onSubmit={handlePost}>
-                <div className="flex items-center"> <div className="icon-box">
-                    <BiPen />
-                </div>
-                    <label htmlFor="">Create Post</label>
-                </div>
+
+                    <label htmlFor="">Create post</label>
+
 
                 <div className=" mt-3 ">
                     <div className=" flex items-center gap-x-2">
-                        <Avatar  className="!h-9 !w-9" imgClass="!h-9 !w-9 !text-xs" username={"Rasel Mahmhd"} ></Avatar>
-                        <h2>Rasel Mahmud</h2>
+                        <Avatar  className="!h-9 !w-9" imgClass="!h-9 !w-9 !text-xs" src={auth?.avatar} username={auth?.fullName} ></Avatar>
+                        <h2>{auth?.fullName}</h2>
                     </div>
 
-                    <div>
-                        <textarea className="w-full" name="content" placeholder="Write you post content" id="" cols="30" rows="10"></textarea>
+                    <div className="mt-2">
+                        <textarea className="w-full input-elemselect add-feed-input" name="content" placeholder={`What's on your mind `+ auth?.firstName} id="" cols="30" rows="10"></textarea>
                     </div>
                 </div>
 
-                <div className="flex justify-between items-center">
-                    <div className="flex items-center gap-x-4">
-                        <li className="list-none flex items-center gap-x-1">
-                            <BiVideo/>
-                            Live Video
-                        </li>
-                        <li className="list-none flex items-center gap-x-1">
-                            <BiImage/>
-                            Photos/Videos
-                        </li>
-                        <li className="list-none flex items-center gap-x-1">
-                            <BiCamera/>
-                            Feallings
-                        </li>
-                    </div>
-                    <FaEllipsisH className="text-xs text-neutral-500" />
+                <div className="flex items-center justify-around">
+                    <li className="list-none flex items-center gap-x-1">
+                        <i className="icon2 video-icon"></i>
+                        <span>Videos</span>
+                    </li>
+                    <li className="list-none flex items-center gap-x-1">
+                        <i className="icon2 photo-icon"></i>
+                        <span>Photos</span>
+                    </li>
+                    <li className="list-none flex items-center gap-x-1">
+                        <i className="icon2 emoji-icon"></i>
+                        <span>Feelings</span>
+                    </li>
                 </div>
 
                 <div className="mt-5">

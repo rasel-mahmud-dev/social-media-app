@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import {fetchFeedsAction} from "src/store/actions/feedAction.js";
+import {fetchFeedsAction, toggleLikeAction} from "src/store/actions/feedAction.js";
 import {fetchPeoplesAction} from "src/store/actions/userAction.js";
 
 
@@ -24,6 +24,12 @@ export const feedSlice = createSlice({
         // fetch all feeds
         builder.addCase(fetchPeoplesAction.fulfilled, (state, action) => {
             state.peoples = action.payload
+        })
+
+        //toggle like
+        builder.addCase(toggleLikeAction.fulfilled, (state, action) => {
+            // state.peoples = action.payload
+            console.log(action.payload)
         })
 
     }

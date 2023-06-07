@@ -2,15 +2,8 @@ import React from 'react';
 import Avatar from "../Avatar/Avatar.jsx";
 import {Link} from "react-router-dom";
 
-const PendingFriendRequestCard = () => {
+const PendingFriendRequestCard = ({pendingFriends  = []}) => {
 
-    const data = [
-        {fullName: "John Abham", avatar: "",},
-        {fullName: "John Abham", avatar: "",},
-        {fullName: "John Abham", avatar: "",},
-        {fullName: "John Abham", avatar: "",},
-
-    ]
 
 
     return (
@@ -18,10 +11,10 @@ const PendingFriendRequestCard = () => {
 
             <div className="card-meta">
                 <h4>Friend Request</h4>
-                <Link to="/">See all</Link>
+                <Link to="/friend-requests">See all</Link>
             </div>
 
-            <div className="mt-6">{data.map((item, i) => (
+            <div className="mt-6">{pendingFriends.map((item, i) => (
                 <div className="mb-5" key={i}>
 
                     <div className="flex items-center mb-2">
@@ -33,8 +26,8 @@ const PendingFriendRequestCard = () => {
                     </div>
 
                     <div className="flex items-center gap-x-2">
-                        <button className="btn btn-primary">asdlfkj</button>
-                        <button className="btn">asdlfkj</button>
+                        <button className="btn btn-primary">Confirm</button>
+                        <button className="btn">Reject</button>
                     </div>
                 </div>
             ))}

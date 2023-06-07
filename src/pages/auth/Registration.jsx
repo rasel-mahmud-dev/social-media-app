@@ -33,14 +33,15 @@ const Registration = () => {
 
         if(password !== confirmPassword) return setState({errorMessage: "Password Does'nt match "})
 
+        let formData = new FormData()
+        formData.append("firstName", firstName)
+        formData.append("lastName", lastName)
+        formData.append("email", email)
+        formData.append("password", password)
+
         dispatch(loginOrRegistrationAction({
             type: "registration",
-            data: {
-                firstName,
-                lastName,
-                email,
-                password,
-            }
+            data: formData
         }))
 
         // api.post("/api/users", {

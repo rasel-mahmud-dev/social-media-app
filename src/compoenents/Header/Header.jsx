@@ -6,15 +6,22 @@ import {BiGlobe, BiHome, BiInfoSquare, BiMessage, BiNotification, BiUser, BiVide
 import {GiBigGear} from "react-icons/gi";
 import MenuDropdown from "../Dropdown/MenuDropdown.jsx";
 import Avatar from "../Avatar/Avatar.jsx";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {FaSignInAlt} from "react-icons/fa";
 import {Link} from "react-router-dom";
+import {logoutAction} from "src/store/slices/authSlice.js";
 
 const Header = () => {
 
+    const dispatch = useDispatch()
 
     const auth = useSelector(state=>state.authState)
-    console.log(auth)
+
+
+    function handleLogout() {
+        dispatch(logoutAction())
+    }
+
     return (
         <>
         <div className="header">
@@ -56,8 +63,8 @@ const Header = () => {
 
                             {auth ? <MenuDropdown render={()=>(
                                 <div>
-                                    sdfsdf
-                                    sdf
+                                    <li  className="list-none " onClick={()=>handleLogout()}>Logout</li>
+                                    <Link to="/profile"><li  className="list-none">Profile</li></Link>
                                 </div>
                             )}>
                                 <Avatar className="!h-9 !w-9" src={auth?.avatar} imgClass="!h-9 !w-9 !text-xs" username={auth.fullName}/>

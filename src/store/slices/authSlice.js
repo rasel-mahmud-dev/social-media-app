@@ -1,13 +1,14 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {fetchCurrentAuthAction, loginOrRegistrationAction, fetchProfileAction} from "../actions/authAction";
-import {fetchAuthFiendsAction} from "src/store/actions/userAction.js";
+import {fetchAuthFriendsAction} from "src/store/actions/userAction.js";
 
 
 const initialState = {
     auth: null,
     authLoaded: false,
     profile: null,
-    friends: []
+    friends: [],
+    pendingFriends: []
 };
 
 export const authSlice = createSlice({
@@ -18,7 +19,9 @@ export const authSlice = createSlice({
         logoutAction(state) {
             state.auth = null
             state.authLoaded = true
-            state.biodata = null
+            state.profile = null
+            state.pendingFriends = []
+            state.friends = []
             localStorage.removeItem("token")
         }
     },
@@ -68,9 +71,10 @@ export const authSlice = createSlice({
         })
 
         // handle fetch current user bio data
-        builder.addCase(fetchAuthFiendsAction.fulfilled, (state, action) => {
+        builder.addCase(fetchAuthFriendsAction.fulfilled, (state, action) => {
             if(action.payload){
-                state.friends = action.payload
+                state.friends = action.payload.friends
+                state.pendingFriends = action.payload.pendingFriends
             }
         })
     }

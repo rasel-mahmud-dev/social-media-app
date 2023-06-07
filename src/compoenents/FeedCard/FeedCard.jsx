@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {BiComment, BiLike} from "react-icons/bi";
+import {BiComment, BiLike, BiShare} from "react-icons/bi";
 import Avatar from "../Avatar/Avatar.jsx";
+import {toggleLikeAction} from "src/store/actions/feedAction.js";
 
-const FeedCard = ({feed}) => {
+const FeedCard = ({feed, dispatch}) => {
 
     const [isExpand, setExpand] = useState(false)
+
 
     useEffect(()=>{
         if(feed?.content.length > 300){
@@ -17,10 +19,15 @@ const FeedCard = ({feed}) => {
         setExpand(isExpand)
     }
 
+    function toggleLikeHandler(feedId){
+        dispatch(toggleLikeAction({feedId}))
+    }
+
+
     return (
         <div className="">
             <div className="bg-white card w-full">
-                <div className="p-4">
+                <div className="">
                     <div className="flex items-center">
                         <Avatar username={feed.author?.fullName} src={feed.author?.avatar} />
 
@@ -36,19 +43,36 @@ const FeedCard = ({feed}) => {
                         <p className="text-gray-800">{feed?.content.slice(0, isExpand ? undefined : 300)}</p>
                         { feed?.content.slice(0, 300) && isExpand ? <span onClick={()=>handleExpand(false)}>show less</span>: <span onClick={()=>handleExpand(true)}>show more</span>  }
                     </div>
+
+
+
                     <div className="flex items-center justify-between mt-4">
-                        <div className="flex items-center">
-                            <button className="flex items-center text-gray-600 text-sm">
-                               <BiLike/>
-                                42 Likes
-                            </button>
-                            <button className="flex items-center text-gray-600 text-sm ml-4">
-                                <BiComment />
-                                10 Comments
-                            </button>
-                        </div>
+                        <li className="list-none flex items-center gap-x-1">
+                            <img src="/icons/like.svg" className="w-5" alt=""/>
+                            <span>23</span>
+                        </li>
+                        <li className="list-none flex items-center gap-x-1">
+                            <BiComment />
+                            <span>123</span>
+                        </li>
 
                     </div>
+
+                    <div className="flex items-center justify-between border-t border-b mt-4 py-1 text-sm font-medium">
+                        <li onClick={()=>toggleLikeHandler(feed._id)} className="flex items-center gap-x-1 hover:bg-neutral-100 rounded-md cursor-pointer px-4 py-2 w-full justify-center">
+                            <BiLike />
+                            <span>Like</span>
+                        </li>
+                        <li className="flex items-center gap-x-1 hover:bg-neutral-100 rounded-md cursor-pointer px-4 py-2 w-full justify-center">
+                            <BiComment />
+                            <span>Comment</span>
+                        </li>
+                        <li className="flex items-center gap-x-1 hover:bg-neutral-100 rounded-md cursor-pointer px-4 py-2 w-full justify-center">
+                            <BiShare />
+                            <span>Share</span>
+                        </li>
+                    </div>
+
                 </div>
             </div>
         </div>

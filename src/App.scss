@@ -2,9 +2,8 @@
 
 .content{
   width: 100%;
-  max-width: 1000px;
+  max-width: 500px;
   margin: auto;
-  padding: 20px;
 }
 
 
@@ -99,4 +98,75 @@
 
   }
 
+}
+
+.icon{
+  background-size: auto;
+  width: 36px;
+  height: 36px;
+  background-repeat: no-repeat;
+  display: inline-block;
+}
+.icon2{
+  background-size: auto;
+  width: 24px;
+  height: 24px;
+  background-repeat: no-repeat;
+  display: inline-block;
+}
+.friend-icon{
+  background-image: url(icons/4GR4KRf3hN2.png);
+  background-position: 0px -296px;
+}
+.group-icon{
+  background-image: url(icons/4GR4KRf3hN2.png);
+  background-position: 0px -37px;
+}
+.save-icon{
+  background-image: url(icons/4GR4KRf3hN2.png);
+  background-position: 0px -185px
+}
+.love-icon{
+  background-image: url(icons/4GR4KRf3hN2.png);
+  background-position: 0px -37px;
+}
+.watch-icon{
+  background-image: url(icons/4GR4KRf3hN2.png);
+  background-position: 0px -518px
+}
+.feed-icon{
+  background-image: url(icons/feed.png);
+}
+.video-icon{
+  background-image: url(icons/video.png);
+}
+.photo-icon{
+  background-image: url(icons/image.png);
+}
+.emoji-icon{
+  background-image: url(icons/imoji.png);
+}
+
+.like-icon{
+  background-image: url(icons/like.svg);
+}
+
+.menu-item-hover{
+  transition: background-color .4s ease;
+  cursor: pointer;
+  border-radius: 5px;
+  &:hover{
+    background: rgba(67, 116, 232, 0.09)
+  }
+}
+
+.add-feed-input{
+
+  border: none !important;
+  outline: none !important;
+  &:focus{
+    border: none !important;
+    outline: none !important;
+
+  }
 }
