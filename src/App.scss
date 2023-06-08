@@ -9,6 +9,7 @@
     padding-top: 0;
   }
 
+
   max-height: calc(100vh - var(--header-height));
   overflow-y: auto;
 
@@ -262,4 +263,15 @@
   span {
     color: #bbbbbb;
   }
+}
+
+.bg-primary2{
+  background: var(--primary-400);
+}
+
+.container-2{
+  max-width: 1920px;
+  padding: 0 20px;
+  margin: auto;
+
 }

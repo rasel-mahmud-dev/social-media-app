@@ -4,9 +4,24 @@ import apis from "../../apis";
 
 
 // fetch all feed
-export const fetchFeedsAction = createAsyncThunk("authSlice/updateBiodata", async (payload, thunkAPI)=>{
+export const fetchFeedsAction = createAsyncThunk("authSlice/fetch-feeds", async (payload, thunkAPI)=>{
     try{
         let {status, data} = await apis.get("/feed", payload)
+        if(status === 200){
+            return data
+        }
+    } catch (ex){
+        // send error message with reject type in reducer
+        return thunkAPI.rejectWithValue( ex.message)
+    }
+})
+
+
+
+// fetch  feed detail
+export const fetchFeedDetailAction = createAsyncThunk("authSlice/fetch-feed-detail", async (payload, thunkAPI)=>{
+    try{
+        let {status, data} = await apis.get("/feed/" +  payload)
         if(status === 200){
             return data
         }
@@ -20,7 +35,6 @@ export const fetchFeedsAction = createAsyncThunk("authSlice/updateBiodata", asyn
 export const createFeedAction = createAsyncThunk("authSlice/createFeed", async (payload, thunkAPI)=>{
     try{
         let {status, data} = await apis.post("/feed/create", payload)
-        console.log(data)
         if(status === 201){
             return data
         }
@@ -32,7 +46,7 @@ export const createFeedAction = createAsyncThunk("authSlice/createFeed", async (
 
 
 
-export const deleteFeedAction = createAsyncThunk("authSlice/createFeed", async (payload, thunkAPI)=>{
+export const deleteFeedAction = createAsyncThunk("authSlice/deleteFeed", async (payload, thunkAPI)=>{
     try{
         let {status} = await apis.delete("/feed/"+ payload)
         if(status === 201){

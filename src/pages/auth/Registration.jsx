@@ -55,8 +55,8 @@ const Registration = () => {
     }
 
     return (
-        <div>
-            <div className="py-20">
+        <div className="">
+            <div className="py-20 ">
                 <div className="max-w-lg mx-auto card">
                     <h1 className="text-2xl font-semibold text-center">Create a new account.</h1>
 

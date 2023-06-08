@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 import {
-    addCommentAction, deleteFeedAction,
+    addCommentAction, createFeedAction, deleteFeedAction,
     fetchFeedsAction,
     getAllCommentsAction,
     toggleLikeAction
@@ -71,6 +71,11 @@ export const feedSlice = createSlice({
         // fetch all feeds
         builder.addCase(fetchPeoplesAction.fulfilled, (state, action) => {
             state.peoples = action.payload
+        })
+
+        // create feed
+        builder.addCase(createFeedAction.fulfilled, (state, action) => {
+            state.feeds = [action.payload.feed, ...state.feeds]
         })
 
         // delete feed

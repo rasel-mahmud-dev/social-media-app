@@ -14,6 +14,9 @@ import Loading from "src/compoenents/Loading/Loading.jsx";
 import {FaEllipsisH, FaEllipsisV} from "react-icons/fa";
 import MenuDropdown from "src/compoenents/Dropdown/MenuDropdown.jsx";
 import {BsFillBookmarkFill, BsFillTrash2Fill} from "react-icons/bs";
+import getPassTime from "src/utils/time.js";
+import {addInToSaveAction} from "src/store/actions/userAction.js";
+import {Link} from "react-router-dom";
 
 const FeedCard = ({feed, authId, dispatch}) => {
 
@@ -27,20 +30,12 @@ const FeedCard = ({feed, authId, dispatch}) => {
         comments: []
     })
 
-
-    useEffect(() => {
-        if (feed?.content.length > 300) {
-            setState({isExpand: true})
-        }
-    }, [feed?.content])
-
-
     function handleExpand(isExpand) {
         setState({isExpand: isExpand})
     }
 
     function toggleLikeHandler(feedId) {
-        setState({setLikeActionLoading: true})
+        setState({isLikeActionLoading: true})
         dispatch(toggleLikeAction({feedId})).unwrap().then((data)=>{
 
             if(!data) return;
@@ -63,7 +58,7 @@ const FeedCard = ({feed, authId, dispatch}) => {
             }))
 
         }).finally(() => {
-            setState({setLikeActionLoading: false})
+            setState({isLikeActionLoading: false})
         })
     }
 
@@ -89,6 +84,9 @@ const FeedCard = ({feed, authId, dispatch}) => {
     function handelDeleteFeed(feedId){
         dispatch(deleteFeedAction(feedId))
     }
+    function handleSaveItem(feedId){
+        dispatch(addInToSaveAction({feedId}))
+    }
 
     return (
         <div className="feed">
@@ -97,10 +95,10 @@ const FeedCard = ({feed, authId, dispatch}) => {
 
                     <div className="flex justify-between">
                         <div className="flex items-center">
-                            <Avatar className="!w-9 !h-9" imgClass="!w-9 !h-9" username={feed.author?.fullName} src={feed.author?.avatar}/>
+                            <Avatar className="!w-9 !h-9" imgClass="!w-9 !h-9" username={feed?.author?.fullName} src={feed?.author?.avatar}/>
                             <div className="ml-3">
-                                <h3 className="text-lg font-bold">{feed.author?.fullName}</h3>
-                                <p className="text-gray-600 text-sm">3 hours ago</p>
+                                <Link to={`/profile/${feed?.userId}`}><h3 className="text-lg font-bold">{feed?.author?.fullName}</h3></Link>
+                                <p className="text-gray-600 text-xs">{getPassTime(feed.createdAt)}</p>
                             </div>
                         </div>
                         <MenuDropdown contentClass="right-0 w-40" render={()=>(
@@ -110,7 +108,7 @@ const FeedCard = ({feed, authId, dispatch}) => {
                                    <BsFillTrash2Fill />
                                    <span className="text-xs font-medium text-gray-500">Delete</span>
                                </li>
-                                <li onClick={()=>handelDeleteFeed(feed._id)} className="cursor-pointer flex items-center gap-x-1 list-none mt-2">
+                                <li onClick={()=>handleSaveItem(feed._id)} className="cursor-pointer flex items-center gap-x-1 list-none mt-2">
                                     <BsFillBookmarkFill />
                                     <span className="text-xs font-medium text-gray-500">Save </span>
                                 </li>
@@ -122,12 +120,9 @@ const FeedCard = ({feed, authId, dispatch}) => {
 
 
                     <div className="mt-4">
-                        <img src="story-image.jpg" alt="Story Image" className="w-full rounded-lg"/>
-                    </div>
-                    <div className="mt-4">
-                        <p className="text-gray-800">{feed?.content.slice(0, state.isExpand ? undefined : 300)}</p>
+                        <p className="text-gray-800">{feed?.content?.slice(0, state.isExpand ? undefined : 300)}</p>
 
-                        { feed?.content.length > 300 ?
+                        { feed?.content?.length > 300 ?
                             state.isExpand
                                 ? <span onClick={() => handleExpand(false)}>show less</span>
                                 : <span onClick={() => handleExpand(true)}>show more</span>

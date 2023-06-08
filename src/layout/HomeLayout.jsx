@@ -4,12 +4,14 @@ import Avatar from "src/compoenents/Avatar/Avatar.jsx";
 import PendingFriendRequestCard from "src/compoenents/PendingFriendRequestCard/PendingFriendRequestCard.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchFeedsAction} from "src/store/actions/feedAction.js";
-import {confirmFriendRequestAction, fetchAuthFriendsAction, fetchPeoplesAction} from "src/store/actions/userAction.js";
+import { fetchAuthFriendsAction, fetchPeoplesAction} from "src/store/actions/userAction.js";
 import {Link} from "react-router-dom";
 import {openSidebarAction} from "src/store/slices/appSlice.js";
 import ActiveFriend from "src/compoenents/ActiveFriend/ActiveFriend.jsx";
 import ChatWithFriend from "src/compoenents/ChatWithFriend/ChatWithFriend.jsx";
 import {openChatUserAction} from "src/store/slices/chatSlice.js";
+import {FaSignOutAlt} from "react-icons/fa";
+import {logoutAction} from "src/store/slices/authSlice.js";
 
 const HomeLayout = ({children}) => {
 
@@ -28,13 +30,17 @@ const HomeLayout = ({children}) => {
     const menuItems = [
         {cls: "friend-icon", label: "Friends", to: "/friends", },
         {cls: "group-icon", label: "Groups", to: "/groups", },
-        {cls: "save-icon", label: "Saves", to: "/saves", },
+        {cls: "save-icon", label: "Saves", to: "/saved", },
         {cls: "watch-icon", label: "Watch", to: "/watch", },
         {cls: "feed-icon", label: "Feed", to: "/", }
     ]
 
     function handleStartChat(friend){
         dispatch(openChatUserAction(friend))
+    }
+
+    function handleLogout() {
+        dispatch(logoutAction())
     }
 
     return (
@@ -47,13 +53,15 @@ const HomeLayout = ({children}) => {
                             <h4>Home</h4>
                         </div>
 
-                        <li  className="flex items-center gap-x-1 my-1 py-2  px-2 menu-item-hover">
-                            <Avatar className="!w-10 !h-10" imgClass="!w-10 !h-10 text-xs" src={auth.avatar} username={auth.fullName} />
-                            <div>
-                                <span className="font-medium text-sm text-neutral-600">{auth.fullName}</span>
-                                <h5 className="text-[10px] text-neutral-600">{auth._id}</h5>
-                            </div>
-                        </li>
+                        <Link to={`/profile/${auth._id}`}>
+                            <li  className="flex items-center gap-x-1 my-1 py-2  px-2 menu-item-hover">
+                                <Avatar className="!w-10 !h-10" imgClass="!w-10 !h-10 text-xs" src={auth.avatar} username={auth.fullName} />
+                                <div>
+                                    <span className="font-medium text-sm text-neutral-600">{auth.fullName}</span>
+                                    <h5 className="text-[10px] text-neutral-600">{auth._id}</h5>
+                                </div>
+                            </li>
+                        </Link>
                         {menuItems.map((item, index)=>(
                             item.to ? (
                                 <Link key={index} to={item.to}>
@@ -85,20 +93,24 @@ const HomeLayout = ({children}) => {
                             <h4>Account</h4>
                         </div>
 
-                        <li  className="flex items-center gap-x-1 my-1 py-2 px-2 menu-item-hover">
-                            <Avatar imgClass="text-xs" className="!w-9 !h-9" username="ER SDF"/>
-                            <label htmlFor="" className="text-sm">Setting</label>
-                        </li>
 
                         <li  className="flex items-center gap-x-1 my-1 py-2 px-2 menu-item-hover">
                             <Avatar imgClass="text-xs" className="!w-9 !h-9" username="ER SDF"/>
                             <label htmlFor="" className="text-sm">Setting</label>
                         </li>
 
-                        <li  className="flex items-center gap-x-1 my-1 py-2 px-2 menu-item-hover">
-                                <Avatar imgClass="text-xs" className="!w-9 !h-9" username="ER SDF"/>
-                                <label htmlFor="" className="text-sm">Setting</label>
+                        <li onClick={handleLogout} className="flex items-center gap-x-1 my-1 py-2 px-2 menu-item-hover">
+                            <div className="!w-9 !h-9 bg-neutral-200 rounded-full flex justify-center items-center"><FaSignOutAlt /></div>
+                            <label htmlFor="" className="text-sm">Logout</label>
                         </li>
+
+                        <Link to={`/profile/${auth._id}`}>
+                            <li  className="flex items-center gap-x-1 my-1 py-2 px-2 menu-item-hover">
+                                <Avatar imgClass="text-xs" className="!w-9 !h-9" src={auth?.avatar} username="ER SDF"/>
+                                <label htmlFor="" className="text-sm">Profile</label>
+                            </li>
+                        </Link>
+
 
                     </div>
 

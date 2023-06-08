@@ -44,7 +44,7 @@ const Login = () => {
     }
 
     return (
-        <div className="py-20">
+        <div className="py-20 pb-72">
             <div className="max-w-lg mx-auto card">
                 <div className="">
                     <h1 className="text-2xl font-semibold text-center">Login in your Account.</h1>

@@ -80,3 +80,31 @@ export const removeFriendAction = createAsyncThunk("authSlice/remove-friend", as
 
 
 
+export const addInToSaveAction = createAsyncThunk("authSlice/remove-friend", async (payload, thunkAPI)=>{
+    try{
+        let {status,data} = await apis.post("/saved", payload)
+        if(status === 201){
+            return data
+        }
+    } catch (ex){
+        // send error message with reject type in reducer
+        return thunkAPI.rejectWithValue( ex.message)
+    }
+})
+
+
+export const fetchAllSavedAction = createAsyncThunk("authSlice/remove-friend", async (payload, thunkAPI)=>{
+    try{
+        let {status,data} = await apis.get("/saved")
+        if(status === 200){
+            return data
+        }
+    } catch (ex){
+        // send error message with reject type in reducer
+        return thunkAPI.rejectWithValue( ex.message)
+    }
+})
+
+
+
+

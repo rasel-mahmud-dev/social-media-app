@@ -11,7 +11,7 @@ const OnlineFriends = () => {
     return (
         <div>
             <ActiveFriend friends={friends}/>
-            <PendingFriendRequestCard  className="mt-4" auth={auth} pendingFriends={pendingFriends} />
+            <PendingFriendRequestCard   className="mt-4" auth={auth} pendingFriends={pendingFriends} />
         </div>
     );
 };

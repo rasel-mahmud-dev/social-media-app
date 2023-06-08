@@ -39,7 +39,7 @@ const Homepage = () => {
                 <div className="flex gap-x-4">
 
 
-                    <div>
+                    <div className='w-full'>
 
                         <div className="card mb-4">
                             <div>

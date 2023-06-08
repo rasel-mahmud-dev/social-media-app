@@ -7,6 +7,7 @@ import Pusher from "pusher-js"
 import playSound from "src/notification/sound.js";
 import addPost from "src/compoenents/AddPost/AddPost.jsx";
 import {addLocalFeedAction, removeLocalFeedAction} from "src/store/slices/feedSlice.js";
+import Footer from "src/compoenents/Footer/Footer.jsx";
 
 
 
@@ -39,8 +40,7 @@ const Main = () => {
         });
 
         channel.bind('new-feed', function(data) {
-
-            if(data.feed) {
+            if(data.feed && data.feed.userId !== auth._id) {
                 // push all users timeline
                 playSound()
                 dispatch(addLocalFeedAction(data.feed))
@@ -63,6 +63,7 @@ const Main = () => {
         <div>
             <Header />
             <Outlet />
+            <Footer/>
         </div>
     );
 };

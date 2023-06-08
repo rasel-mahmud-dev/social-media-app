@@ -20,6 +20,7 @@ const AddPost = ({onClose}) => {
 
         dispatch(createFeedAction(payload)).then(()=>{
             onClose()
+            e.target.content.value = ""
         })
 
     }

@@ -2,7 +2,8 @@ import axios from "axios";
 
 
 // export const backend = "http://192.168.126.224:1000/api/v1"
-export const backend = "http://localhost:1000/api/v1"
+// export const backend = "http://localhost:1000/api/v1"
+export const backend = "https://social-app-v.vercel.app/api/v1"
 
 const api = axios.create({
   baseURL: backend,

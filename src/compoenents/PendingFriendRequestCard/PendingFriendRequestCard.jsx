@@ -1,8 +1,12 @@
 import React from 'react';
 import Avatar from "../Avatar/Avatar.jsx";
 import {Link} from "react-router-dom";
+import {confirmFriendRequestAction} from "src/store/actions/userAction.js";
+import {useDispatch} from "react-redux";
 
-const PendingFriendRequestCard = ({pendingFriends  = [], handleRemoveFriend, handleAcceptFriendRequest,  auth, className = ""}) => {
+const PendingFriendRequestCard = ({pendingFriends  = [], handleRemoveFriend,  auth, className = ""}) => {
+
+    const dispatch = useDispatch()
 
     function renderPendingRequest(people, friend){
 
@@ -19,9 +23,9 @@ const PendingFriendRequestCard = ({pendingFriends  = [], handleRemoveFriend, han
                 <div className="flex items-center gap-x-2">
                     {
                         friend.senderId === auth._id ? (
-                            <button onClick={()=>handleRemoveFriend(friend._id)} className="btn btn-primary">Cancel Request</button>
+                            <button onClick={()=>handleRemoveFriend(friend._id)} className="btn btn-primary">Cancel</button>
                         ): (
-                            <button onClick={()=>handleAcceptFriendRequest(friend._id)} className="btn btn-primary">Confirm Request</button>
+                            <button onClick={()=>dispatch(confirmFriendRequestAction({friendId: friend._id, userId: friend.receiverId}))} className="btn btn-primary">Confirm</button>
                         )
                     }
                     <button className="btn">Profile</button>
@@ -36,7 +40,7 @@ const PendingFriendRequestCard = ({pendingFriends  = [], handleRemoveFriend, han
 
             <div className="card-meta">
                 <h4>Friend Request</h4>
-                <Link to="/friend-requests">See all</Link>
+                <Link to="/friend-request-received">See all</Link>
             </div>
 
             <div className="mt-6">{pendingFriends.map((item, i) => (
