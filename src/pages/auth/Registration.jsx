@@ -1,11 +1,12 @@
 import React, {useReducer} from "react";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {loginOrRegistrationAction} from "src/store/actions/authAction.js";
 import {useDispatch} from "react-redux";
 
 
 const Registration = () => {
 
+    const navigate = useNavigate()
 
     const dispatch = useDispatch()
 
@@ -42,7 +43,13 @@ const Registration = () => {
         dispatch(loginOrRegistrationAction({
             type: "registration",
             data: formData
-        }))
+        })).unwrap().then(()=>{
+            navigate("/")
+        }).catch((message)=>{
+            setState({
+                message: message
+            })
+        })
 
         // api.post("/api/users", {
         //     first_name: userData.firstName,
