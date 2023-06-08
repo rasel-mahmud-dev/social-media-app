@@ -7,6 +7,7 @@ import {fetchFeedsAction} from "src/store/actions/feedAction.js";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchPeoplesAction} from "src/store/actions/userAction.js";
 import HomeLayout from "layout/HomeLayout.jsx";
+import Stories from "src/compoenents/Story/Stories.jsx";
 
 const Homepage = () => {
 
@@ -40,6 +41,8 @@ const Homepage = () => {
 
 
                     <div className='w-full'>
+
+                        <Stories></Stories>
 
                         <div className="card mb-4">
                             <div>

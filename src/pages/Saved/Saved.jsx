@@ -13,7 +13,7 @@ const Saved = () => {
         dispatch(fetchAllSavedAction()).unwrap().then((data)=>{
             setSaved(data.saved)
         })
-    })
+    }, [])
 
     return (
         <HomeLayout>

@@ -47,7 +47,7 @@ const Registration = () => {
             navigate("/")
         }).catch((message)=>{
             setState({
-                message: message
+                errorMessage: message
             })
         })
 

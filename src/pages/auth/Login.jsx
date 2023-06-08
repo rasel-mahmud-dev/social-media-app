@@ -36,7 +36,7 @@ const Login = () => {
             navigate("/")
         }).catch((message)=>{
             setState({
-                message: message
+                errorMessage: message
             })
         })
 

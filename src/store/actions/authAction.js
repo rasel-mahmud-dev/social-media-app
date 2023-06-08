@@ -16,7 +16,11 @@ export const loginOrRegistrationAction = createAsyncThunk("authSlice/login", asy
         }
     } catch (ex){
         // send error message with reject type in reducer
-        return thunkAPI.rejectWithValue( ex.message)
+        let message = ex.message
+        if(ex?.response?.data?.message){
+            message = ex?.response?.data?.message
+        }
+        return thunkAPI.rejectWithValue( message)
     }
 })
 
