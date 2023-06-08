@@ -1,10 +1,9 @@
 import React from 'react';
-import {BiCamera, BiImage, BiVideo} from "react-icons/bi";
 import Avatar from "../Avatar/Avatar.jsx";
 import {createFeedAction} from "src/store/actions/feedAction.js";
 import {useDispatch, useSelector} from "react-redux";
 
-const AddPost = () => {
+const AddPost = ({onClose}) => {
 
     const dispatch = useDispatch()
 
@@ -19,10 +18,9 @@ const AddPost = () => {
         let payload = new FormData()
         payload.append("content", content)
 
-
-
-        dispatch(createFeedAction(payload))
-
+        dispatch(createFeedAction(payload)).then(()=>{
+            onClose()
+        })
 
     }
 

@@ -31,7 +31,7 @@ const Homepage = () => {
 
             <ModalWithBackdrop modalClass="!max-w-xl" isOpen={isOpenAddPostModal}
                                onClose={() => setOpenAddPostModal(false)}>
-                <AddPost/>
+                <AddPost onClose={()=>setOpenAddPostModal(false)}/>
             </ModalWithBackdrop>
 
 
@@ -74,7 +74,7 @@ const Homepage = () => {
                         {/**** all feed */}
                         <div className="flex flex-col gap-y-4">
                             {feedState.feeds.map((feed) => (
-                                <FeedCard dispatch={dispatch} feed={feed} key={feed._id}/>
+                                <FeedCard authId={auth._id} dispatch={dispatch} feed={feed} key={feed._id}/>
                             ))}
                         </div>
 

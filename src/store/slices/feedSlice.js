@@ -1,5 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
-import {fetchFeedsAction, toggleLikeAction} from "src/store/actions/feedAction.js";
+import {
+    addCommentAction, deleteFeedAction,
+    fetchFeedsAction,
+    getAllCommentsAction,
+    toggleLikeAction
+} from "src/store/actions/feedAction.js";
 import {fetchPeoplesAction} from "src/store/actions/userAction.js";
 
 
@@ -41,6 +46,18 @@ export const feedSlice = createSlice({
                     ...action.payload
                 }
             }
+        },
+
+        // dispatch this when add new post
+        addLocalFeedAction(state, action){
+            state.feeds = [action.payload, ...state.feeds ]
+        },
+
+
+        // dispatch this when delete feed
+        removeLocalFeedAction(state, action){
+            console.log(action.payload)
+            state.feeds = state.feeds.filter(f=>f._id !== action.payload._id)
         }
     },
 
@@ -56,8 +73,25 @@ export const feedSlice = createSlice({
             state.peoples = action.payload
         })
 
+        // delete feed
+        builder.addCase(deleteFeedAction.fulfilled, (state, action) => {
+            state.feeds = state.feeds.filter(f=>f._id !== action.payload)
+        })
+
         //toggle like
-        builder.addCase(toggleLikeAction.fulfilled, (state, action) => {
+        // builder.addCase(toggleLikeAction.fulfilled, (state, action) => {
+        //     // state.peoples = action.payload
+        //     console.log(action.payload)
+        // })
+
+        //add comment
+        // builder.addCase(addCommentAction.fulfilled, (state, action) => {
+        //     // state.peoples = action.payload
+        //     console.log(action.payload)
+        // })
+
+        //get all comments
+        builder.addCase(getAllCommentsAction.fulfilled, (state, action) => {
             // state.peoples = action.payload
             console.log(action.payload)
         })
@@ -65,6 +99,6 @@ export const feedSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {  removePeople, addPeople, updateLocalFeedAction } = feedSlice.actions
+export const {  addLocalFeedAction, removeLocalFeedAction, removePeople, addPeople, updateLocalFeedAction } = feedSlice.actions
 
 export default feedSlice.reducer
