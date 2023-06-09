@@ -56,7 +56,7 @@ const Header = () => {
                                 className="h-8 mr-3"
                                 alt="Flowbite Logo"
                             />
-                            <span className="hidden md:block self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Sassy</span>
+                            <span className="hidden md:block self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Kotha</span>
                         </Link>
                     </div>
 

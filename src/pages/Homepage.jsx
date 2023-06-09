@@ -1,6 +1,6 @@
 import FeedCard from "../compoenents/FeedCard/FeedCard.jsx";
 import Avatar from "../compoenents/Avatar/Avatar.jsx";
-import React, {useEffect, useState} from "react";
+import React, {memo, useEffect, useMemo, useState} from "react";
 import AddPost from "../compoenents/AddPost/AddPost.jsx";
 import ModalWithBackdrop from "../compoenents/ModalWithBackdrop/ModalWithBackdrop.jsx";
 import {fetchFeedsAction} from "src/store/actions/feedAction.js";
@@ -42,7 +42,9 @@ const Homepage = () => {
 
                     <div className='w-full'>
 
-                        <Stories></Stories>
+                        <div className="stories-container">
+                            <Stories></Stories>
+                        </div>
 
                         <div className="card mb-4">
                             <div>
@@ -77,7 +79,7 @@ const Homepage = () => {
                         {/**** all feed */}
                         <div className="flex flex-col gap-y-4">
                             {feedState.feeds.map((feed) => (
-                                <FeedCard authId={auth._id} dispatch={dispatch} feed={feed} key={feed._id}/>
+                                <MemoWithFeed  key={feed._id} authId={auth._id} dispatch={dispatch} feed={feed} />
                             ))}
                         </div>
 
@@ -87,10 +89,13 @@ const Homepage = () => {
 
                 </div>
             </HomeLayout>
-
-
         </div>
     );
 };
+
+const MemoWithFeed = memo(({authId, dispatch, feed})=>{
+    return <FeedCard authId={authId} dispatch={dispatch} feed={feed}/>
+})
+
 
 export default Homepage;

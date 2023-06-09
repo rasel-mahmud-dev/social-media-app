@@ -48,6 +48,24 @@ export const feedSlice = createSlice({
             }
         },
 
+        // dispatch this when make unfriend
+        localToggleFeedReactionAction(state, action){
+            const {feedId, _id} = action.payload
+            let updateFeeds = [...state.feeds]
+            let index = updateFeeds.findIndex(p=>p._id === feedId)
+            if(index !== -1){
+                let updateLikes = updateFeeds[index]?.likes || []
+                let isExistLike = updateLikes.findIndex(like=>like._id === _id)
+                if(isExistLike !== -1){
+                    updateLikes.splice(isExistLike, 1)
+                } else {
+                    updateLikes.push(action.payload)
+                }
+            }
+            state.feeds = updateFeeds
+            return state
+        },
+
         // dispatch this when add new post
         addLocalFeedAction(state, action){
             state.feeds = [action.payload, ...state.feeds ]
@@ -104,6 +122,6 @@ export const feedSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {  addLocalFeedAction, removeLocalFeedAction, removePeople, addPeople, updateLocalFeedAction } = feedSlice.actions
+export const {  addLocalFeedAction, localToggleFeedReactionAction, removeLocalFeedAction, removePeople, addPeople, updateLocalFeedAction } = feedSlice.actions
 
 export default feedSlice.reducer

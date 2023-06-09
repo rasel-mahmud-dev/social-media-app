@@ -7,7 +7,7 @@ import {
     getAllCommentsAction,
     toggleLikeAction
 } from "src/store/actions/feedAction.js";
-import {updateLocalFeedAction} from "src/store/slices/feedSlice.js";
+import {localToggleFeedReactionAction, updateLocalFeedAction} from "src/store/slices/feedSlice.js";
 import Comments from "src/compoenents/Comments/Comments.jsx";
 import AddComment from "src/compoenents/AddComment/AddComment.jsx";
 import Loading from "src/compoenents/Loading/Loading.jsx";
@@ -36,26 +36,11 @@ const FeedCard = ({feed, authId, dispatch}) => {
 
     function toggleLikeHandler(feedId) {
         setState({isLikeActionLoading: true})
-        dispatch(toggleLikeAction({feedId})).unwrap().then((data)=>{
 
+        dispatch(toggleLikeAction({feedId})).unwrap().then((data)=>{
             if(!data) return;
 
-            let likes = []
-            if(feed.likes && Array.isArray(feed.likes)){
-                likes = [...feed.likes]
-            }
-            if(data.isAdded){
-                likes = [...likes, data.newLike]
-            } else {
-                likes = likes.filter(like=>like._id !== data.removeId)
-            }
-
-            dispatch(updateLocalFeedAction({
-                feedId: feedId,
-                updated: {
-                    likes: likes
-                }
-            }))
+            dispatch(localToggleFeedReactionAction(data.like))
 
         }).finally(() => {
             setState({isLikeActionLoading: false})
@@ -97,7 +82,7 @@ const FeedCard = ({feed, authId, dispatch}) => {
                         <div className="flex items-center">
                             <Avatar className="!w-9 !h-9" imgClass="!w-9 !h-9" username={feed?.author?.fullName} src={feed?.author?.avatar}/>
                             <div className="ml-3">
-                                <Link to={`/profile/${feed?.userId}`}><h3 className="text-lg font-bold">{feed?.author?.fullName}</h3></Link>
+                                <Link to={`/profile/${feed?.userId}`}><h3 className="text-lg font-bold">{feed?.author?.fullName} {new Date().getTime()} </h3></Link>
                                 <p className="text-gray-600 text-xs">{getPassTime(feed.createdAt)}</p>
                             </div>
                         </div>

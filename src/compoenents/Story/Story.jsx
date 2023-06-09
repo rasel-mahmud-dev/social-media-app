@@ -4,7 +4,7 @@ import "./story.scss"
 
 const Story = ({fullName, avatar, storyAsset}) => {
     return (
-        <div className="story" style={{backgroundImage: `url(${storyAsset})`}}>
+        <div className="story story-card" style={{backgroundImage: `url(${storyAsset})`}}>
             <div className="story-image">
                 <img src={avatar} alt=""/>
             </div>

@@ -5,8 +5,13 @@ import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
 import Pusher from "pusher-js"
 import playSound from "src/notification/sound.js";
-import addPost from "src/compoenents/AddPost/AddPost.jsx";
-import {addLocalFeedAction, removeLocalFeedAction} from "src/store/slices/feedSlice.js";
+
+import {
+    addLocalFeedAction,
+    localToggleFeedReactionAction,
+    removeLocalFeedAction,
+
+} from "src/store/slices/feedSlice.js";
 import Footer from "src/compoenents/Footer/Footer.jsx";
 
 
@@ -31,14 +36,12 @@ const Main = () => {
             cluster: 'ap2'
         });
 
-
         const channel = pusher.subscribe('public-channel');
 
         channel.bind('message', function(data) {
             playSound()
             console.log(data)
         });
-
         channel.bind('new-feed', function(data) {
             if(data.feed && data.feed.userId !== auth._id) {
                 // push all users timeline
@@ -54,6 +57,19 @@ const Main = () => {
                 dispatch(removeLocalFeedAction(data.feed))
             }
         });
+
+        channel.bind("toggle-reaction", function (data){
+            console.log(data)
+            // skip if this action fired from current user.
+            if(data.like.userId === auth._id) return
+            dispatch(localToggleFeedReactionAction(data.like))
+        })
+
+
+        return ()=>{
+            pusher.unsubscribe("public-channel")
+            pusher.disconnect()
+        }
 
     }, [auth]);
 

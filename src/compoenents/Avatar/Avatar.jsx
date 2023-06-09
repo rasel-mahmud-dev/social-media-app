@@ -10,7 +10,7 @@ function chooseFirstLetter(name) {
     if (splitName.length > 1) {
         letterTwo = splitName[1][0];
     }
-    return letterOne + letterTwo;
+    return letterOne + (letterTwo ? letterTwo : "");
 }
 
 

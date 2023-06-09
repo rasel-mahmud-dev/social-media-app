@@ -80,6 +80,11 @@
   color: white !important;
   background-image: linear-gradient(to right, #4144ff, #4570d3) !important;
 }
+.btn-disable {
+  color: #505050 !important;
+  background-image: linear-gradient(to right, #b1b1b1, #ababab) !important;
+  pointer-events: none;
+}
 
 .online {
   width: 10px;
@@ -193,6 +198,23 @@
   background-image: url(/icons/like.svg);
 }
 
+
+.bw-image-icon, .bw-text-icon{
+  background-image: url(/icons/wf9LMNvOarh.png);
+  background-size: auto;
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  display: inline-block;
+}
+.bw-image-icon {
+  background-position: 0px -1137px;
+}
+.bw-text-icon {
+  background-position: 0px -1452px;
+}
+
+
 .menu-item-hover {
   transition: background-color .4s ease;
   cursor: pointer;
@@ -274,4 +296,13 @@
   padding: 0 20px;
   margin: auto;
 
+}
+
+.stories-container{
+  @include getDown(600px){
+    //margin-left: 8px;
+    .story-first{
+      margin-left: 10px;
+    }
+  }
 }
