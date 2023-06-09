@@ -74,9 +74,10 @@ const Stories = ({auth}) => {
                 }}
                 aria-label="My Favorite Images">
                 <SplideSlide className="story-first">
-                    <CreateStory onSubmit={handleSubmitStory} fullName={auth?.fullName}
-                                 avatar="https://res.cloudinary.com/rasel/image/upload/v1686216926/social-app/avatar.jpg"
-                                 storyAsset=""/>
+                    <CreateStory
+                        onSubmit={handleSubmitStory} fullName={auth?.fullName}
+                        avatar={auth?.avatar}
+                        storyAsset="" />
                 </SplideSlide>
 
                 {state.stories.map(item => (

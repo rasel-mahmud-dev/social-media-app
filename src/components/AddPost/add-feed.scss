@@ -1,28 +1,103 @@
-.add-feed-wrapper{
-  margin-bottom: 10px;
+@import "src/mixin";
 
-  &.image-2{
-    .media-preview{
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 4px;
-      height: 100px;
-      overflow-y: auto;
-      & div{
-        border-radius: 8px;
-        overflow: hidden;
-        img{
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-      }
-    }
-    textarea{
-      height: 120px;
+.add-feed-modal {
+  max-width: 600px;
+  margin: auto;
+
+  @include getDown(600px){
+    top: 0 !important;
+    height: 100% !important;
+    max-height: 100% !important;
+    border-radius: 0 !important;
+
+    &::-webkit-scrollbar{
+      display: none !important;
     }
   }
 
+}
 
 
+.add-feed-wrapper {
+  margin-bottom: 10px;
+
+
+  //.media-preview {
+  //  column-count: 3;
+  //
+  //  textarea {
+  //    height: 120px;
+  //  }
+  //
+  //  & div {
+  //
+  //    margin: 0;
+  //    display: grid;
+  //    grid-template-rows: 1fr auto;
+  //    margin-bottom: 10px;
+  //    break-inside: avoid;
+  //
+  //    & > img {
+  //      grid-row: 1 / -1;
+  //      grid-column: 1;
+  //    }
+  //  }
+  //}
+
+
+  &.image-0 {
+    textarea {
+      height: 200px;
+    }
+  }
+
+  &.image-1 {
+    textarea {
+      height: 80px;
+    }
+  }
+
+  &.image-4, &.image-2, &.image-3 {
+    .media-preview {
+      user-select: none;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+
+      & > div {
+        background: #ffffff;
+        height: 200px;
+        width: 100%;
+
+        &:last-child {
+          height: 50px;
+          margin-top: 4px;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+
+        img {
+          object-fit: cover;
+          object-position: center;
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+
+    textarea {
+      height: 90px;
+    }
+  }
+
+  &.image-3 {
+    .media-preview {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  &.image-2 {
+    .media-preview {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
 }

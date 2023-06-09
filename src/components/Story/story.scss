@@ -1,4 +1,3 @@
-
 @import "src/mixin";
 
 .story_root {
@@ -62,27 +61,28 @@
   }
 
   .story-thumb {
-    height: 100px;
+    height: 120px;
     position: relative;
+    overflow: hidden;
+  }
 
-    .story-btn {
-      cursor: pointer;
-      position: absolute;
-      left: 50%;
-      bottom: -30px;
-      transform: translateX(-50%);
-      width: 40px;
-      height: 40px;
-      border-radius: 100%;
-      background: var(--primary-400);
-      border: 3px solid white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+  .story-btn {
+    cursor: pointer;
+    position: absolute;
+    left: 50%;
+    top: 100px;
+    transform: translateX(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+    background: var(--primary-400);
+    border: 3px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-      svg {
-        fill: white;
-      }
+    svg {
+      fill: white;
     }
   }
 
@@ -94,6 +94,9 @@
     font-size: 14px;
     font-weight: 500;
     text-align: center;
+    P{
+      line-height: 1.1;
+    }
   }
 
 }
@@ -117,9 +120,8 @@
 
 .create-story-content {
   position: relative;
-
   .close-button {
-
+  z-index: 1010;
     position: absolute;
     background: var(--primary-400);
     width: 35px;
@@ -136,51 +138,6 @@
     }
 
   }
-
-
-  .preview-story-modal {
-    width: 900px;
-    min-height: 500px;
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    box-sizing: border-box;
-    overflow: hidden;
-
-    .card-meta {
-      position: absolute;
-      z-index: 1000;
-      color: white
-    }
-
-    .preview-content {
-      background: black;
-      //width: 100%;
-      //height: inherit;
-      border-radius: 10px;
-
-
-      .reactEasyCrop_Container {
-        background: black;
-      }
-
-
-      .preview-content-img {
-        width: 250px;
-        height: 450px;
-        margin: auto;
-        background: black;
-
-        img {
-          width: 100%;
-          height: 100%;
-          //aspect-ratio: 1/1;
-          object-fit: contain;
-        }
-      }
-    }
-  }
 }
 
 .my-stories-sidebar {
@@ -195,7 +152,7 @@
   }
 
 
-  @include getDown(800px){
+  @include getDown(800px) {
     display: none;
   }
 
@@ -212,12 +169,78 @@
       background-image: linear-gradient(40deg, #ff7f58, #ff00f5);
     }
   }
+
+  @include getDown(600px) {
+    flex-direction: column;
+    row-gap: 10px;
+    padding: 40px 0;
+  }
+
+}
+
+
+.mobile-add-story-btn{
+  position: fixed;
+  bottom: 10px;
+}
+
+.preview-story-modal {
+  width: 900px;
+  min-height: 500px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  box-sizing: border-box;
+  overflow: hidden;
+
+  @include getDown(600px){
+    width: 100%;
+    top: 0;
+    height: 100%;
+    transform: translate(0, 0);
+    left: 0;
+    border-radius: 0 !important;
+  }
+
+  .card-meta {
+    position: absolute;
+    z-index: 1000;
+    color: white
+  }
+
+  .preview-content {
+    background: black;
+    //width: 100%;
+    //height: inherit;
+    border-radius: 10px;
+
+
+    .reactEasyCrop_Container {
+      background: black;
+    }
+
+
+    .preview-content-img {
+      width: 250px;
+      height: 450px;
+      margin: auto;
+      background: black;
+
+      img {
+        width: 100%;
+        height: 100%;
+        //aspect-ratio: 1/1;
+        object-fit: contain;
+      }
+    }
+  }
 }
 
 .open-story-content {
   background-color: #000000;
 
-  @include getDown(800px){
+  @include getDown(800px) {
     top: calc(0px - var(--header-height));
     position: relative;
     z-index: 1004;
@@ -245,7 +268,7 @@
       transform: translateY(0) scale(1);
       transition: transform .4s ease;
       cursor: pointer;
-      @include getDown(800px){
+      @include getDown(800px) {
         display: none;
       }
 

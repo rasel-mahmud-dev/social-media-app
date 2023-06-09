@@ -80,6 +80,10 @@
   color: white !important;
   background-image: linear-gradient(to right, #4144ff, #4570d3) !important;
 }
+.btn-light{
+  color: #262626;
+  background-image: linear-gradient(to right, #e1e1e1, #d2d2d2) !important;
+}
 .btn-disable {
   color: #505050 !important;
   background-image: linear-gradient(to right, #b1b1b1, #ababab) !important;
@@ -305,4 +309,11 @@
       margin-left: 10px;
     }
   }
+}
+
+.position-center{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }

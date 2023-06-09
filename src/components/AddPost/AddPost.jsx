@@ -2,11 +2,13 @@ import React from 'react';
 import Avatar from "../Avatar/Avatar.jsx";
 import {createFeedAction} from "src/store/actions/feedAction.js";
 import {useDispatch, useSelector} from "react-redux";
-import {BsGlobe} from "react-icons/bs";
+import {BsGlobe, BsTrash} from "react-icons/bs";
 import chooseImage from "src/utils/chooseImage.js";
 import useCustomReducer from "src/hooks/useReducer.jsx";
 
 import "./add-feed.scss"
+import Loading from "components/Loading/Loading.jsx";
+import {BiChevronLeft} from "react-icons/bi";
 
 const AddPost = ({onClose}) => {
 
@@ -15,7 +17,8 @@ const AddPost = ({onClose}) => {
     const {auth} = useSelector(state => state.authState)
 
     const [state, setState] = useCustomReducer({
-        images: []
+        images: [],
+        addFeedLoading: false
     })
 
 
@@ -26,15 +29,27 @@ const AddPost = ({onClose}) => {
 
         let payload = new FormData()
         payload.append("content", content)
-       if(state.images &&  state.images.length > 0){
-           state.images.forEach(image=>{
-               payload.append("image", image.blob, image.blob.name)
-           })
-       }
+        if (state.images && state.images.length > 0) {
+            state.images.forEach(image => {
+                payload.append("image", image.blob, image.blob.name)
+            })
+        }
+        setState({
+            addFeedLoading: true
+        })
 
-        dispatch(createFeedAction(payload)).then(() => {
+        dispatch(createFeedAction(payload)).unwrap().then(() => {
             onClose()
             e.target.content.value = ""
+            setState({
+                images: []
+            })
+        }).catch(() => {
+            alert("Post adding fail")
+        }).finally(() => {
+            setState({
+                addFeedLoading: false
+            })
         })
 
     }
@@ -51,13 +66,25 @@ const AddPost = ({onClose}) => {
         }
     }
 
+    function handleRemoveImage(imageIndex) {
+        setState(prevState => {
+            return {
+                ...prevState,
+                images: prevState.images.filter((_, i) => i !== imageIndex)
+            }
+        })
+    }
 
 
     return (
-        <div>
+        <div className="">
+
             <form onSubmit={handlePost}>
 
-                <label className="font-semibold">Create post</label>
+                <div className="flex items-center gap-x-2">
+                    <div onClick={onClose} className="icon-box !w-8 !h-8 rounded-full"><BiChevronLeft /></div>
+                    <label className="font-semibold">Create post</label>
+                </div>
 
                 <div className="mt-3 ">
                     <div className=" flex items-center gap-x-2">
@@ -72,7 +99,7 @@ const AddPost = ({onClose}) => {
                         </div>
                     </div>
 
-                    <div className={`mt-2 add-feed-wrapper image-${state.images.length}`}>
+                    <div className={`mt-2 add-feed-wrapper image-${state.images.length > 4 ? 4 : state.images.length}`}>
                         <textarea
                             className="w-full input-elemselect add-feed-input" name="content"
                             placeholder={`What's on your mind ` + auth?.firstName} id="" cols="30"
@@ -81,11 +108,27 @@ const AddPost = ({onClose}) => {
 
                         {/* post media */}
                         {state.images.length > 0 && <div className="media-preview">
-                            {state.images.map((image, index) => (
-                                <div className="" key={index}>
+                            {state.images.slice(0, state.images.length >= 4 ? 4 : undefined).map((image, index) => (
+                                <div className="relative group " key={index}>
                                     <img src={image.base64} alt=""/>
+                                    <div onClick={() => handleRemoveImage(index)}
+                                         className="group-hover:!flex !hidden cursor-pointer icon-box bg-neutral-600/20 !w-8 !h-8 absolute right-1 top-1">
+                                        <BsTrash className="text-white  text-xs"/>
+                                    </div>
+
+                                    <div onClick={() => handleRemoveImage(index)}
+                                         className="position-center text-xs font-medium text-white">
+                                        {state.images.length > 4 && index === 3 && <div>
+                                            {state.images.length - 4} More items
+                                        </div>}
+                                    </div>
                                 </div>
                             ))}
+
+                            <div onClick={handleChoosePhoto}
+                                 className="relative group flex items-center justify-center h-10 border border-neutral-600/10 rounded-lg">
+                                <span className="text-whites font-medium text-sm">Add More</span>
+                            </div>
                         </div>}
 
                     </div>
@@ -107,7 +150,18 @@ const AddPost = ({onClose}) => {
                 </div>
 
                 <div className="mt-5">
-                    <button type="submit" className="btn btn-primary w-full">Submit Post</button>
+                    <button type="submit"
+                            className={`btn  w-full ${state.addFeedLoading ? "btn-light pointer-events-none flex justify-center" : "btn-primary"}`}>
+                        {!state.addFeedLoading && "Submit Post"}
+
+                        {state.addFeedLoading && (
+                            <div className="flex items-center gap-x-2">
+                                <Loading/>
+                                <span>Adding</span>
+                            </div>
+                        )}
+
+                    </button>
                 </div>
 
             </form>

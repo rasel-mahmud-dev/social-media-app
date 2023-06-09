@@ -126,10 +126,17 @@ const FeedCard = ({feed, authId, dispatch}) => {
                         </div>
 
                         { feed.images.length > 0 && (
-                            <div className={`feed-media image-${feed.images.length}`}>
-                                {feed?.images.map((image, index)=>(
-                                    <div key={index}>
+                            <div className={`feed-media image-${feed.images.length > 4 ? 4 : feed.images.length}`}>
+                                {feed?.images.slice(0, feed?.images.length >= 4 ? 4 : undefined).map((image, index)=>(
+                                    <div key={index} className="relative">
                                         <img src={staticImage(image)} alt=""/>
+
+                                        { feed?.images.length >= 4  && index === 3 && (
+                                            <div className={`position-center text-white font-semibold`}>
+                                                {feed?.images.length} More items
+                                            </div>
+                                        ) }
+
                                     </div>
                                 ))}
                             </div>

@@ -21,16 +21,19 @@
   transform: translateX(-50%);
   overflow-y: auto;
   cursor: auto;
-  max-height: calc(100vh - 5em);
+  max-height: calc(80vh - var(--header-height));
   min-width: 300px;
   left: 50%;
-  top: 20%;
+  top:  calc(50px + var(--header-height));
   background-color: white;
   padding: 1.5rem;
   border-radius: 1rem;
   box-shadow: 0 25px 50px -12px rgb(0 0 0 / 25%);
   overflow-y: auto;
   overscroll-behavior: contain;
+  &::-webkit-scrollbar{
+    display: none;
+  }
 }
 
 

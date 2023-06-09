@@ -30,7 +30,7 @@ const Homepage = () => {
     return (
         <div className="mt-1.5">
 
-            <ModalWithBackdrop modalClass="!max-w-xl" isOpen={isOpenAddPostModal}
+            <ModalWithBackdrop modalClass="add-feed-modal" isOpen={isOpenAddPostModal}
                                onClose={() => setOpenAddPostModal(false)}>
                 <AddPost onClose={() => setOpenAddPostModal(false)}/>
             </ModalWithBackdrop>

@@ -53,8 +53,8 @@ const Header = () => {
                         <Link to="/" className="flex items-center bg-transparent">
                             <img
                                 src="https://flowbite.com/docs/images/logo.svg"
-                                className="h-8 mr-3"
-                                alt="Flowbite Logo"
+                                className="h-8 mr-3 hidden md:flex"
+                                alt=""
                             />
                             <span className="hidden md:block self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Kotha</span>
                         </Link>
