@@ -1,8 +1,8 @@
 import {Outlet} from "react-router-dom";
-import Header from "../compoenents/Header/Header.jsx";
+import Header from "../components/Header/Header.jsx";
 import {fetchCurrentAuthAction} from "src/store/actions/authAction.js";
 import {useDispatch, useSelector} from "react-redux";
-import {useEffect} from "react";
+import React, {Suspense, useEffect} from "react";
 import Pusher from "pusher-js"
 import playSound from "src/notification/sound.js";
 
@@ -12,7 +12,8 @@ import {
     removeLocalFeedAction,
 
 } from "src/store/slices/feedSlice.js";
-import Footer from "src/compoenents/Footer/Footer.jsx";
+import Footer from "src/components/Footer/Footer.jsx";
+import {MoonLoader} from "react-spinners";
 
 
 
@@ -59,7 +60,6 @@ const Main = () => {
         });
 
         channel.bind("toggle-reaction", function (data){
-            console.log(data)
             // skip if this action fired from current user.
             if(data.like.userId === auth._id) return
             dispatch(localToggleFeedReactionAction(data.like))
@@ -78,7 +78,14 @@ const Main = () => {
     return (
         <div>
             <Header />
-            <Outlet />
+            <Suspense fallback={()=>(
+                <div className="py-24 w-full flex justify-center  items-center flex-col">
+                    <MoonLoader/>
+                    <h4 className="text-xs font-semibold mt-2">Page Loading...</h4>
+                </div>
+            )}>
+                <Outlet />
+            </Suspense>
             {/*<Footer/>*/}
         </div>
     );

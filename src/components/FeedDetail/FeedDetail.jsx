@@ -3,8 +3,8 @@ import HomeLayout from "layout/HomeLayout.jsx";
 import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchFeedDetailAction} from "src/store/actions/feedAction.js";
-import FeedCard from "src/compoenents/FeedCard/FeedCard.jsx";
-import Loading from "src/compoenents/Loading/Loading.jsx";
+import FeedCard from "src/components/FeedCard/FeedCard.jsx";
+import Loading from "src/components/Loading/Loading.jsx";
 
 const FeedDetail = () => {
 

@@ -2,7 +2,7 @@ import React from 'react';
 import {TiTimes} from "react-icons/ti";
 import {useDispatch} from "react-redux";
 import {openChatUserAction} from "src/store/slices/chatSlice.js";
-import Avatar from "src/compoenents/Avatar/Avatar.jsx";
+import Avatar from "src/components/Avatar/Avatar.jsx";
 
 const ChatWithFriend = ({openChatUser}) => {
 

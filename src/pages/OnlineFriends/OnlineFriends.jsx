@@ -1,7 +1,7 @@
 import React from 'react';
-import ActiveFriend from "src/compoenents/ActiveFriend/ActiveFriend.jsx";
+import ActiveFriend from "src/components/ActiveFriend/ActiveFriend.jsx";
 import {useSelector} from "react-redux";
-import PendingFriendRequestCard from "src/compoenents/PendingFriendRequestCard/PendingFriendRequestCard.jsx";
+import PendingFriendRequestCard from "src/components/PendingFriendRequestCard/PendingFriendRequestCard.jsx";
 
 const OnlineFriends = () => {
 

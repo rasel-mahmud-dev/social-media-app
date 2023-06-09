@@ -1,5 +1,5 @@
 import React from 'react';
-import Avatar from "src/compoenents/Avatar/Avatar.jsx";
+import Avatar from "src/components/Avatar/Avatar.jsx";
 import {BsFillTrash2Fill} from "react-icons/bs";
 
 

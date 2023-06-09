@@ -1,5 +1,5 @@
 import {useEffect, useReducer, useRef, useState} from 'react';
-import Avatar from "src/compoenents/Avatar/Avatar.jsx";
+import Avatar from "src/components/Avatar/Avatar.jsx";
 import {useNavigate, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {getStoriesAction} from "src/store/actions/storyAction.js";
@@ -8,6 +8,7 @@ import {BiChevronLeft, BiChevronRight, BiPause, BiPlay, BiPlus} from "react-icon
 import staticImage from "src/utils/staticImage.js";
 import {AiFillSound} from "react-icons/ai";
 import {FaEllipsisH} from "react-icons/fa";
+import "../../components/Story/story.scss"
 
 const intervalId = {
     current: 0
@@ -20,7 +21,7 @@ const Stories = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const {stories} = useSelector(state => state.authState)
+    const {stories, auth} = useSelector(state => state.authState)
 
     const [state, setState] = useReducer((prev, action) => ({...prev, ...action}), {
         showStoryIndex: -1,
@@ -93,14 +94,21 @@ const Stories = () => {
             setProgress(prev => {
                 const value = prev + 1
                 if (value > 99) {
-                    setState({isPause: true})
+
                     clearInterval(intervalId.current)
+
+                    // next item play
+                    const story = stories[state.showStoryIndex + 1]
+                    if(story){
+                        handleShowStory(story._id)
+                    }
+
                     return 100
                 } else {
                     return prev + 1
                 }
             })
-        }, 200)
+        }, 100)
     }
 
     function handleChangeStory(storyIndex) {
@@ -176,9 +184,9 @@ const Stories = () => {
                     <h3 className="text-base font-medium">Your story</h3>
                     <div className="flex items-center justify-between border-b pb-4">
                         <div className="flex items-center gap-x-2 mt-3 ">
-                            <Avatar username="rasel"
+                            <Avatar username={auth?.fullName} src={auth?.avatar}
                                     className="!w-14 !h-14 border-2 border-primary-400 rounded-full p-1"/>
-                            <h4 className="font-medium">Rasel mahmud</h4>
+                            <h4 className="font-medium">{auth?.fullName}</h4>
                         </div>
                         <div className="w-12 h-12 bg-neutral-100 flex items-center justify-center rounded-full">
                             <BiPlus/></div>

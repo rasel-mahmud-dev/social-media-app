@@ -2,8 +2,8 @@ import React, {useEffect, useReducer} from 'react';
 import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import apis from "src/apis/index.js";
-import Avatar from "src/compoenents/Avatar/Avatar.jsx";
-import FeedCard from "src/compoenents/FeedCard/FeedCard.jsx";
+import Avatar from "src/components/Avatar/Avatar.jsx";
+import FeedCard from "src/components/FeedCard/FeedCard.jsx";
 
 
 const Profile = () => {

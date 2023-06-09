@@ -1,9 +1,9 @@
 import {useCallback, useReducer, useRef, useState} from 'react';
 import "./story.scss"
 import {BiPlus} from "react-icons/bi";
-import ModalWithBackdrop from "src/compoenents/ModalWithBackdrop/ModalWithBackdrop.jsx";
+import ModalWithBackdrop from "src/components/ModalWithBackdrop/ModalWithBackdrop.jsx";
 import {TiTimes} from "react-icons/ti";
-import Avatar from "src/compoenents/Avatar/Avatar.jsx";
+import Avatar from "src/components/Avatar/Avatar.jsx";
 import chooseImage from "src/utils/chooseImage.js";
 import Cropper from 'react-easy-crop'
 import getCroppedImg from "src/utils/getCroppedImg.js";

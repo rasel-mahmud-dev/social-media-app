@@ -1,20 +1,22 @@
 import {createBrowserRouter} from "react-router-dom"
 import Main from "layout/Main";
-import Homepage from "pages/Homepage";
-import Login from "pages/auth/Login";
-import Registration from "pages/auth/Registration.jsx";
-import PrivateRoute from "src/Middleware/PrivateRoute.jsx";
-import FindPeoples from "pages/FindPeoples/FindPeoples.jsx";
-import MyFriendList from "pages/MyFriendList/MyFriendList.jsx";
-import RequestForYou from "pages/RequestForYou/RequestForYou.jsx";
-import WatchVideos from "pages/WatchVideos/WatchVideos.jsx";
-import OnlineFriends from "pages/OnlineFriends/OnlineFriends.jsx";
-import RequestSend from "pages/RequestSend/RequestSend.jsx";
-import Saved from "pages/Saved/Saved.jsx";
-import Groups from "pages/Groups/Groups.jsx";
-import FeedDetail from "src/compoenents/FeedDetail/FeedDetail.jsx";
-import Profile from "src/pages/Profile/Profile.jsx";
-import Stories from "pages/Stories/Stories.jsx";
+import {lazy} from "react";
+import Login  from "pages/auth/Login"
+
+const Homepage  = lazy(()=>import("pages/Homepage"));
+const Registration  = lazy(()=>import("pages/auth/Registration.jsx"));
+const PrivateRoute  = lazy(()=>import("src/middleware/PrivateRoute.jsx"));
+const FindPeoples  = lazy(()=>import("pages/FindPeoples/FindPeoples.jsx"));
+const MyFriendList  = lazy(()=>import("pages/MyFriendList/MyFriendList.jsx"));
+const RequestForYou  = lazy(()=>import("pages/RequestForYou/RequestForYou.jsx"));
+const WatchVideos  = lazy(()=>import("pages/WatchVideos/WatchVideos.jsx"));
+const OnlineFriends  = lazy(()=>import("pages/OnlineFriends/OnlineFriends.jsx"));
+const RequestSend  = lazy(()=>import("pages/RequestSend/RequestSend.jsx"));
+const Saved  = lazy(()=>import("pages/Saved/Saved.jsx"));
+const Groups  = lazy(()=>import("pages/Groups/Groups.jsx"));
+const FeedDetail  = lazy(()=>import("src/components/FeedDetail/FeedDetail.jsx"));
+const Profile  = lazy(()=>import("src/pages/Profile/Profile.jsx"));
+const Stories  = lazy(()=>import("pages/Stories/Stories.jsx"));
 
 const router = createBrowserRouter([
     {

@@ -1,8 +1,8 @@
 import React, {useReducer} from 'react';
-import Avatar from "src/compoenents/Avatar/Avatar.jsx";
+import Avatar from "src/components/Avatar/Avatar.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import {addCommentAction} from "src/store/actions/feedAction.js";
-import Loading from "src/compoenents/Loading/Loading.jsx";
+import Loading from "src/components/Loading/Loading.jsx";
 
 const AddComment = ({feedId, handleAddComment}) => {
 

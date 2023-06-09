@@ -6,7 +6,7 @@ import {
     fetchPeoplesAction,
     removeFriendAction
 } from "src/store/actions/userAction.js";
-import Avatar from "src/compoenents/Avatar/Avatar.jsx";
+import Avatar from "src/components/Avatar/Avatar.jsx";
 import HomeLayout from "layout/HomeLayout.jsx";
 
 

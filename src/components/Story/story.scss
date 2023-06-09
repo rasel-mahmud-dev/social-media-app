@@ -1,4 +1,6 @@
 
+@import "src/mixin";
+
 .story_root {
   overflow-x: auto;
   display: inline-flex;
@@ -191,6 +193,12 @@
     position: relative;
     bottom: 0
   }
+
+
+  @include getDown(800px){
+    display: none;
+  }
+
 }
 
 
@@ -209,6 +217,13 @@
 .open-story-content {
   background-color: #000000;
 
+  @include getDown(800px){
+    top: calc(0px - var(--header-height));
+    position: relative;
+    z-index: 1004;
+
+  }
+
 
   .story-view-card-wrapper {
 
@@ -216,7 +231,7 @@
     width: 500px;
     position: relative;
 
-    .next-story-btn, .prev-story-btn{
+    .next-story-btn, .prev-story-btn {
       width: 40px;
       height: 40px;
       background: rgba(201, 201, 201, 0.55);
@@ -230,12 +245,17 @@
       transform: translateY(0) scale(1);
       transition: transform .4s ease;
       cursor: pointer;
-      &:hover{
+      @include getDown(800px){
+        display: none;
+      }
+
+      &:hover {
         background: white;
         transform: translateY(-5px) scale(1.1);
       }
     }
-    .next-story-btn{
+
+    .next-story-btn {
       left: auto;
       right: -100px !important;
     }
@@ -245,6 +265,7 @@
       background-color: #383838;
       border-radius: 10px;
       overflow: hidden;
+
       img {
 
         width: 100%;
@@ -265,7 +286,7 @@
 
           .progress-item {
             list-style: none;
-            transition: width .2s linear;
+            transition: width .7s linear;
             height: 4px;
             border-radius: 10px;
             width: 100%;

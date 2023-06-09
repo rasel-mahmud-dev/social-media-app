@@ -1,13 +1,13 @@
-import FeedCard from "../compoenents/FeedCard/FeedCard.jsx";
-import Avatar from "../compoenents/Avatar/Avatar.jsx";
-import React, {memo, useEffect, useMemo, useState} from "react";
-import AddPost from "../compoenents/AddPost/AddPost.jsx";
-import ModalWithBackdrop from "../compoenents/ModalWithBackdrop/ModalWithBackdrop.jsx";
+import FeedCard from "../components/FeedCard/FeedCard.jsx";
+import Avatar from "../components/Avatar/Avatar.jsx";
+import React, {memo, useEffect, useState} from "react";
+import AddPost from "../components/AddPost/AddPost.jsx";
+import ModalWithBackdrop from "../components/ModalWithBackdrop/ModalWithBackdrop.jsx";
 import {fetchFeedsAction} from "src/store/actions/feedAction.js";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchPeoplesAction} from "src/store/actions/userAction.js";
 import HomeLayout from "layout/HomeLayout.jsx";
-import Stories from "src/compoenents/Story/Stories.jsx";
+import Stories from "src/components/Story/Stories.jsx";
 
 const Homepage = () => {
 
@@ -32,7 +32,7 @@ const Homepage = () => {
 
             <ModalWithBackdrop modalClass="!max-w-xl" isOpen={isOpenAddPostModal}
                                onClose={() => setOpenAddPostModal(false)}>
-                <AddPost onClose={()=>setOpenAddPostModal(false)}/>
+                <AddPost onClose={() => setOpenAddPostModal(false)}/>
             </ModalWithBackdrop>
 
 
@@ -43,16 +43,18 @@ const Homepage = () => {
                     <div className='w-full'>
 
                         <div className="stories-container">
-                            <Stories></Stories>
+                            <Stories auth={auth}></Stories>
                         </div>
 
                         <div className="card mb-4">
                             <div>
 
                                 <div className=" flex items-center gap-x-2 border-b border-neutral-600/10 mb-3 pb-3">
-                                    <Avatar className="!w-9 !h-9" imgClass="!w-9 !h-9" src={auth?.avatar} username={auth?.fullName}></Avatar>
+                                    <Avatar className="!w-9 !h-9" imgClass="!w-9 !h-9" src={auth?.avatar}
+                                            username={auth?.fullName}></Avatar>
                                     <h2 className="py-2 bg-neutral-100 rounded-full px-3 w-full text-sm text-neutral-600"
-                                        onClick={() => setOpenAddPostModal(true)}>What on your mind, {auth?.firstName}?</h2>
+                                        onClick={() => setOpenAddPostModal(true)}>What on your
+                                        mind, {auth?.firstName}?</h2>
                                 </div>
 
 
@@ -79,7 +81,7 @@ const Homepage = () => {
                         {/**** all feed */}
                         <div className="flex flex-col gap-y-4">
                             {feedState.feeds.map((feed) => (
-                                <MemoWithFeed  key={feed._id} authId={auth._id} dispatch={dispatch} feed={feed} />
+                                <MemoWithFeed key={feed._id} authId={auth._id} dispatch={dispatch} feed={feed}/>
                             ))}
                         </div>
 
@@ -93,7 +95,7 @@ const Homepage = () => {
     );
 };
 
-const MemoWithFeed = memo(({authId, dispatch, feed})=>{
+const MemoWithFeed = memo(({authId, dispatch, feed}) => {
     return <FeedCard authId={authId} dispatch={dispatch} feed={feed}/>
 })
 

@@ -1,6 +1,6 @@
 import React, {useEffect, useReducer} from 'react';
-import Story from "src/compoenents/Story/Story.jsx";
-import CreateStory from "src/compoenents/Story/CreateStory.jsx";
+import Story from "src/components/Story/Story.jsx";
+import CreateStory from "src/components/Story/CreateStory.jsx";
 
 
 import {Splide, SplideSlide} from '@splidejs/react-splide';
@@ -19,7 +19,7 @@ import staticImage from "src/utils/staticImage.js";
 import {useNavigate} from "react-router-dom";
 
 
-const Stories = () => {
+const Stories = ({auth}) => {
 
     const dispatch = useDispatch()
 
@@ -40,7 +40,7 @@ const Stories = () => {
         dispatch(getStoriesAction()).unwrap().then(data => {
             setState({stories: data.stories})
         })
-    }, [])
+    }, [dispatch])
 
 
     function handleSubmitStory({media}) {
@@ -48,7 +48,14 @@ const Stories = () => {
         media.forEach((m) => {
             formData.append("image", m.blob, m.name)
         })
-        dispatch(createStoryAction(formData))
+        dispatch(createStoryAction(formData)).unwrap().then((data) => {
+            if(data.story){
+                navigate(`/stories/${data.story._id}`)
+            }
+
+        }).catch((_err) => {
+            alert("Internal Error")
+        })
 
     }
 
@@ -67,14 +74,14 @@ const Stories = () => {
                 }}
                 aria-label="My Favorite Images">
                 <SplideSlide className="story-first">
-                    <CreateStory onSubmit={handleSubmitStory} fullName="Rasel mahmud"
+                    <CreateStory onSubmit={handleSubmitStory} fullName={auth?.fullName}
                                  avatar="https://res.cloudinary.com/rasel/image/upload/v1686216926/social-app/avatar.jpg"
                                  storyAsset=""/>
                 </SplideSlide>
 
                 {state.stories.map(item => (
                     <SplideSlide key={item._id} onClick={() => navigate(`/stories/${item._id}`)}>
-                        <Story fullName="Rasel mahmud" avatar={item?.author.fullName}
+                        <Story fullName={item?.author.fullName} avatar={item?.author.fullName}
                                storyAsset={staticImage(item.media[0].url)}/>
                     </SplideSlide>
                 ))}
