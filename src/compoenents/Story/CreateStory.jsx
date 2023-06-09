@@ -1,10 +1,13 @@
-import React, {useReducer} from 'react';
+import {useCallback, useReducer, useRef, useState} from 'react';
 import "./story.scss"
 import {BiPlus} from "react-icons/bi";
 import ModalWithBackdrop from "src/compoenents/ModalWithBackdrop/ModalWithBackdrop.jsx";
 import {TiTimes} from "react-icons/ti";
 import Avatar from "src/compoenents/Avatar/Avatar.jsx";
 import chooseImage from "src/utils/chooseImage.js";
+import Cropper from 'react-easy-crop'
+import getCroppedImg from "src/utils/getCroppedImg.js";
+
 
 
 const CreateStory = ({fullName, avatar, storyAsset, onChange, onSubmit}) => {
@@ -13,6 +16,8 @@ const CreateStory = ({fullName, avatar, storyAsset, onChange, onSubmit}) => {
         isCreateStoryModalOpen: false,
         media: []
     })
+
+    const previewRef = useRef()
 
     function handleClose(){
         setState({isCreateStoryModalOpen: false})
@@ -33,8 +38,27 @@ const CreateStory = ({fullName, avatar, storyAsset, onChange, onSubmit}) => {
     }
 
     function handleShareStory(){
-        onSubmit({media: state.media.map(m=>({type: "image", blob: m.blob, name: m.blob?.name}))})
+        onSubmit({media: state.media.map(m=>({type: "image", blob: m.blob, name: m?.name ?? "image.jpg"}))})
     }
+
+    const [crop, setCrop] = useState({ x: 0, y: 0 })
+    const [zoom, setZoom] = useState(1)
+
+    const onCropComplete = useCallback(async (croppedArea, croppedAreaPixels) => {
+        if(state?.media[0]?.base64) {
+            const croppedImage = await getCroppedImg(
+                state?.media[0]?.base64,
+                croppedAreaPixels,
+            )
+            setState({media: [
+                {
+                    ...state.media[0],
+                    blob: croppedImage
+                }
+            ]})
+        }
+    }, [state?.media])
+
 
     return (
         <div>
@@ -79,17 +103,37 @@ const CreateStory = ({fullName, avatar, storyAsset, onChange, onSubmit}) => {
                         <div className="create-story-type-card flex w-full items-center justify-center gap-x-4 relative ">
                             {/**** media preview window ****/}
                             { state.media && state.media.length > 0 && (
+
                                 <div className="card preview-story-modal ">
                                     <div className="card-meta">
                                         <h4>Preview</h4>
                                     </div>
+
+
                                     <div className="preview-content">
-                                        <div className="preview-content-img">
-                                            <img src={state.media[0].base64} alt=""/>
-                                        </div>
+
+                                        <Cropper
+                                            showGrid={false}
+                                            image={state.media[0].base64}
+                                            crop={crop}
+                                            zoom={zoom}
+                                            aspect={3 / 4}
+                                            onCropChange={setCrop}
+                                            onCropComplete={onCropComplete}
+                                            onZoomChange={setZoom}
+                                        />
+
+                                        {/*<div className="preview-content-img">*/}
+                                        {/*    <img src={state.media[0].base64} alt=""/>*/}
+                                        {/*</div>*/}
+
+
                                     </div>
                                 </div>
                             ) }
+
+
+
 
 
                             <div className="card story-card flex items-center justify-center " onClick={handleChooseImage}>

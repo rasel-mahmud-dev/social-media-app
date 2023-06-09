@@ -6,6 +6,7 @@ import {
     fetchAuthFriendsAction,
     removeFriendAction
 } from "src/store/actions/userAction.js";
+import {getStoriesAction} from "src/store/actions/storyAction.js";
 
 
 const initialState = {
@@ -13,7 +14,8 @@ const initialState = {
     authLoaded: false,
     profile: null,
     friends: [],
-    pendingFriends: []
+    pendingFriends: [],
+    stories: []
 };
 
 export const authSlice = createSlice({
@@ -104,6 +106,13 @@ export const authSlice = createSlice({
             if (action.payload) {
                 state.friends = state.friends.filter(f => f._id !== action.payload.friendId)
                 state.pendingFriends = state.pendingFriends.filter(f => f._id !== action.payload.friendId)
+            }
+        })
+
+        // fetch all stories
+        builder.addCase(getStoriesAction.fulfilled, (state, action) => {
+            if (action.payload) {
+                state.stories = action.payload.stories
             }
         })
     }

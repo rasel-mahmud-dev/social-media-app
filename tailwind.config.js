@@ -6,7 +6,13 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: {
+          400: "#4374e8"
+        }
+      }
+    },
   },
   plugins: [
     // eslint-disable-next-line no-undef

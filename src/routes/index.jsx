@@ -13,7 +13,8 @@ import RequestSend from "pages/RequestSend/RequestSend.jsx";
 import Saved from "pages/Saved/Saved.jsx";
 import Groups from "pages/Groups/Groups.jsx";
 import FeedDetail from "src/compoenents/FeedDetail/FeedDetail.jsx";
-import Profile from "src/Profile/Profile.jsx";
+import Profile from "src/pages/Profile/Profile.jsx";
+import Stories from "pages/Stories/Stories.jsx";
 
 const router = createBrowserRouter([
     {
@@ -24,6 +25,8 @@ const router = createBrowserRouter([
             {path: "/feed", element: <PrivateRoute> <Homepage/> </PrivateRoute> },
             {path: "/profile/:userId", element: <PrivateRoute> <Profile/> </PrivateRoute> },
             {path: "/feed/:feedId", element: <PrivateRoute> <FeedDetail/> </PrivateRoute> },
+            {path: "/stories", element: <PrivateRoute> <Stories/> </PrivateRoute> },
+            {path: "/stories/:storyId", element: <PrivateRoute> <Stories/> </PrivateRoute> },
             {path: "find-peoples", element: <PrivateRoute> <FindPeoples/> </PrivateRoute> },
             {path: "friends", element: <PrivateRoute> <MyFriendList/> </PrivateRoute> },
             {path: "friend-request-received", element: <PrivateRoute> <RequestForYou/> </PrivateRoute> },

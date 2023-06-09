@@ -9,7 +9,7 @@ function chooseImage() {
             input.addEventListener("change", async (e) => {
                 let file = e.target.files[0]
                 let base64 = await blobToBase64(file)
-                resolve({blob: file, base64: base64})
+                resolve({blob: file, name: file.name, base64: base64})
             })
             input.click()
         } catch (ex) {
