@@ -2,12 +2,21 @@
 
 .profile-page {
 
+
   .profile-header-bg {
     background-image: linear-gradient(to bottom,
             rgba(0, 0, 0, 0.7) 1%,
             #ffffff 50%,
             #ffffff 100%);
-    box-shadow:0 -2px 7px 0px #363636a6
+    box-shadow: 0 -2px 7px 0px #363636a6
+  }
+
+  @include dark() {
+    .profile-header-bg {
+      background-image: linear-gradient(to bottom,
+              rgba(54, 54, 54, 0.87) 10%,
+              rgb(0, 0, 0) 100%);
+    }
   }
 
   margin: auto;
@@ -31,10 +40,10 @@
     padding: 0 40px;
     margin: auto;
 
-  margin-top: 20px;
+    margin-top: 20px;
     @include getDown(600px) {
       padding: 0 10px;
-      h4{
+      h4 {
         font-size: 20px
       }
     }
@@ -45,7 +54,7 @@
       @include getDown(600px) {
         width: 100px !important;
         height: 100px !important;
-        img{
+        img {
           width: 100px !important;
           height: 100px !important;
         }
@@ -58,9 +67,9 @@
 
       gap: 20px;
 
-      @include getDown(800px){
+      @include getDown(800px) {
         overflow-x: auto;
-        &::-webkit-scrollbar{
+        &::-webkit-scrollbar {
           display: none;
         }
       }
@@ -71,15 +80,18 @@
         font-weight: 500;
         color: #606060;
         padding: 10px 10px;
-       border-radius: 6px;
+        border-radius: 6px;
         cursor: pointer;
-        &:hover{
+
+        &:hover {
           background: var(--neutral-200);
         }
+
         &.active {
-          &:hover{
+          &:hover {
             background: white;
           }
+
           border-radius: 0;
           font-weight: 600;
           color: var(--primary-400);

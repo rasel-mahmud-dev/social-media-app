@@ -14,7 +14,7 @@ const AddPostDemo = ({className = ""}) => {
     }
 
     return (<>
-        <ModalWithBackdrop root="modal-root" modalClass="add-feed-modal" isOpen={isOpenAddPostModal}
+        <ModalWithBackdrop root="modal-root" modalClass="add-feed-modal card" isOpen={isOpenAddPostModal}
                            onClose={() => setOpenAddPostModal(false)}>
             <AddPost onClose={() => setOpenAddPostModal(false)}/>
         </ModalWithBackdrop>

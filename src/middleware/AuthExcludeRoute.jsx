@@ -1,12 +1,10 @@
 import React from 'react';
-
 import {MoonLoader} from "react-spinners";
-import {Navigate} from "react-router-dom";
+
 import {useSelector} from "react-redux";
+import {Navigate} from "react-router-dom";
 
-const PrivateRoute = ({children}) => {
-
-
+const AuthExcludeRoute = ({children}) => {
     const {authLoaded, auth} = useSelector(state=>state.authState)
 
     if (!authLoaded) return (
@@ -17,11 +15,11 @@ const PrivateRoute = ({children}) => {
     )
 
     if (authLoaded && !auth) {
-        return <Navigate to="/join"/>
+        return children
     }
 
-    return children
+    return <Navigate to="/" />
 };
 
-export default PrivateRoute;
+export default AuthExcludeRoute;
 

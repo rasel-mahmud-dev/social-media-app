@@ -47,7 +47,7 @@ const HomeLayout = ({children}) => {
         { label: "Groups", img: groupIcon, to: "/groups", },
         { label: "Market", img: marketIcon, to: "/", },
         { label: "Watch", img: videoIcon, to: "/watch", },
-        { label: "Memories", img: clockIcon, to: "/", },
+        { label: "Memories", img: clockIcon, to: "/stories", },
         { label: "Pages", img: pageIcon, to: "/pages", },
         { label: "Save", img: bookmarkIcon, to: "/saved", },
         { label: "Favorites", img: starIcon, to: "/saved", },

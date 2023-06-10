@@ -124,8 +124,8 @@ const Profile = () => {
                                         username={state.user.fullName}
                                     />
                                     <div className="ml-2 md:ml-4">
-                                        <h4 className="text-2xl font-semibold">{state.user.fullName}</h4>
-                                        <span className="text-md font-medium">123 Friends</span>
+                                        <h4 className="text-2xl font-semibold color_h1">{state.user.fullName}</h4>
+                                        <span className="text-md font-medium color_h3">123 Friends</span>
                                         <AvatarGroup imgClass="!w-10 !h-10" className="!w-10 !h-10" data={[
                                             {avatar: auth.avatar, fullName: "Rasel mahmud"},
                                             {avatar: auth.avatar, fullName: "Rasel mahmud"},
@@ -143,7 +143,7 @@ const Profile = () => {
                                 <div className="profile-section-nav flex mt-2">
                                     {Object.keys(sectionNavs).map((name) => (
                                         <li key={name} onClick={() => handleSelectSection(name)}
-                                            className={["profile-section-item", state.showSectionName === name ? "active" : ""].join(" ")}
+                                            className={["profile-section-item color_p", state.showSectionName === name ? "active" : ""].join(" ")}
                                         >{name}</li>
                                     ))}
                                 </div>

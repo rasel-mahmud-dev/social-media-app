@@ -112,7 +112,7 @@
     width: 100vw !important;
     min-width: 100vw !important;
     min-height: 100% !important;
-    background-color: #eeeeee;
+    @apply dark:bg-dark-800;
     padding: 0;
     border-radius: 0;
   }
@@ -142,11 +142,10 @@
 }
 
 .my-stories-sidebar {
-  height: calc(100vh - var(--header-height));
+  height: calc(100vh);
   overflow-y: auto;
   width: 500px;
-  background-color: white;
-
+  @apply dark:bg-dark-750;
   .action-button {
     position: relative;
     bottom: 0
@@ -296,6 +295,7 @@
       background-color: #383838;
       border-radius: 10px;
       overflow: hidden;
+      min-height: 400px;
 
       img {
 

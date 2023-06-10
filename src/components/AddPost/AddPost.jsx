@@ -82,8 +82,8 @@ const AddPost = ({onClose}) => {
             <form onSubmit={handlePost}>
 
                 <div className="flex items-center gap-x-2">
-                    <div onClick={onClose} className="icon-box !w-8 !h-8 rounded-full"><BiChevronLeft /></div>
-                    <label className="font-semibold">Create post</label>
+                    <div onClick={onClose} className="flex md:hidden icon-box !w-8 !h-8 rounded-full"><BiChevronLeft /></div>
+                    <label className="font-semibold color_h1">Create post</label>
                 </div>
 
                 <div className="mt-3 ">
@@ -91,8 +91,8 @@ const AddPost = ({onClose}) => {
                         <Avatar className="!h-9 !w-9" imgClass="!h-9 !w-9 !text-xs" src={auth?.avatar}
                                 username={auth?.fullName}></Avatar>
                         <div className="text-sm">
-                            <h2 className="text-neutral-700 font-semibold">{auth?.fullName}</h2>
-                            <span className="text-xs text-neutral-500 flex items-center gap-x-1">
+                            <h2 className="color_h2 font-semibold">{auth?.fullName}</h2>
+                            <span className="color_h3 text-xs  flex items-center gap-x-1">
                                 <BsGlobe className="text-xs"/>
                                 <span className="font-medium">Public</span>
                             </span>
@@ -101,7 +101,7 @@ const AddPost = ({onClose}) => {
 
                     <div className={`mt-2 add-feed-wrapper image-${state.images.length > 4 ? 4 : state.images.length}`}>
                         <textarea
-                            className="w-full input-elemselect add-feed-input" name="content"
+                            className="w-full input-elemselect add-feed-input dark:bg-dark-650 color_p" name="content"
                             placeholder={`What's on your mind ` + auth?.firstName} id="" cols="30"
                             rows="10">
                         </textarea>
@@ -117,7 +117,7 @@ const AddPost = ({onClose}) => {
                                     </div>
 
                                     <div onClick={() => handleRemoveImage(index)}
-                                         className="position-center text-xs font-medium text-white">
+                                         className="position-center text-xs font-medium color_h3">
                                         {state.images.length > 4 && index === 3 && <div>
                                             {state.images.length - 4} More items
                                         </div>}
@@ -126,15 +126,15 @@ const AddPost = ({onClose}) => {
                             ))}
 
                             <div onClick={handleChoosePhoto}
-                                 className="relative group flex items-center justify-center h-10 border border-neutral-600/10 rounded-lg">
-                                <span className="text-whites font-medium text-sm">Add More</span>
+                                 className="relative group flex items-center justify-center h-10 mt-2 border dark:border-neutral-700 border-neutral-600/10 rounded-lg">
+                                <span className=" color_h3 font-medium text-sm">Add More</span>
                             </div>
                         </div>}
 
                     </div>
                 </div>
 
-                <div className="flex items-center justify-around text-sm font-medium text-gray-800">
+                <div className="flex items-center justify-around text-sm font-medium color_h3">
                     <li className="list-none flex items-center gap-x-1">
                         <i className="icon2 video-icon"></i>
                         <span>Videos</span>

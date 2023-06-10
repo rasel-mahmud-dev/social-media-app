@@ -1,4 +1,4 @@
-import React from "react";
+import React, {lazy, Suspense} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {useDispatch} from "react-redux"
 
@@ -7,18 +7,18 @@ import Button from "components/Shared/Button/Button.jsx";
 
 import {bgPhone, email, max, min, required, validate} from "src/utils/validator.js";
 
-import apis from "src/apis";
-
-import errorResponse from "src/utils/errorResponse.js";
-
 
 import "./Login.scss"
 
 
 import ErrorMessage from "components/ErrorMessage/ErrorMessage.jsx";
-import Footer from "components/footer/Footer";
-import Loading from "components/Shared/Loading/Loading.jsx";
 import {loginOrRegistrationAction} from "src/store/actions/authAction.js";
+import {MoonLoader} from "react-spinners";
+import SocialLogin from "components/Shared/SocialLogin/SocialLogin.jsx";
+import Divider from "components/Shared/Divider/Divider.jsx";
+import ModalWithBackdrop from "components/ModalWithBackdrop/ModalWithBackdrop.jsx";
+
+const Registration = lazy(() => import("pages/auth/Registration.jsx"));
 
 
 const Login = (props) => {
@@ -138,12 +138,15 @@ const Login = (props) => {
                 password: userData.password.value
 
             }
-        })).unwrap().then(()=>{
-            // navigate("/")
-        }).catch((message)=>{
+        })).unwrap().then(() => {
+            navigate("/")
+        }).catch((message) => {
+            setErrorMessage(message)
             // setState({
             //     errorMessage: message
             // })
+        }).finally(() => {
+            setPending(false)
         })
 
 
@@ -165,14 +168,6 @@ const Login = (props) => {
 
     function toggleRegistrationModal(isOpen) {
         setNewAccountForm(isOpen)
-        // dispatch({
-        //   type: ActionTypes.TOGGLE_BACKDROP,
-        //   payload: {
-        //     isOpen: isOpen,
-        //     where: "content",
-        //     message: "registration",
-        //   }
-        // })
     }
 
     return (
@@ -180,12 +175,17 @@ const Login = (props) => {
             <div className="container-1200 ">
                 <div className="align-middle-vh">
                     <div className="registration-form-popup">
-                        {/*<Modal className="registration-form_modal" inProp={newAccountForm} >*/}
-                        {/*  <div className="max-w-4xl mx-auto sm:shadow-b relative  bg-white/90 p-4 rounded-lg mx-auto  w-full mx-auto rounded">*/}
-                        {/*  <FontAwesomeIcon onClick={()=>toggleRegistrationModal(false)} icon={faTimes} className="font-xl absolute top-5 right-5" />*/}
-                        {/*  <Registration onToggleRegistrationModal={toggleRegistrationModal} />*/}
-                        {/*  </div>*/}
-                        {/*</Modal>*/}
+                        <ModalWithBackdrop root="modal-root" isOpen={newAccountForm}
+                                           modalClass="registration-form_modal card ">
+                            <Suspense fallback={(<div>
+                                <MoonLoader size={24}/>
+                            </div>)}>
+                                <div className="">
+                                    <Registration onClose={() => setNewAccountForm(false)}
+                                                  onToggleRegistrationModal={toggleRegistrationModal}/>
+                                </div>
+                            </Suspense>
+                        </ModalWithBackdrop>
                     </div>
 
                     <div className="flex items-center justify-center flex-col sm:flex-row">
@@ -199,12 +199,12 @@ const Login = (props) => {
                                 <div className=" sm:mt-0 mt-8">
 
                                     <div
-                                        className="sm:shadow-b   bg-white p-4 rounded-lg mx-auto sm:w-[400px] w-full mx-auto rounded">
+                                        className="card w-[400px]">
 
                                         <form onSubmit={handleSubmit} className="w-full flex-1">
 
                                             {isPending && <div className="flex justify-center">
-                                                <Loading/>
+                                                <MoonLoader size={30}/>
                                             </div>}
 
 
@@ -230,23 +230,22 @@ const Login = (props) => {
                                             />
 
                                             <Button type="submit"
-                                                    className={["bg-primary w-full font-medium rounded py-1", isPending ? "btn-disable" : ""].join(" ")}>Login</Button>
+                                                    className={["bg-primary w-full font-medium rounded py-1.5", isPending ? "btn-disable" : ""].join(" ")}>Login</Button>
                                             <span className="mt-3 block text-center ">
-                                              <Link className="text-blue-500 text-sm " to="/auth/registration">Forget Password?</Link>
+                                              <Link className="text-blue text-xs font-medium "
+                                                    to="#">Forget Password?</Link>
                                              </span>
-                                            <div className="border border-1 border-[#e4e4e4] my-4"></div>
+                                            <div
+                                                className="border border-1 dark:border-dark-100 border-dark-50 my-4"></div>
 
-                                            <div className="mt-2 mb-3">
+                                            <div className="mt-2">
                                                 <Button onClick={() => toggleRegistrationModal(true)}
-                                                        className="bg-secondary-400 px-4 py-1 font-medium mx-auto block">Create
+                                                        className="bg-secondary-400 px-8 py-1.5 font-medium mx-auto block">Create
                                                     Account</Button>
 
                                             </div>
-                                            <div>
-
-
-                                            </div>
-
+                                            <Divider text="or" textClass="my-3"/>
+                                            <SocialLogin/>
                                         </form>
                                     </div>
                                 </div>
@@ -255,7 +254,7 @@ const Login = (props) => {
                     </div>
                 </div>
             </div>
-            <Footer/>
+            {/*<Footer/>*/}
         </div>
 
     );

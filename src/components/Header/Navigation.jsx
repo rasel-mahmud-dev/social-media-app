@@ -1,6 +1,7 @@
 import {NavLink, useLocation, useNavigate} from "react-router-dom";
 import "./navigation.scss"
-import React, {useEffect, useState} from "react";
+import "./style.scss";
+import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import slugify from "src/utils/slugify";
 // import PreloadLink from "../preloadLink/PreloadLink";
@@ -9,6 +10,8 @@ import {HiBars3} from "react-icons/hi2";
 import staticImage from "src/utils/staticImage.js";
 import {BiPlus, BiUserCircle} from "react-icons/bi";
 import {logoutAction} from "src/store/slices/authSlice.js";
+import {openSidebarAction} from "src/store/slices/appSlice.js";
+import {FiSearch} from "react-icons/fi";
 
 
 const Navigation = (props) => {
@@ -17,12 +20,28 @@ const Navigation = (props) => {
 
     let navigate = useNavigate();
     let location = useLocation();
+    let headerRef = useRef();
 
     const dispatch = useDispatch()
 
     const [expandDropdown, setExpandDropdown] = useState("")
 
     const [activeNav, setActiveNav] = useState("")
+
+
+    useEffect(()=>{
+        if (headerRef.current) {
+            document.documentElement.style.setProperty(`--header-height`, headerRef.current.offsetHeight + "px");
+        }
+    }, [])
+
+    function handleLogout() {
+        dispatch(logoutAction())
+    }
+
+    function handleOpenSidebar(){
+        dispatch(openSidebarAction("left-sidebar"))
+    }
 
     function handleExpandDropdown(name) {
         setExpandDropdown(expandDropdown === name ? "" : name)
@@ -50,35 +69,32 @@ const Navigation = (props) => {
         setExpandDropdown("")
     }
 
-    function logoutRoutePush() {
-        dispatch(logoutAction())
-    }
 
     function authDropdown(isShow) {
         return isShow && (
-            <div className="absolute top-10 right-0 shadow-lg card bg-white">
+            <div className="absolute top-6 right-0 shadow-lg card bg-white">
                 <div className="min-w-200px  text-sm font-medium">
                     {auth && auth._id ? (
                         <>
                             <li
                                 className="hover:bg-primary hover:text-white cursor-pointer px-2 ">
-                                <NavLink to={`profile/${slugify(auth.fullName)}/${auth._id}`}>Profile</NavLink>
+                                <NavLink to={`/profile/${auth._id}`}>Profile</NavLink>
                             </li>
-                            <li onClick={logoutRoutePush}
+                            <li onClick={handleLogout}
                                 className="hover:bg-primary hover:text-white cursor-pointer px-2 py-1">Logout
                             </li>
                         </>
                     ) : (
                         <li
                             className="hover:bg-primary hover:text-white  cursor-pointer  px-2 py-1"
-                            onClick={() => pushRoute("/auth/login")}
+                            onClick={() => pushRoute("/join")}
                         >Login</li>
                     )
                     }
-                    <li
-                        onClick={() => pushRoute("/admin/dashboard")}
-                        className="hover:bg-primary hover:text-white cursor-pointer px-2 py-1">Dashboard
-                    </li>
+                    {/*<li*/}
+                    {/*    onClick={() => pushRoute("/admin/dashboard")}*/}
+                    {/*    className="hover:bg-primary hover:text-white cursor-pointer px-2 py-1">Dashboard*/}
+                    {/*</li>*/}
                 </div>
             </div>
         )
@@ -130,7 +146,7 @@ const Navigation = (props) => {
             </svg>,
             icon2: "",
 
-            to: "/market",
+            to: "/",
 
         },
         {
@@ -148,7 +164,7 @@ const Navigation = (props) => {
                 <path
                     d="M25.825 12.29C25.824 12.289 25.823 12.288 25.821 12.286L15.027 2.937C14.752 2.675 14.392 2.527 13.989 2.521 13.608 2.527 13.248 2.675 13.001 2.912L2.175 12.29C1.756 12.658 1.629 13.245 1.868 13.759 2.079 14.215 2.567 14.479 3.069 14.479L5 14.479 5 23.729C5 24.695 5.784 25.479 6.75 25.479L11 25.479C11.552 25.479 12 25.031 12 24.479L12 18.309C12 18.126 12.148 17.979 12.33 17.979L15.67 17.979C15.852 17.979 16 18.126 16 18.309L16 24.479C16 25.031 16.448 25.479 17 25.479L21.25 25.479C22.217 25.479 23 24.695 23 23.729L23 14.479 24.931 14.479C25.433 14.479 25.921 14.215 26.132 13.759 26.371 13.245 26.244 12.658 25.825 12.29"></path>
             </svg>,
-            to: "/",
+            to: "/friends",
 
         },
         {
@@ -183,7 +199,7 @@ const Navigation = (props) => {
 
     return (
         <>
-            <div className="navigation px-3 sm:px-4 bg-white dark:bg-dark-700 z-50 fixed w-full shadow-xss">
+            <div ref={headerRef} className="navigation px-3 sm:px-4 bg-white dark:bg-dark-700 z-50 fixed w-full shadow-xss">
 
                 <div className="w-full mx-auto px-0 sm:px-2">
                     <ul className="main-nav ">
@@ -192,7 +208,18 @@ const Navigation = (props) => {
                         <div className="nav-logo  mr-0 ">
 
                             <div className="flex items-center">
-                                <NavLink onChange={handleNavChange} to="/" className="cursor-pointer mr-2">
+
+                                {/******** menu icon only for mobile devices ********/}
+                                <li className="mr-3 block md:hidden">
+                                    <div
+                                        onClick={handleOpenSidebar}
+                                        className={["rounded_circle", expandDropdown === "allMenu" ? "text-primary" : "text-body-dark dark:text-body-light"].join(" ")}>
+                                        <HiBars3/>
+                                    </div>
+                                </li>
+
+
+                                <NavLink onChange={handleNavChange} to="/" className="cursor-pointer mr-3 hidden md:block">
                                     <div className="logo">
                                         <svg viewBox="0 0 36 36" className="a8c37x1j ms05siws l3qrxjdp b7h9ocf4"
                                              fill="url(#jsc_s_2)"
@@ -213,30 +240,16 @@ const Navigation = (props) => {
 
 
                                 {/******** search icon  only for mobile devices ********/}
-                                <button className="block xl:hidden  rounded_circle ">
-                                    {/*<FontAwesomeIcon*/}
-                                    {/*    className="text-dark-300 dark:text-light-500 mt-1 "*/}
-                                    {/*    icon={faSearch}*/}
-                                    {/*/>*/}
+                                <button className="flex items-center justify-center xl:hidden  rounded_circle  ">
+                                    <FiSearch  className="text-dark-300 dark:text-light-500"/>
                                 </button>
 
 
-                                {/******** menu icon only for mobile devices ********/}
-                                <li className="ml-3 block md:hidden">
-                                    <div
-                                        onClick={() => handleExpandDropdown("allMenu")}
-                                        className={["rounded_circle", expandDropdown === "allMenu" ? "text-primary" : "text-body-dark dark:text-body-light"].join(" ")}>
-                                        <HiBars3/>
-                                    </div>
-                                </li>
 
 
                                 <div
                                     className="hidden xl:flex flex-1 max-w-max  justify-between items-center bg-dark-300/10 dark:bg-dark-300/30 px-3.5 rounded-2xl text-sm">
-                                    {/*<FontAwesomeIcon*/}
-                                    {/*    className="text-dark-400 dark:text-light-500  mr-1.5"*/}
-                                    {/*    icon={faSearch}*/}
-                                    {/*/>*/}
+                                    <FiSearch  className="text-dark-300 dark:text-light-500 mr-1 text-base"/>
                                     <input
                                         className="py-2 text-xs placeholder:text-dark-400 dark:placeholder:text-light-100 px-0 text-dark-400  bg-transparent  bg-opacity-0   border-none  outline-none  w-full"
                                         type="text"
@@ -376,7 +389,7 @@ const Navigation = (props) => {
                     </ul>
                 </div>
             </div>
-            <div className="h-[55px]"/>
+            <div className="header-space"/>
         </>
     );
 };

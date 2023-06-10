@@ -18,19 +18,24 @@ export const appSlice = createSlice({
             state.openSidebar = action.payload
         },
 
-
-        toggleDarkMode(state, action){
+        toggleDarkMode(state, action) {
             let isDarkMode = action.payload
-            localStorage.setItem("darkMode", isDarkMode);
             let html = document.documentElement
-            if(isDarkMode) {
-                html.classList.remove("light")
-                html.classList.add("dark")
-                state.isDarkMode = true
+            if (isDarkMode === undefined) {
+                isDarkMode = localStorage.getItem("darkMode") === "true"
+                html.classList.add(isDarkMode ? "dark" : "light")
+                state.isDarkMode = isDarkMode
             } else {
-                html.classList.remove("dark")
-                html.classList.add("light")
-                state.isDarkMode = false
+                localStorage.setItem("darkMode", isDarkMode);
+                if (isDarkMode) {
+                    html.classList.remove("light")
+                    html.classList.add("dark")
+                    state.isDarkMode = true
+                } else {
+                    html.classList.remove("dark")
+                    html.classList.add("light")
+                    state.isDarkMode = false
+                }
             }
         }
     }

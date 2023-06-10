@@ -9,3 +9,12 @@
     @content()
   }
 }
+
+
+@mixin dark(){
+  @at-root {
+    .dark{
+      @content()
+    }
+  }
+}

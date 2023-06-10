@@ -12,6 +12,7 @@ import {backend} from "src/apis/index.js";
 import {getNewMessageAction} from "src/store/slices/chatSlice.js";
 import channelName from "src/utils/channelName.js";
 import Navigation from "components/Header/Navigation.jsx";
+import {toggleDarkMode} from "src/store/slices/appSlice.js";
 
 
 const Main = () => {
@@ -22,8 +23,6 @@ const Main = () => {
 
     useEffect(() => {
         dispatch(fetchCurrentAuthAction())
-
-
     }, []);
 
     useEffect(() => {
@@ -90,7 +89,7 @@ const Main = () => {
 
 
     return (
-        <div className="relative bg-body-light dark:bg-body-dark h-screen">
+        <div className="relative">
             <Navigation/>
             <Suspense fallback={() => (
                 <div className="py-24 w-full flex justify-center  items-center flex-col">
