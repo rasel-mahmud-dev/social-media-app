@@ -12,7 +12,7 @@ const ActiveFriend = ({handleStartChat, friends, auth}) => {
                 _id: friend.senderId === auth._id ? friend.receiverId : friend.senderId
             })} key={user.id} className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-x-2 ">
-                    <Avatar imgClass="text-xs" className="!w-9 !h-9" src={user?.avatar} username="ER SDF"/>
+                    <Avatar imgClass="text-xs !w-9 !h-9" className="!w-9 !h-9" src={user?.avatar} username="ER SDF"/>
                     <label htmlFor="" className="text-sm">{user?.fullName}</label>
                 </div>
                 <span className="online"></span>

@@ -62,6 +62,7 @@ const Main = () => {
         channel.bind("toggle-reaction", function (data) {
             // skip if this action fired from current user.
             if (data.like.userId === auth._id) return
+            playSound()
             dispatch(localToggleFeedReactionAction(data.like))
         })
 
@@ -69,8 +70,6 @@ const Main = () => {
         privateChannel.bind("message", (data) => {
             if(data.message){
                 playSound()
-
-
                 dispatch(getNewMessageAction({
                     channelName: channelName(auth._id,  data.message.senderId),
                     message: data.message

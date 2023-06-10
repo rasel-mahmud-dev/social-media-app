@@ -26,6 +26,9 @@ export const chatSlice = createSlice({
         openChatUserAction(state, action) {
             state.openChatUser = action.payload
         },
+        closeChatUserAction(state) {
+            state.openChatUser = null
+        },
 
         getNewMessageAction(state, action) {
             addNewMessage(state, action)
@@ -52,6 +55,6 @@ export const chatSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {openChatUserAction, getNewMessageAction} = chatSlice.actions
+export const {openChatUserAction, closeChatUserAction, getNewMessageAction} = chatSlice.actions
 
 export default chatSlice.reducer

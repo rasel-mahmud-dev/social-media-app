@@ -1,0 +1,12 @@
+.users-avatar-list{
+  margin-left: 15px;
+  & > div{
+    margin-left: -20px;
+    img{
+      border: 2px solid white !important;
+      //width: 40px;
+      //height: 40px;
+    }
+
+  }
+}

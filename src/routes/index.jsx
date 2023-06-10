@@ -26,6 +26,7 @@ const router = createBrowserRouter([
         children: [
             {path: "", element: <PrivateRoute> <Homepage/> </PrivateRoute> },
             {path: "/feed", element: <PrivateRoute> <Homepage/> </PrivateRoute> },
+            {path: "/profile", element: <PrivateRoute> <Profile/> </PrivateRoute> },
             {path: "/profile/:userId", element: <PrivateRoute> <Profile/> </PrivateRoute> },
             {path: "/feed/:feedId", element: <PrivateRoute> <FeedDetail/> </PrivateRoute> },
             {path: "/stories", element: <PrivateRoute> <Stories/> </PrivateRoute> },

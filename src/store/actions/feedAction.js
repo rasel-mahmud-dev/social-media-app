@@ -4,11 +4,16 @@ import apis from "../../apis";
 
 
 // fetch all feed
-export const fetchFeedsAction = createAsyncThunk("authSlice/fetch-feeds", async (payload, thunkAPI)=>{
+export const fetchFeedsAction = createAsyncThunk("authSlice/fetch-feeds", async (payload = {}, thunkAPI)=>{
     try{
-        let {status, data} = await apis.get("/feed", payload)
+        const {userId, query} = payload
+        let {status, data} = await apis.get("/feed" + (query ? query : "?") )
         if(status === 200){
-            return data
+            return {
+                isTimeline: !userId,
+                feeds: data,
+                userId
+            }
         }
     } catch (ex){
         // send error message with reject type in reducer

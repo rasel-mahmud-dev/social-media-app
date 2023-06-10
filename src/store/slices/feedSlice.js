@@ -1,27 +1,28 @@
-import { createSlice } from '@reduxjs/toolkit';
+import {createSlice} from '@reduxjs/toolkit';
 import {
-    addCommentAction, createFeedAction, deleteFeedAction,
+    createFeedAction,
+    deleteFeedAction,
     fetchFeedsAction,
-    getAllCommentsAction,
-    toggleLikeAction
+    getAllCommentsAction
 } from "src/store/actions/feedAction.js";
 import {fetchPeoplesAction} from "src/store/actions/userAction.js";
 
 
 const initialState = {
     feeds: [],
-    peoples: []
+    peoples: [],
+    userFeeds: {}
 };
 
 export const feedSlice = createSlice({
     name: 'feedSlice',
     initialState,
     reducers: {
-        updateLocalFeedAction(state, action){
+        updateLocalFeedAction(state, action) {
             const {feedId, updated} = action.payload
             let updatedFeeds = [...state.feeds]
-            let index = updatedFeeds.findIndex(f=>f._id === feedId)
-            if(index !== -1){
+            let index = updatedFeeds.findIndex(f => f._id === feedId)
+            if (index !== -1) {
                 updatedFeeds[index] = {
                     ...updatedFeeds[index],
                     ...updated
@@ -32,15 +33,15 @@ export const feedSlice = createSlice({
 
 
         // dispatch this when send friend request
-        removePeople(state, action){
-            state.peoples = state.peoples.filter(p=>p._id !== action.payload)
+        removePeople(state, action) {
+            state.peoples = state.peoples.filter(p => p._id !== action.payload)
         },
 
         // dispatch this when make unfriend
-        addPeople(state, action){
+        addPeople(state, action) {
             let updatePeoples = [...state.peoples]
-            let index = updatePeoples.findIndex(p=>p._id === action.payload._id)
-            if(index !== -1){
+            let index = updatePeoples.findIndex(p => p._id === action.payload._id)
+            if (index !== -1) {
                 updatePeoples[index] = {
                     ...updatePeoples[index],
                     ...action.payload
@@ -49,14 +50,14 @@ export const feedSlice = createSlice({
         },
 
         // dispatch this when make unfriend
-        localToggleFeedReactionAction(state, action){
+        localToggleFeedReactionAction(state, action) {
             const {feedId, _id} = action.payload
             let updateFeeds = [...state.feeds]
-            let index = updateFeeds.findIndex(p=>p._id === feedId)
-            if(index !== -1){
+            let index = updateFeeds.findIndex(p => p._id === feedId)
+            if (index !== -1) {
                 let updateLikes = updateFeeds[index]?.likes || []
-                let isExistLike = updateLikes.findIndex(like=>like._id === _id)
-                if(isExistLike !== -1){
+                let isExistLike = updateLikes.findIndex(like => like._id === _id)
+                if (isExistLike !== -1) {
                     updateLikes.splice(isExistLike, 1)
                 } else {
                     updateLikes.push(action.payload)
@@ -67,23 +68,28 @@ export const feedSlice = createSlice({
         },
 
         // dispatch this when add new post
-        addLocalFeedAction(state, action){
-            state.feeds = [action.payload, ...state.feeds ]
+        addLocalFeedAction(state, action) {
+            state.feeds = [action.payload, ...state.feeds]
         },
 
 
         // dispatch this when delete feed
-        removeLocalFeedAction(state, action){
+        removeLocalFeedAction(state, action) {
             console.log(action.payload)
-            state.feeds = state.feeds.filter(f=>f._id !== action.payload._id)
+            state.feeds = state.feeds.filter(f => f._id !== action.payload._id)
         }
     },
 
-    extraReducers: (builder)=>{
+    extraReducers: (builder) => {
 
         // fetch all feeds
         builder.addCase(fetchFeedsAction.fulfilled, (state, action) => {
-            state.feeds = action.payload
+            const {isTimeline, feeds, userId} = action.payload
+            if (isTimeline) {
+                state.feeds = feeds
+            } else {
+                state.userFeeds[userId] = feeds
+            }
         })
 
         // fetch all feeds
@@ -98,7 +104,7 @@ export const feedSlice = createSlice({
 
         // delete feed
         builder.addCase(deleteFeedAction.fulfilled, (state, action) => {
-            state.feeds = state.feeds.filter(f=>f._id !== action.payload)
+            state.feeds = state.feeds.filter(f => f._id !== action.payload)
         })
 
         //toggle like
@@ -122,6 +128,13 @@ export const feedSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {  addLocalFeedAction, localToggleFeedReactionAction, removeLocalFeedAction, removePeople, addPeople, updateLocalFeedAction } = feedSlice.actions
+export const {
+    addLocalFeedAction,
+    localToggleFeedReactionAction,
+    removeLocalFeedAction,
+    removePeople,
+    addPeople,
+    updateLocalFeedAction
+} = feedSlice.actions
 
 export default feedSlice.reducer

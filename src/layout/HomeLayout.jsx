@@ -111,7 +111,7 @@ const HomeLayout = ({children}) => {
 
                         <Link to={`/profile/${auth._id}`}>
                             <li  className="flex items-center gap-x-1 my-1 py-2 px-2 menu-item-hover">
-                                <Avatar imgClass="text-xs" className="!w-9 !h-9" src={auth?.avatar} username="ER SDF"/>
+                                <Avatar imgClass="text-xs !w-9 !h-9" className="!w-9 !h-9" src={auth?.avatar} username="ER SDF"/>
                                 <label htmlFor="" className="text-sm">Profile</label>
                             </li>
                         </Link>
