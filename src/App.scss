@@ -1,5 +1,6 @@
 @import "mixin";
-
+@import "styles/transition-group";
+@import "styles/shared";
 
 .content {
   width: 100%;
@@ -10,12 +11,12 @@
   }
 
 
-  max-height: calc(100vh - var(--header-height));
-  overflow-y: auto;
+  //max-height: calc(100vh - var(--header-height));
+  //overflow-y: auto;
 
-  &::-webkit-scrollbar {
-    background-color: transparent;
-  }
+  //&::-webkit-scrollbar {
+  //  background-color: transparent;
+  //}
 }
 
 
@@ -42,17 +43,23 @@
   justify-content: center;
 }
 
+
+.card{
+  @apply shadow-y_xx mx-3 bg-white dark:bg-dark-750 p-3 md:px-5 rounded-lg
+}
+
+
 .card {
-  background: #ffffff;
+  //background: #ffffff;
   border-radius: 6px;
-  padding: 20px;
-  box-shadow: 0 1px 10px -4px #5d74a361;
+  //padding: 20px;
+  //box-shadow: 0 1px 10px -4px #5d74a361;
 
   .card-meta {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 5px;
+    //margin-bottom: 5px;
 
     h4 {
       font-size: 14px;

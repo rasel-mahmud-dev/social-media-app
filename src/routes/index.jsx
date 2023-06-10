@@ -1,11 +1,11 @@
 import {createBrowserRouter} from "react-router-dom"
 import Main from "layout/Main";
 import {lazy} from "react";
-import Login  from "pages/auth/Login"
+import Login  from "src/pages/auth/Login"
 import Messenger from "pages/Messenger/Messenger.jsx";
 
 const Homepage  = lazy(()=>import("pages/Homepage"));
-const Registration  = lazy(()=>import("pages/auth/Registration.jsx"));
+const Registration  = lazy(()=>import("src/notification/auth/Registration.jsx"));
 const PrivateRoute  = lazy(()=>import("src/middleware/PrivateRoute.jsx"));
 const FindPeoples  = lazy(()=>import("pages/FindPeoples/FindPeoples.jsx"));
 const MyFriendList  = lazy(()=>import("pages/MyFriendList/MyFriendList.jsx"));

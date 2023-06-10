@@ -1,5 +1,5 @@
 import React from 'react';
-import Avatar from "../Avatar/Avatar.jsx";
+import Avatar from "../Shared/Avatar/Avatar.jsx";
 import {Link} from "react-router-dom";
 import {confirmFriendRequestAction} from "src/store/actions/userAction.js";
 import {useDispatch} from "react-redux";
@@ -56,8 +56,8 @@ const PendingFriendRequestCard = ({pendingFriends  = [], handleRemoveFriend,  au
                 //     </div>
                 //
                 //     <div className="flex items-center gap-x-2">
-                //         <button onClick={()=>handleAcceptFriendRequest(item.senderId)} className="btn btn-primary">Confirm</button>
-                //         <button className="btn">Reject</button>
+                //         <Button onClick={()=>handleAcceptFriendRequest(item.senderId)} className="btn btn-primary">Confirm</Button>
+                //         <Button className="btn">Reject</Button>
                 //     </div>
                 // </div>
             ))}

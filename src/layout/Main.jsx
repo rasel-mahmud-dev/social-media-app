@@ -1,5 +1,4 @@
 import {Outlet} from "react-router-dom";
-import Header from "../components/Header/Header.jsx";
 import {fetchCurrentAuthAction} from "src/store/actions/authAction.js";
 import {useDispatch, useSelector} from "react-redux";
 import React, {Suspense, useEffect} from "react";
@@ -12,6 +11,7 @@ import {MoonLoader} from "react-spinners";
 import {backend} from "src/apis/index.js";
 import {getNewMessageAction} from "src/store/slices/chatSlice.js";
 import channelName from "src/utils/channelName.js";
+import Navigation from "components/Header/Navigation.jsx";
 
 
 const Main = () => {
@@ -68,10 +68,10 @@ const Main = () => {
 
 
         privateChannel.bind("message", (data) => {
-            if(data.message){
+            if (data.message) {
                 playSound()
                 dispatch(getNewMessageAction({
-                    channelName: channelName(auth._id,  data.message.senderId),
+                    channelName: channelName(auth._id, data.message.senderId),
                     message: data.message
                 }))
             }
@@ -90,8 +90,8 @@ const Main = () => {
 
 
     return (
-        <div>
-            <Header/>
+        <div className="relative bg-body-light dark:bg-body-dark h-screen">
+            <Navigation/>
             <Suspense fallback={() => (
                 <div className="py-24 w-full flex justify-center  items-center flex-col">
                     <MoonLoader/>
@@ -100,7 +100,6 @@ const Main = () => {
             )}>
                 <Outlet/>
             </Suspense>
-            {/*<Footer/>*/}
         </div>
     );
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import staticImage from "src/utils/staticImage.js";
-import Avatar from "components/Avatar/Avatar.jsx";
+import Avatar from "components/Shared/Avatar/Avatar.jsx";
 import "./avatar.scss"
 
 

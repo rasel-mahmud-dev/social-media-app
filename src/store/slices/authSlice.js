@@ -3,7 +3,7 @@ import {fetchCurrentAuthAction, fetchProfileAction, loginOrRegistrationAction} f
 import {
     addFriendAction,
     confirmFriendRequestAction,
-    fetchAuthFriendsAction,
+    fetchAuthFriendsAction, fetchProfileMediaAction,
     removeFriendAction
 } from "src/store/actions/userAction.js";
 import {getStoriesAction} from "src/store/actions/storyAction.js";
@@ -15,7 +15,10 @@ const initialState = {
     profile: null,
     friends: [],
     pendingFriends: [],
-    stories: []
+    stories: [],
+    media: {
+
+    }
 };
 
 export const authSlice = createSlice({
@@ -86,6 +89,13 @@ export const authSlice = createSlice({
             }
         })
 
+        // handle store all media user
+        builder.addCase(fetchProfileMediaAction.fulfilled, (state, action) => {
+            if (action.payload && action.payload.userId) {
+                state.media[action.payload.userId]  = action.payload.media
+            }
+        })
+
         // handle add friend request
         builder.addCase(addFriendAction.fulfilled, (state, action) => {
             if (action.payload) {
@@ -95,7 +105,6 @@ export const authSlice = createSlice({
         // handle accept friend request
         builder.addCase(confirmFriendRequestAction.fulfilled, (state, action) => {
             if (action.payload) {
-                console.log(action.payload)
                 state.friends = [...state.friends, action.payload.friend]
                 state.pendingFriends = state.pendingFriends.filter(f => f._id !== action.payload.friendId)
             }

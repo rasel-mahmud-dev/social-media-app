@@ -1,5 +1,5 @@
 import React from 'react';
-import Avatar from "../Avatar/Avatar.jsx";
+import Avatar from "../Shared/Avatar/Avatar.jsx";
 import {createFeedAction} from "src/store/actions/feedAction.js";
 import {useDispatch, useSelector} from "react-redux";
 import {BsGlobe, BsTrash} from "react-icons/bs";
@@ -7,7 +7,7 @@ import chooseImage from "src/utils/chooseImage.js";
 import useCustomReducer from "src/hooks/useReducer.jsx";
 
 import "./add-feed.scss"
-import Loading from "components/Loading/Loading.jsx";
+import Loading from "components/Shared/Loading/Loading.jsx";
 import {BiChevronLeft} from "react-icons/bi";
 
 const AddPost = ({onClose}) => {

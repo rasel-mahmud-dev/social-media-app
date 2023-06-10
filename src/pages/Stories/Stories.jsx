@@ -1,5 +1,5 @@
 import {useEffect, useReducer, useRef, useState} from 'react';
-import Avatar from "src/components/Avatar/Avatar.jsx";
+import Avatar from "src/components/Shared/Avatar/Avatar.jsx";
 import {useNavigate, useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {getStoriesAction} from "src/store/actions/storyAction.js";

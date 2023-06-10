@@ -1,6 +1,6 @@
 import React from 'react';
 import {Link} from "react-router-dom";
-import Avatar from "src/components/Avatar/Avatar.jsx";
+import Avatar from "src/components/Shared/Avatar/Avatar.jsx";
 
 const ActiveFriend = ({handleStartChat, friends, auth}) => {
 
@@ -10,10 +10,10 @@ const ActiveFriend = ({handleStartChat, friends, auth}) => {
                 ...user,
                 friendId: friend._id,
                 _id: friend.senderId === auth._id ? friend.receiverId : friend.senderId
-            })} key={user.id} className="flex items-center justify-between mb-2">
+            })} key={user.id} className="flex items-center justify-between mb-2 color_h1">
                 <div className="flex items-center gap-x-2 ">
                     <Avatar imgClass="text-xs !w-9 !h-9" className="!w-9 !h-9" src={user?.avatar} username="ER SDF"/>
-                    <label htmlFor="" className="text-sm">{user?.fullName}</label>
+                    <label htmlFor="" className="text-sm ">{user?.fullName}</label>
                 </div>
                 <span className="online"></span>
             </div>
@@ -22,10 +22,10 @@ const ActiveFriend = ({handleStartChat, friends, auth}) => {
 
     return (
         <div>
-            <div className="card">
-                <div className="card-meta">
+            <div className="">
+                <div className="flex items-center justify-between  color_h1 pb-4">
                     <h4>Active Friends</h4>
-                    <Link to="/friends">See all</Link>
+                    <Link to="/friends" className="text-sm">See all</Link>
                 </div>
 
                 {auth && friends?.map((friend)=> friend?.status === "accepted" && (

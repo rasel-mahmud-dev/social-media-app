@@ -4,7 +4,7 @@ import "./style.scss";
 import {BiGlobe, BiHome, BiInfoSquare, BiMessage, BiNotification, BiUser, BiVideo} from "react-icons/bi";
 import {GiBigGear} from "react-icons/gi";
 import MenuDropdown from "../Dropdown/MenuDropdown.jsx";
-import Avatar from "../Avatar/Avatar.jsx";
+import Avatar from "../Shared/Avatar/Avatar.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import {FaSignInAlt} from "react-icons/fa";
 import {Link, useNavigate} from "react-router-dom";
@@ -61,14 +61,14 @@ const Header = () => {
                     </div>
 
                            {/*<div className="flex-1 hidden md:block">*/}
-                           {/*    <input type="text" placeholder="Search content"  className="w-full text-sm bg-neutral-100  border-none  rounded-full"/>*/}
+                           {/*    <Input type="text" placeholder="Search content"  className="w-full text-sm bg-neutral-100  border-none  rounded-full"/>*/}
                            {/*</div>*/}
 
 
 
 
 
-                        {/*search input*/}
+                        {/*search Input*/}
 
                     {auth && (
                         <div className="flex items-center gap-x-4">

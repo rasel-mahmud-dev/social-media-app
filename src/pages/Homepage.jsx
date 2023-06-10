@@ -1,8 +1,5 @@
-import FeedCard from "../components/FeedCard/FeedCard.jsx";
-import Avatar from "../components/Avatar/Avatar.jsx";
 import React, {memo, useEffect, useState} from "react";
-import AddPost from "../components/AddPost/AddPost.jsx";
-import ModalWithBackdrop from "../components/ModalWithBackdrop/ModalWithBackdrop.jsx";
+
 import {fetchFeedsAction} from "src/store/actions/feedAction.js";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchPeoplesAction} from "src/store/actions/userAction.js";
@@ -39,16 +36,13 @@ const Homepage = () => {
                             <Stories auth={auth}></Stories>
                         </div>
 
-                        <AddPostDemo className="mt-4" />
-
+                        <AddPostDemo className="mb-4" />
 
 
                         {/**** all feed */}
                         <Feeds feeds={feedState.feeds} />
 
-
                     </div>
-
 
                 </div>
             </HomeLayout>

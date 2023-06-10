@@ -28,7 +28,6 @@
 .story {
   background-blend-mode: darken;
   flex: 1;
-  background: white;
   height: 173px;
   width: 112px;
   border-radius: 10px;
@@ -88,7 +87,7 @@
 
   .create {
     position: absolute;
-    bottom: 6px;
+    bottom: 14px;
     left: 50%;
     transform: translateX(-50%);
     font-size: 14px;

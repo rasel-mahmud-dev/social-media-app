@@ -1,6 +1,6 @@
 import React, {useEffect, useReducer, useState} from 'react';
 import {BiComment, BiLike, BiShare} from "react-icons/bi";
-import Avatar from "../Avatar/Avatar.jsx";
+import Avatar from "../Shared/Avatar/Avatar.jsx";
 import {
     deleteCommentAction,
     deleteFeedAction,
@@ -10,7 +10,7 @@ import {
 import {localToggleFeedReactionAction, updateLocalFeedAction} from "src/store/slices/feedSlice.js";
 import Comments from "src/components/Comments/Comments.jsx";
 import AddComment from "src/components/AddComment/AddComment.jsx";
-import Loading from "src/components/Loading/Loading.jsx";
+import Loading from "src/components/Shared/Loading/Loading.jsx";
 import {FaEllipsisH, FaEllipsisV} from "react-icons/fa";
 import MenuDropdown from "src/components/Dropdown/MenuDropdown.jsx";
 import {BsFillBookmarkFill, BsFillTrash2Fill} from "react-icons/bs";
@@ -84,15 +84,15 @@ const FeedCard = ({feed, authId, dispatch}) => {
 
     return (
         <div className="feed">
-            <div className="bg-white card w-full p-0">
+            <div className="bg-white card p-0">
                 <div className="">
 
                     <div className="flex justify-between p-4">
                         <div className="flex items-center">
                             <Avatar className="!w-9 !h-9" imgClass="!w-9 !h-9" username={feed?.author?.fullName} src={feed?.author?.avatar}/>
                             <div className="ml-3">
-                                <Link to={`/profile/${feed?.userId}`}><h3 className="text-lg font-bold">{feed?.author?.fullName}</h3></Link>
-                                <p className="text-gray-600 text-xs">{getPassTime(feed.createdAt)}</p>
+                                <Link to={`/profile/${feed?.userId}`}><h3 className="dark:text-light-950 text-dark-850 text-lg font-bold">{feed?.author?.fullName}</h3></Link>
+                                <p className="dark:text-dark-100 text-gray-600 text-xs">{getPassTime(feed.createdAt)}</p>
                             </div>
                         </div>
                         <MenuDropdown contentClass="right-0 w-40" render={()=>(
@@ -113,10 +113,10 @@ const FeedCard = ({feed, authId, dispatch}) => {
                     </div>
 
 
-                    <div className="mt-4 feed-content">
+                    <div className="my-4 feed-content">
 
-                        <div>
-                            <p className="text-gray-800 whitespace-pre-line">{feed?.content?.slice(0, state.isExpand ? undefined : 300)}</p>
+                        <div className="mb-3">
+                            <p className="dark:text-light-950 text-gray-800 whitespace-pre-line">{feed?.content?.slice(0, state.isExpand ? undefined : 300)}</p>
 
                             { feed?.content?.length > 300 ?
                                 state.isExpand
@@ -144,8 +144,8 @@ const FeedCard = ({feed, authId, dispatch}) => {
                     </div>
 
 
-                    <div className="px-4">
-                        <div className="flex items-center justify-between mt-4">
+                    <div className="px-4 pb-6">
+                        <div className="flex items-center justify-between mt-4 dark:text-dark-50 text-dark-850">
                             <li className="list-none flex items-center gap-x-1">
                                 <img src="/icons/like.svg" className="w-5" alt=""/>
                                 <span>{feed?.likes?.length > 0 ? feed?.likes?.length: "" }</span>
@@ -156,21 +156,21 @@ const FeedCard = ({feed, authId, dispatch}) => {
                             </li>
                         </div>
 
-                        <div className="flex items-center justify-between border-t border-b mt-4 py-1 text-sm font-medium">
+                        <div className="flex items-center justify-between border-y dark:border-y-dark-500 border-y-light-700 mt-4 py-1 text-sm font-medium dark:text-dark-50 text-dark-850">
                             {state.isLikeActionLoading ? (
-                                <li className="flex items-center gap-x-1 hover:bg-neutral-100 rounded-md cursor-pointer px-4 py-2 w-full justify-center">
+                                <li className="flex items-center gap-x-1   dark:hover:bg-dark-600 hover:bg-neutral-100 rounded-md cursor-pointer px-4 py-2 w-full justify-center">
                                     <Loading />
                                 </li>
                             ) : <li onClick={() => toggleLikeHandler(feed._id)}
-                                    className={`${isLiked(feed.likes) ? "!text-blue-600" : ""} flex items-center gap-x-1 hover:bg-neutral-100 rounded-md cursor-pointer px-4 py-2 w-full justify-center`}>
+                                    className={`${isLiked(feed.likes) ? "!text-blue-600" : ""} flex items-center gap-x-1 dark:hover:bg-dark-600 hover:bg-neutral-100 rounded-md cursor-pointer px-4 py-2 w-full justify-center`}>
                                 <BiLike/>
                                 <span>Like</span>
                             </li>}
-                            <li onClick={handleShowComment} className="flex items-center gap-x-1 hover:bg-neutral-100 rounded-md cursor-pointer px-4 py-2 w-full justify-center">
+                            <li onClick={handleShowComment} className="flex items-center gap-x-1  dark:hover:bg-dark-600 hover:bg-neutral-100 rounded-md cursor-pointer px-4 py-2 w-full justify-center">
                                 <BiComment/>
                                 <span>Comment</span>
                             </li>
-                            <li className="flex items-center gap-x-1 hover:bg-neutral-100 rounded-md cursor-pointer px-4 py-2 w-full justify-center">
+                            <li className="flex items-center gap-x-1  dark:hover:bg-dark-600 hover:bg-neutral-100 rounded-md cursor-pointer px-4 py-2 w-full justify-center">
                                 <BiShare/>
                                 <span>Share</span>
                             </li>

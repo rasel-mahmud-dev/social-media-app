@@ -1,5 +1,5 @@
 import React from 'react';
-import Avatar from "components/Avatar/Avatar.jsx";
+import Avatar from "components/Shared/Avatar/Avatar.jsx";
 import {BiChevronLeft} from "react-icons/bi";
 import "./chat.scss"
 

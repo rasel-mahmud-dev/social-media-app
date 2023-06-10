@@ -3,7 +3,7 @@ import "./story.scss"
 import {BiPlus} from "react-icons/bi";
 import ModalWithBackdrop from "src/components/ModalWithBackdrop/ModalWithBackdrop.jsx";
 import {TiTimes} from "react-icons/ti";
-import Avatar from "src/components/Avatar/Avatar.jsx";
+import Avatar from "src/components/Shared/Avatar/Avatar.jsx";
 import chooseImage from "src/utils/chooseImage.js";
 import Cropper from 'react-easy-crop'
 import getCroppedImg from "src/utils/getCroppedImg.js";
@@ -71,7 +71,7 @@ const CreateStory = ({fullName, avatar, onSubmit}) => {
     return (
         <div>
 
-            <div className="story">
+            <div className="story card !p-0 m-0 shadow-none">
                 <div className="story-thumb">
                     <img src={avatar} alt=""/>
                 </div>
@@ -80,8 +80,8 @@ const CreateStory = ({fullName, avatar, onSubmit}) => {
                     <BiPlus/>
                 </div>
 
-                <div className="create">
-                    <p>Create Story</p>
+                <div className="create w-full color_p">
+                    <p className="text-xs">Create Story</p>
                 </div>
 
             </div>
@@ -101,15 +101,15 @@ const CreateStory = ({fullName, avatar, onSubmit}) => {
                                 <h4 className="font-medium">{fullName}</h4>
                             </div>
 
-                            {/*<div className="action-button">*/}
+                            {/*<div className="action-Button">*/}
                             {/*    <div className="flex w-full items-center">*/}
-                            {/*        <button onClick={() => setState({isCreateStoryModalOpen: false})}*/}
+                            {/*        <Button onClick={() => setState({isCreateStoryModalOpen: false})}*/}
                             {/*                className="w-full btn btn-primary">Discard*/}
-                            {/*        </button>*/}
-                            {/*        <button onClick={handleShareStory}*/}
+                            {/*        </Button>*/}
+                            {/*        <Button onClick={handleShareStory}*/}
                             {/*                className={`whitespace-nowrap w-full btn  ${isShareable() ? "btn-primary" : "btn-disable"}`}>Share*/}
                             {/*            to story*/}
-                            {/*        </button>*/}
+                            {/*        </Button>*/}
                             {/*    </div>*/}
                             {/*</div>*/}
 

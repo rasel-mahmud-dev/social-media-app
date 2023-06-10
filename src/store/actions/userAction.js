@@ -18,6 +18,23 @@ export const fetchPeoplesAction = createAsyncThunk("authSlice/fetchPeoples", asy
 })
 
 
+
+export const fetchProfileMediaAction = createAsyncThunk("fetch-media", async (payload, thunkAPI)=>{
+    try{
+        let {status, data} = await apis.get("/users/media/"+payload.userId)
+        if(status === 200){
+            return {
+                userId: payload.userId,
+                media: data.media
+            }
+        }
+    } catch (ex){
+        // send error message with reject type in reducer
+        return thunkAPI.rejectWithValue( ex.message)
+    }
+})
+
+
 //  get all friends and pending friends
 export const fetchAuthFriendsAction = createAsyncThunk("authSlice/fetchAuthFriends", async (payload, thunkAPI)=>{
     try{

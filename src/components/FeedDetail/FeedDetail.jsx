@@ -4,7 +4,7 @@ import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchFeedDetailAction} from "src/store/actions/feedAction.js";
 import FeedCard from "src/components/FeedCard/FeedCard.jsx";
-import Loading from "src/components/Loading/Loading.jsx";
+import Loading from "src/components/Shared/Loading/Loading.jsx";
 
 const FeedDetail = () => {
 

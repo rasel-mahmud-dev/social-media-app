@@ -2,11 +2,12 @@ import React, {useEffect} from 'react';
 import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import apis from "src/apis/index.js";
-import Avatar from "src/components/Avatar/Avatar.jsx";
+import Avatar from "src/components/Shared/Avatar/Avatar.jsx";
 import "./profile.scss"
-import AvatarGroup from "components/Avatar/AvatarGroup";
+import AvatarGroup from "components/Shared/Avatar/AvatarGroup";
 import useCustomReducer from "src/hooks/useReducer.jsx";
 import PostSection from "components/Profile/PostSection.jsx";
+import MediaSection from "components/Profile/MediaSection.jsx";
 
 
 const Profile = () => {
@@ -81,7 +82,7 @@ const Profile = () => {
         Posts: (params) => <PostSection {...params} />,
         Friends: (params) => "Working",
         Timeline: (params) => "Working",
-        Photos: (params) => "Working",
+        Photos: (params) => <MediaSection  {...params} />,
         Follower: (params) => "Working"
     }
 
@@ -108,8 +109,8 @@ const Profile = () => {
 
                             {/*{state.user._id === auth._id && (*/}
                             {/*    <div className="mt-2">*/}
-                            {/*        <button onClick={handleUploadAvatar} className="btn text-xs font-medium">Change Photo*/}
-                            {/*        </button>*/}
+                            {/*        <Button onClick={handleUploadAvatar} className="btn text-xs font-medium">Change Photo*/}
+                            {/*        </Button>*/}
                             {/*    </div>*/}
                             {/*)}*/}
 
@@ -154,7 +155,7 @@ const Profile = () => {
 
                             {/*    {state.user._id === auth._id && (*/}
                             {/*        <div className="mt-2">*/}
-                            {/*            <button onClick={handleUploadAvatar} className="btn text-xs font-medium">Change Photo</button>*/}
+                            {/*            <Button onClick={handleUploadAvatar} className="btn text-xs font-medium">Change Photo</Button>*/}
                             {/*        </div>*/}
                             {/*    )}*/}
 

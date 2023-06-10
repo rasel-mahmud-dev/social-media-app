@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Sidebar from "src/components/Sidebar/Sidebar.jsx";
-import Avatar from "src/components/Avatar/Avatar.jsx";
+import Avatar from "src/components/Shared/Avatar/Avatar.jsx";
 import PendingFriendRequestCard from "src/components/PendingFriendRequestCard/PendingFriendRequestCard.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import {fetchFeedsAction} from "src/store/actions/feedAction.js";
@@ -13,6 +13,19 @@ import {openChatUserAction} from "src/store/slices/chatSlice.js";
 import {FaSignOutAlt} from "react-icons/fa";
 import {logoutAction} from "src/store/slices/authSlice.js";
 import channelName from "src/utils/channelName.js";
+
+import friendIcon from "src/assets/icon/friends.png"
+import groupIcon from "src/assets/icon/group.png"
+import bloodIcon from "src/assets/icon/blood.png"
+import pageIcon from "src/assets/icon/pages.png"
+import starIcon from "src/assets/icon/star.png"
+import videoIcon from "src/assets/icon/video.png"
+import marketIcon from "src/assets/icon/market.png"
+import bookmarkIcon from "src/assets/icon/bookmark.png"
+import clockIcon from "src/assets/icon/time.png"
+import messengerIcon from "src/assets/icon/messenger.png"
+import avatarIcon from "src/assets/icon/avatar.png"
+
 
 const HomeLayout = ({children}) => {
 
@@ -28,13 +41,19 @@ const HomeLayout = ({children}) => {
     const {openSidebar } = useSelector(state=>state.appState)
     const {openChatUser } = useSelector(state=>state.chatState)
 
-    const menuItems = [
-        {cls: "friend-icon", label: "Friends", to: "/friends", },
-        {cls: "group-icon", label: "Groups", to: "/groups", },
-        {cls: "save-icon", label: "Saves", to: "/saved", },
-        {cls: "watch-icon", label: "Watch", to: "/watch", },
-        {cls: "feed-icon", label: "Feed", to: "/", }
+
+    const nav = [
+        { label: "Friends", img: friendIcon, to: "/friends", },
+        { label: "Groups", img: groupIcon, to: "/groups", },
+        { label: "Market", img: marketIcon, to: "/", },
+        { label: "Watch", img: videoIcon, to: "/watch", },
+        { label: "Memories", img: clockIcon, to: "/", },
+        { label: "Pages", img: pageIcon, to: "/pages", },
+        { label: "Save", img: bookmarkIcon, to: "/saved", },
+        { label: "Favorites", img: starIcon, to: "/saved", },
+        { label: "Messenger",  img: messengerIcon, to: "/messenger"}
     ]
+
 
     function handleStartChat(friend){
         if(!auth) return;
@@ -53,32 +72,32 @@ const HomeLayout = ({children}) => {
             <div className="flex justify-between ">
                 <Sidebar className="white left-sidebar" isOpen={openSidebar === "left-sidebar"} onClose={()=>dispatch(openSidebarAction(""))}>
 
-                    <div className="card !px-2">
-                        <div className="card-meta !px-2">
-                            <h4>Home</h4>
-                        </div>
-
+                    <div className=" !px-2">
                         <Link to={`/profile/${auth._id}`}>
-                            <li  className="flex items-center gap-x-1 my-1 py-2  px-2 menu-item-hover">
-                                <Avatar className="!w-10 !h-10" imgClass="!w-10 !h-10 text-xs" src={auth.avatar} username={auth.fullName} />
-                                <div>
-                                    <span className="font-medium text-sm text-neutral-600">{auth.fullName}</span>
-                                    <h5 className="text-[10px] text-neutral-600">{auth._id}</h5>
+                            <li  className="flex items-center gap-x-1 my-1 py-2  px-2 menu-item-hover color_h1">
+                                <Avatar className="!w-8 !h-8" imgClass="!w-8 !h-8 text-xs" src={auth.avatar} username={auth.fullName} />
+                                <div className="ml-2">
+                                    <span className="font-medium text-base ">{auth.fullName}</span>
+                                    <h5 className="text-[10px] color_mute">{auth._id}</h5>
                                 </div>
                             </li>
                         </Link>
-                        {menuItems.map((item, index)=>(
+                        {nav.map((item, index)=>(
                             item.to ? (
                                 <Link key={index} to={item.to}>
                                     <li key={index} className="flex items-center gap-x-1 my-1 py-2 px-2 menu-item-hover">
-                                        <i className={`icon ${item.cls}`}></i>
-                                        <span className="font-medium text-sm text-neutral-600">{item.label}</span>
+                                        <img className="w-9 radius-100" src={item.img} alt=""/>
+                                        <h4 className="ml-2 text-[15px] color_li font-medium ">{item.label}</h4>
                                     </li>
+                                    {/**/}
+                                    {/*    <i className={`icon ${item.cls}`}></i>*/}
+                                    {/*    <span className="font-medium text-sm text-neutral-600">{item.label}</span>*/}
+                                    {/*</li>*/}
                                 </Link>
                             ) : (
                                 <li key={index} onClick={()=>item.onClick && item.onClick(item)} className="flex items-center gap-x-1 my-1 py-2 px-2 menu-item-hover">
-                                    <i className={`icon ${item.cls}`}></i>
-                                    <span className="font-medium text-sm text-neutral-600">{item.label}</span>
+                                    <img className="w-9 radius-100" src={item.img} alt=""/>
+                                    <h4 className="ml-2 text-[15px] color_li font-medium ">{item.label}</h4>
                                 </li>
                             )
                         ))}
@@ -93,31 +112,31 @@ const HomeLayout = ({children}) => {
                     </div>
 
 
-                    <div className="card !px-2 mt-3">
-                        <div className="card-meta !px-2">
-                            <h4>Account</h4>
-                        </div>
+                    {/*<div className=" !px-2 mt-3">*/}
+                    {/*    <div className="card-meta !px-2">*/}
+                    {/*        <h4>Account</h4>*/}
+                    {/*    </div>*/}
 
 
-                        <li  className="flex items-center gap-x-1 my-1 py-2 px-2 menu-item-hover">
-                            <Avatar imgClass="text-xs" className="!w-9 !h-9" username="ER SDF"/>
-                            <label htmlFor="" className="text-sm">Setting</label>
-                        </li>
+                    {/*    <li  className="flex items-center gap-x-1 my-1 py-2 px-2 menu-item-hover">*/}
+                    {/*        <Avatar imgClass="text-xs" className="!w-9 !h-9" username="ER SDF"/>*/}
+                    {/*        <label htmlFor="" className="text-sm">Setting</label>*/}
+                    {/*    </li>*/}
 
-                        <li onClick={handleLogout} className="flex items-center gap-x-1 my-1 py-2 px-2 menu-item-hover">
-                            <div className="!w-9 !h-9 bg-neutral-200 rounded-full flex justify-center items-center"><FaSignOutAlt /></div>
-                            <label htmlFor="" className="text-sm">Logout</label>
-                        </li>
+                    {/*    <li onClick={handleLogout} className="flex items-center gap-x-1 my-1 py-2 px-2 menu-item-hover">*/}
+                    {/*        <div className="!w-9 !h-9 bg-neutral-200 rounded-full flex justify-center items-center"><FaSignOutAlt /></div>*/}
+                    {/*        <label htmlFor="" className="text-sm">Logout</label>*/}
+                    {/*    </li>*/}
 
-                        <Link to={`/profile/${auth._id}`}>
-                            <li  className="flex items-center gap-x-1 my-1 py-2 px-2 menu-item-hover">
-                                <Avatar imgClass="text-xs !w-9 !h-9" className="!w-9 !h-9" src={auth?.avatar} username="ER SDF"/>
-                                <label htmlFor="" className="text-sm">Profile</label>
-                            </li>
-                        </Link>
+                    {/*    <Link to={`/profile/${auth._id}`}>*/}
+                    {/*        <li  className="flex items-center gap-x-1 my-1 py-2 px-2 menu-item-hover">*/}
+                    {/*            <Avatar imgClass="text-xs !w-9 !h-9" className="!w-9 !h-9" src={auth?.avatar} username="ER SDF"/>*/}
+                    {/*            <label htmlFor="" className="text-sm">Profile</label>*/}
+                    {/*        </li>*/}
+                    {/*    </Link>*/}
 
 
-                    </div>
+                    {/*</div>*/}
 
 
                 </Sidebar>
@@ -137,7 +156,7 @@ const HomeLayout = ({children}) => {
 
                     <ActiveFriend handleStartChat={handleStartChat} auth={auth} friends={friends}/>
 
-                    <PendingFriendRequestCard  className="mt-4" auth={auth} pendingFriends={pendingFriends} />
+                    {/*<PendingFriendRequestCard  className="mt-4" auth={auth} pendingFriends={pendingFriends} />*/}
 
 
                     {openChatUser && <ChatWithFriend auth={auth} friend={openChatUser} openChatUser={openChatUser} /> }

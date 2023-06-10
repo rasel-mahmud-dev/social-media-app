@@ -13,7 +13,8 @@ export default defineConfig({
       src: path.resolve("./src"),
       components: path.resolve("./src/components"),
       pages: path.resolve("./src/pages"),
-      layout: path.resolve("./src/layout")
+      layout: path.resolve("./src/layout"),
+      styles: path.resolve("./src/styles")
     }
   }
 })

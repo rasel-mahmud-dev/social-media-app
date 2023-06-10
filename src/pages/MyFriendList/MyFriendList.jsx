@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {fetchAuthFriendsAction, removeFriendAction} from "src/store/actions/userAction.js";
 
-import Avatar from "src/components/Avatar/Avatar.jsx";
+import Avatar from "src/components/Shared/Avatar/Avatar.jsx";
 import HomeLayout from "layout/HomeLayout.jsx";
 
 import HomeLayoutLink from "pages/HomeLayoutLink/HomeLayoutLink.jsx";
