@@ -2,6 +2,7 @@ import {createBrowserRouter} from "react-router-dom"
 import Main from "layout/Main";
 import {lazy} from "react";
 import Login  from "pages/auth/Login"
+import Messenger from "pages/Messenger/Messenger.jsx";
 
 const Homepage  = lazy(()=>import("pages/Homepage"));
 const Registration  = lazy(()=>import("pages/auth/Registration.jsx"));
@@ -38,7 +39,8 @@ const router = createBrowserRouter([
             {path: "saved", element: <PrivateRoute> <Saved/> </PrivateRoute> },
             {path: "groups", element: <PrivateRoute> <Groups/> </PrivateRoute> },
             {path: "login", element: <Login/> },
-            {path: "registration", element: <Registration/> }
+            {path: "registration", element: <Registration/> },
+            {path: "messenger", element: <Messenger/> }
         ]
     }
 ])

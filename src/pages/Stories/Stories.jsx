@@ -9,6 +9,7 @@ import staticImage from "src/utils/staticImage.js";
 import {AiFillSound} from "react-icons/ai";
 import {FaEllipsisH} from "react-icons/fa";
 import "../../components/Story/story.scss"
+import {TiTimes} from "react-icons/ti";
 
 const intervalId = {
     current: 0
@@ -121,6 +122,10 @@ const Stories = () => {
         }
     }
 
+    function handleCloseStory(){
+        navigate("/")
+    }
+
 
     function renderStoryDetail() {
 
@@ -152,8 +157,8 @@ const Stories = () => {
 
                             <div className="flex justify-between items-center pt-3">
                                 <div className="story-view-author flex items-center gap-x-2 ">
-                                    <Avatar username="rasel" className="!w-8 !h-8  rounded-full " imgClass="!text-xs"/>
-                                    <h4 className="font-medium">Rasel mahmud</h4>
+                                    <Avatar username={storyDetail?.author.fullName} src={storyDetail?.author.avatar} className="!w-8 !h-8  rounded-full " imgClass="!text-xs"/>
+                                    <h4 className="font-medium">{storyDetail?.author.fullName}</h4>
                                 </div>
 
                                 <div className="flex items-center mr-3 gap-x-2   ">
@@ -164,7 +169,8 @@ const Stories = () => {
                                         }
                                     </span>
                                     <AiFillSound className="text-2xl text-white"/>
-                                    <FaEllipsisH className="text-xl text-white"/>
+                                    <FaEllipsisH className="text-xl text-white hidden lg:block"/>
+                                    <TiTimes onClick={handleCloseStory} className="text-xl text-white block lg:hidden"/>
                                 </div>
                             </div>
                         </div>

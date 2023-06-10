@@ -38,8 +38,6 @@ const Homepage = () => {
 
             <HomeLayout>
                 <div className="flex gap-x-4">
-
-
                     <div className='w-full'>
 
                         <div className="stories-container">

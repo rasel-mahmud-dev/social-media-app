@@ -12,6 +12,7 @@ import ChatWithFriend from "src/components/ChatWithFriend/ChatWithFriend.jsx";
 import {openChatUserAction} from "src/store/slices/chatSlice.js";
 import {FaSignOutAlt} from "react-icons/fa";
 import {logoutAction} from "src/store/slices/authSlice.js";
+import channelName from "src/utils/channelName.js";
 
 const HomeLayout = ({children}) => {
 
@@ -36,7 +37,11 @@ const HomeLayout = ({children}) => {
     ]
 
     function handleStartChat(friend){
-        dispatch(openChatUserAction(friend))
+        if(!auth) return;
+        dispatch(openChatUserAction({
+            ...friend,
+            channelName: channelName(auth._id, friend._id)
+        }))
     }
 
     function handleLogout() {
@@ -135,7 +140,7 @@ const HomeLayout = ({children}) => {
                     <PendingFriendRequestCard  className="mt-4" auth={auth} pendingFriends={pendingFriends} />
 
 
-                    {openChatUser && <ChatWithFriend openChatUser={openChatUser} /> }
+                    {openChatUser && <ChatWithFriend auth={auth} friend={openChatUser} openChatUser={openChatUser} /> }
 
 
                 </Sidebar>

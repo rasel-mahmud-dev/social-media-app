@@ -94,7 +94,8 @@
     font-size: 14px;
     font-weight: 500;
     text-align: center;
-    P{
+
+    P {
       line-height: 1.1;
     }
   }
@@ -120,8 +121,9 @@
 
 .create-story-content {
   position: relative;
+
   .close-button {
-  z-index: 1010;
+    z-index: 1010;
     position: absolute;
     background: var(--primary-400);
     width: 35px;
@@ -179,7 +181,7 @@
 }
 
 
-.mobile-add-story-btn{
+.mobile-add-story-btn {
   position: fixed;
   bottom: 10px;
 }
@@ -194,7 +196,7 @@
   box-sizing: border-box;
   overflow: hidden;
 
-  @include getDown(600px){
+  @include getDown(600px) {
     width: 100%;
     top: 0;
     height: 100%;
@@ -244,6 +246,9 @@
     top: calc(0px - var(--header-height));
     position: relative;
     z-index: 1004;
+  }
+
+  @include getDown(600px) {
 
   }
 
@@ -253,6 +258,10 @@
     height: 80%;
     width: 500px;
     position: relative;
+
+    @include getDown(600px){
+      width: 100%;
+    }
 
     .next-story-btn, .prev-story-btn {
       width: 40px;
