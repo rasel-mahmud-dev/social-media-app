@@ -72,21 +72,21 @@ const Navigation = (props) => {
 
     function authDropdown(isShow) {
         return isShow && (
-            <div className="absolute top-6 right-0 shadow-lg card bg-white">
+            <div className="absolute top-6 right-0 shadow-lg card ">
                 <div className="min-w-200px  text-sm font-medium">
                     {auth && auth._id ? (
                         <>
                             <li
-                                className="hover:bg-primary hover:text-white cursor-pointer px-2 ">
+                                className="hover:bg-primary color_h2 hover:text-white cursor-pointer px-2 ">
                                 <NavLink to={`/profile/${auth._id}`}>Profile</NavLink>
                             </li>
                             <li onClick={handleLogout}
-                                className="hover:bg-primary hover:text-white cursor-pointer px-2 py-1">Logout
+                                className="hover:bg-primary color_h2 hover:text-white cursor-pointer px-2 py-1">Logout
                             </li>
                         </>
                     ) : (
                         <li
-                            className="hover:bg-primary hover:text-white  cursor-pointer  px-2 py-1"
+                            className="hover:bg-primary color_h2 hover:text-white  cursor-pointer  px-2 py-1"
                             onClick={() => pushRoute("/join")}
                         >Login</li>
                     )

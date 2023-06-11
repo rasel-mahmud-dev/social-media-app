@@ -8,7 +8,8 @@ import useCustomReducer from "src/hooks/useReducer.jsx";
 
 import "./add-feed.scss"
 import Loading from "components/Shared/Loading/Loading.jsx";
-import {BiChevronLeft} from "react-icons/bi";
+import {BiChevronLeft, BiPlus} from "react-icons/bi";
+import resizeImageByMaxWidth from "src/utils/resizeImage.js";
 
 const AddPost = ({onClose}) => {
 
@@ -44,25 +45,31 @@ const AddPost = ({onClose}) => {
             setState({
                 images: []
             })
-        }).catch(() => {
-            alert("Post adding fail")
+        }).catch((message) => {
+            alert(message)
         }).finally(() => {
             setState({
                 addFeedLoading: false
             })
         })
-
     }
 
     async function handleChoosePhoto() {
         let file = await chooseImage()
-        if (file.base64) {
-            setState(prevState => {
-                return {
-                    ...prevState,
-                    images: [...prevState.images, {blob: file.blob, base64: file.base64}]
-                }
-            })
+        if (file && file.base64) {
+            const newFile =  await resizeImageByMaxWidth(file.base64, 1000, 0.6)
+
+
+            console.log(newFile)
+
+            if(newFile && newFile.blob && newFile.base64){
+                setState(prevState => {
+                    return {
+                        ...prevState,
+                        images: [...prevState.images, {blob: newFile.blob, base64: newFile.base64}]
+                    }
+                })
+            }
         }
     }
 
@@ -117,7 +124,7 @@ const AddPost = ({onClose}) => {
                                     </div>
 
                                     <div onClick={() => handleRemoveImage(index)}
-                                         className="position-center text-xs font-medium color_h3">
+                                         className="position-center text-xs font-semibold text-primary">
                                         {state.images.length > 4 && index === 3 && <div>
                                             {state.images.length - 4} More items
                                         </div>}
@@ -126,8 +133,10 @@ const AddPost = ({onClose}) => {
                             ))}
 
                             <div onClick={handleChoosePhoto}
-                                 className="relative group flex items-center justify-center h-10 mt-2 border dark:border-neutral-700 border-neutral-600/10 rounded-lg">
-                                <span className=" color_h3 font-medium text-sm">Add More</span>
+                                 className="relative group !bg-transparent hover:!bg-primary !w-max px-4 py-3 !h-max flex items-center justify-center mt-2 border dark:border-neutral-700 border-neutral-600/10 rounded-lg">
+                                <span className=" color_h3 font-medium text-sm">
+                                    <BiPlus />
+                                </span>
                             </div>
                         </div>}
 

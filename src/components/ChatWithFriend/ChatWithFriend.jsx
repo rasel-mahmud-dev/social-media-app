@@ -31,18 +31,14 @@ const ChatWithFriend = ({openChatUser, auth, friend}) => {
     }, [openChatUser])
 
     return (
-        <div className="card fixed bottom-3 right-3 quick-chat-popup">
-
-            <div className="fixed right-6">
-                <TiTimes onClick={() => dispatch(openChatUserAction(null))}/>
-            </div>
-
+        <div className="card p-0 fixed bottom-3 right-3 quick-chat-popup">
             <div>
                 {openChatUser && (
                     <Chat
                         openChatUser={openChatUser}
                         messages={messages}
                         auth={auth}
+                        handleClose={()=> dispatch(openChatUserAction(null))}
                         handleSendMessage={handleSendMessage}
                     />
                 )}

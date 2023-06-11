@@ -1,5 +1,5 @@
-import React, {lazy, Suspense} from "react";
-import {Link, useNavigate} from "react-router-dom";
+import React, {lazy, Suspense, useEffect} from "react";
+import {Link, useNavigate, useSearchParams} from "react-router-dom";
 import {useDispatch} from "react-redux"
 
 import Input from "components/Shared/Input/Input.jsx";
@@ -12,11 +12,12 @@ import "./Login.scss"
 
 
 import ErrorMessage from "components/ErrorMessage/ErrorMessage.jsx";
-import {loginOrRegistrationAction} from "src/store/actions/authAction.js";
+import {fetchCurrentAuthAction, loginOrRegistrationAction} from "src/store/actions/authAction.js";
 import {MoonLoader} from "react-spinners";
 import SocialLogin from "components/Shared/SocialLogin/SocialLogin.jsx";
 import Divider from "components/Shared/Divider/Divider.jsx";
 import ModalWithBackdrop from "components/ModalWithBackdrop/ModalWithBackdrop.jsx";
+import axios from "axios";
 
 const Registration = lazy(() => import("pages/auth/Registration.jsx"));
 
@@ -31,7 +32,9 @@ const Login = (props) => {
 
     const [isPending, setPending] = React.useState(false)
 
-    const {afterRedirect} = props
+    const [getUrlParams] = useSearchParams()
+
+    const token = getUrlParams.get("token")
 
     let navigate = useNavigate()
 
@@ -39,6 +42,18 @@ const Login = (props) => {
 
     const [errorMessage, setErrorMessage] = React.useState("")
     const [newAccountForm, setNewAccountForm] = React.useState(false)
+
+    useEffect(() => {
+        if(token){
+            localStorage.removeItem("token")
+            localStorage.setItem("token", token)
+            dispatch(fetchCurrentAuthAction()).unwrap().then(()=>{
+                navigate("/")
+            })
+        }
+    }, [token]);
+
+
 
     const [userData, setUserData] = React.useState({
         emailPhone: {value: "rasel@gmail.com", touch: false, errorMessage: "", isMail: true},

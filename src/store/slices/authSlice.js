@@ -42,17 +42,13 @@ export const authSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(loginOrRegistrationAction.fulfilled, (state, action) => {
             if (action.payload) {
-                let {fullName, firstName, lastName, email, role, avatar} = action.payload
-                state.auth = {
-                    fullName, firstName, lastName, email, role, avatar
-                }
-                state.authLoaded = true
+                state.auth = action.payload
             }
-            // state.entities.push(action.payload)
+            state.authLoaded = true
         })
 
         // handle rejection error
-        builder.addCase(loginOrRegistrationAction.rejected, (state, action) => {
+        builder.addCase(loginOrRegistrationAction.rejected, (state) => {
             state.auth = null
             state.authLoaded = true
         })

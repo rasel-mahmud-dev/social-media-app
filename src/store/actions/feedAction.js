@@ -1,5 +1,6 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import apis from "../../apis";
+import errorResponse from "src/utils/errorResponse.js";
 
 
 
@@ -17,7 +18,7 @@ export const fetchFeedsAction = createAsyncThunk("authSlice/fetch-feeds", async 
         }
     } catch (ex){
         // send error message with reject type in reducer
-        return thunkAPI.rejectWithValue( ex.message)
+        return thunkAPI.rejectWithValue( errorResponse(ex))
     }
 })
 
@@ -32,7 +33,7 @@ export const fetchFeedDetailAction = createAsyncThunk("authSlice/fetch-feed-deta
         }
     } catch (ex){
         // send error message with reject type in reducer
-        return thunkAPI.rejectWithValue( ex.message)
+        return thunkAPI.rejectWithValue( errorResponse(ex))
     }
 })
 
@@ -45,7 +46,7 @@ export const createFeedAction = createAsyncThunk("authSlice/createFeed", async (
         }
     } catch (ex){
         // send error message with reject type in reducer
-        return thunkAPI.rejectWithValue( ex.message)
+        return thunkAPI.rejectWithValue( errorResponse(ex))
     }
 })
 
@@ -59,7 +60,7 @@ export const deleteFeedAction = createAsyncThunk("authSlice/deleteFeed", async (
         }
     } catch (ex){
         // send error message with reject type in reducer
-        return thunkAPI.rejectWithValue( ex.message)
+        return thunkAPI.rejectWithValue( errorResponse(ex))
     }
 })
 
@@ -73,7 +74,7 @@ export const toggleLikeAction = createAsyncThunk("authSlice/toggleLikeAction", a
         }
     } catch (ex){
         // send error message with reject type in reducer
-        return thunkAPI.rejectWithValue( ex.message)
+        return thunkAPI.rejectWithValue( errorResponse(ex))
     }
 })
 
@@ -85,7 +86,7 @@ export const addCommentAction = createAsyncThunk("authSlice/addComment", async (
         }
     } catch (ex){
         // send error message with reject type in reducer
-        return thunkAPI.rejectWithValue( ex.message)
+        return thunkAPI.rejectWithValue( errorResponse(ex))
     }
 })
 
@@ -98,7 +99,7 @@ export const getAllCommentsAction = createAsyncThunk("authSlice/fetchComment", a
         }
     } catch (ex){
         // send error message with reject type in reducer
-        return thunkAPI.rejectWithValue( ex.message)
+        return thunkAPI.rejectWithValue( errorResponse(ex))
     }
 })
 
@@ -111,6 +112,6 @@ export const deleteCommentAction = createAsyncThunk("authSlice/deleteComment", a
         }
     } catch (ex){
         // send error message with reject type in reducer
-        return thunkAPI.rejectWithValue( ex.message)
+        return thunkAPI.rejectWithValue( errorResponse(ex))
     }
 })
