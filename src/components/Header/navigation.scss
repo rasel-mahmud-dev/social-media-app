@@ -249,3 +249,7 @@
 .rounded_circle {
   @apply bg-dark-500/10 dark:bg-light-200/30 w-9 h-9 rounded-full flex items-center justify-center hover:bg-dark-900/20 dark:hover:bg-light-400/50  cursor-pointer;
 }
+
+.circle-hover-btn {
+  @apply w-8 h-8 hover:bg-light-800 dark:hover:bg-dark-600 rounded-full flex items-center justify-center cursor-pointer;
+}

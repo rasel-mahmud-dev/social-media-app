@@ -188,7 +188,7 @@ const Login = (props) => {
     return (
         <div>
             <div className="container-1200 ">
-                <div className="align-middle-vh">
+                <div className="align-middle-vh login-page-wrapper">
                     <div className="registration-form-popup">
                         <ModalWithBackdrop root="modal-root" isOpen={newAccountForm}
                                            modalClass="registration-form_modal card ">
@@ -205,8 +205,8 @@ const Login = (props) => {
 
                     <div className="flex items-center justify-center flex-col sm:flex-row">
                         <div>
-                            <h1 className="font-bold mt-4 text-2xl sm:text-4xl text-primary">Facebook3.0</h1>
-                            <h3 className="font-medium mt-3 max-w-sm text-lg text-dark-300">Facebook3.0 helps you
+                            <h1 className="font-bold mt-4 text-2xl sm:text-4xl text-primary">Facebook</h1>
+                            <h3 className="font-medium mt-3 max-w-sm text-lg text-dark-300">Facebook helps you
                                 contact and share with the people in your life</h3>
                         </div>
                         <div className="sm:w-auto w-full">
@@ -214,7 +214,7 @@ const Login = (props) => {
                                 <div className=" sm:mt-0 mt-8">
 
                                     <div
-                                        className="card w-[400px]">
+                                        className="card login-card">
 
                                         <form onSubmit={handleSubmit} className="w-full flex-1">
 
@@ -259,7 +259,7 @@ const Login = (props) => {
                                                     Account</Button>
 
                                             </div>
-                                            <Divider text="or" textClass="my-3"/>
+                                            <Divider text="or" textClass="!my-3"/>
                                             <SocialLogin/>
                                         </form>
                                     </div>

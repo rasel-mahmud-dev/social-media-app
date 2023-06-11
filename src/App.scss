@@ -358,3 +358,10 @@
   --filter-placeholder-icon: invert(59%) sepia(11%) saturate(200%) saturate(135%) hue-rotate(176deg) brightness(96%) contrast(94%);
   filter: var(--filter-placeholder-icon);
 }
+
+.list-hover-able{
+  @apply rounded-md py-2 px-2 cursor-pointer;
+  &:hover{
+    @apply dark:bg-dark-600 bg-light-800
+  }
+}

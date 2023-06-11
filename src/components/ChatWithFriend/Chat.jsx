@@ -33,7 +33,7 @@ const Chat = ({openChatUser, messages, className = "", auth, handleClose, handle
 
 
                 <div className="message-list p-4">
-                    {messages[openChatUser?.channelName] && messages[openChatUser?.channelName]?.map((msg) => (
+                    {messages[openChatUser?.groupId] && messages[openChatUser?.groupId]?.map((msg) => (
                         <div className={`msg-item ${msg.senderId === auth?._id ? "your-msg" : ""}`} key={msg._id}>
                             <li>{msg.message}</li>
                         </div>

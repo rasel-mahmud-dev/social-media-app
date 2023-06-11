@@ -13,6 +13,7 @@ import {logoutAction} from "src/store/slices/authSlice.js";
 import {openSidebarAction} from "src/store/slices/appSlice.js";
 import {FiSearch} from "react-icons/fi";
 import Avatar from "components/Shared/Avatar/Avatar.jsx";
+import {toggleOpenHomeChatsSidebar} from "src/store/slices/chatSlice.js";
 
 
 const Navigation = (props) => {
@@ -45,6 +46,9 @@ const Navigation = (props) => {
     }
 
     function handleExpandDropdown(name) {
+        if(name === "messenger"){
+            dispatch(toggleOpenHomeChatsSidebar())
+        }
         setExpandDropdown(expandDropdown === name ? "" : name)
     }
 

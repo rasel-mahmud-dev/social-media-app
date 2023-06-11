@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react';
-import {TiTimes} from "react-icons/ti";
 import {useDispatch, useSelector} from "react-redux";
 import {openChatUserAction} from "src/store/slices/chatSlice.js";
 import "./chat-with-friend.scss"
@@ -17,17 +16,19 @@ const ChatWithFriend = ({openChatUser, auth, friend}) => {
     function handleSendMessage(e) {
         e.preventDefault();
 
+        if (!(openChatUser && openChatUser?.groupId)) return
+
         let message = e.target.message.value
         dispatch(sendPrivateMessageAction({
-            sender: auth._id,
-            recipientId: friend._id,
             message,
-            channelName: openChatUser.channelName
+            groupId: openChatUser.groupId
         }))
     }
 
     useEffect(() => {
-        dispatch(fetchPrivateMessageAction({channelName: openChatUser.channelName}))
+        if (openChatUser.groupId) {
+            dispatch(fetchPrivateMessageAction({groupId: openChatUser.groupId}))
+        }
     }, [openChatUser])
 
     return (
@@ -38,7 +39,7 @@ const ChatWithFriend = ({openChatUser, auth, friend}) => {
                         openChatUser={openChatUser}
                         messages={messages}
                         auth={auth}
-                        handleClose={()=> dispatch(openChatUserAction(null))}
+                        handleClose={() => dispatch(openChatUserAction(null))}
                         handleSendMessage={handleSendMessage}
                     />
                 )}

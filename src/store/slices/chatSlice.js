@@ -1,19 +1,26 @@
 import {createSlice} from '@reduxjs/toolkit';
-import {fetchPrivateMessageAction, sendPrivateMessageAction} from "src/store/actions/chatAction.js";
+import {
+    createGroupAction,
+    fetchGroupsAction,
+    fetchPrivateMessageAction,
+    sendPrivateMessageAction
+} from "src/store/actions/chatAction.js";
 
 
 const initialState = {
     auth: null,
-    openChatUser: null,
-    messages: {},  // { 23423432sdfhJKHdsf_sdfhsdkf: [] }
+    openHomeChatsSidebar: false,
+    openChatUser: null,  // {...friend: {}, group: {}}
+    groups: [],
+    messages: {},  // { groupId: [] }
 };
 
 function addNewMessage(state, action) {
-    const {channelName, message} = action.payload
+    const {groupId, message} = action.payload
     state.messages = {
         ...state.messages,
-        [channelName]: [
-            ...(state.messages[channelName] || []),
+        [groupId]: [
+            ...(state.messages[groupId] || []),
             message
         ]
     }
@@ -25,6 +32,7 @@ export const chatSlice = createSlice({
     reducers: {
         openChatUserAction(state, action) {
             state.openChatUser = action.payload
+
         },
         closeChatUserAction(state) {
             state.openChatUser = null
@@ -32,16 +40,37 @@ export const chatSlice = createSlice({
 
         getNewMessageAction(state, action) {
             addNewMessage(state, action)
+        },
+        toggleOpenHomeChatsSidebar(state) {
+            state.openHomeChatsSidebar = !state.openHomeChatsSidebar
         }
     },
 
     extraReducers: (builder) => {
 
         builder.addCase(fetchPrivateMessageAction.fulfilled, (state, action) => {
-            const {messages, channelName} = action.payload
+            const {messages, groupId} = action.payload
             state.messages = {
                 ...state.messages,
-                [channelName]: messages || []
+                [groupId]: messages || []
+            }
+        })
+
+        builder.addCase(fetchGroupsAction.fulfilled, (state, action) => {
+            // const {messages, channelName} = action.payload
+            // state.messages = {
+            //     ...state.messages,
+            //     [channelName]: messages || []
+            // }
+            //
+            // const {messages, channelName} = action.payload
+
+            state.groups = action.payload.groups || []
+        })
+
+        builder.addCase(createGroupAction.fulfilled, (state, action) => {
+            if(action.payload){
+                state.groups.push(action.payload)
             }
         })
 
@@ -55,6 +84,6 @@ export const chatSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {openChatUserAction, closeChatUserAction, getNewMessageAction} = chatSlice.actions
+export const {openChatUserAction, toggleOpenHomeChatsSidebar, closeChatUserAction, getNewMessageAction} = chatSlice.actions
 
 export default chatSlice.reducer

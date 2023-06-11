@@ -1,15 +1,33 @@
-
+@import "src/mixin";
 
 .registration-form_modal {
+  width: 100%;
+  position: absolute;
+  top: 20px;
+  z-index: 1004;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.registration-form_modal {
+  width: 700px !important;
+
+}
+
+.login-card {
+  min-width: 350px;
+  width: 100%;
+
+  @include getDown(640px) {
+    min-width: 100%;
     width: 100%;
-    position: absolute;
-    top: 20px;
-    z-index: 1004;
-    left: 50%;
-    transform: translateX(-50%);
+    margin: 0;
   }
+}
 
-.registration-form_modal {
-  width: 700px!important;
 
+.login-page-wrapper {
+  @include getDown(640px) {
+      top: 5vh;
+  }
 }

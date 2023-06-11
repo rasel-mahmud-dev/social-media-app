@@ -12,7 +12,8 @@ import {backend} from "src/apis/index.js";
 import {getNewMessageAction} from "src/store/slices/chatSlice.js";
 import channelName from "src/utils/channelName.js";
 import Navigation from "components/Header/Navigation.jsx";
-import {toggleDarkMode} from "src/store/slices/appSlice.js";
+
+import {fetchGroupsAction} from "src/store/actions/chatAction.js";
 
 
 const Main = () => {
@@ -23,7 +24,9 @@ const Main = () => {
 
     useEffect(() => {
         dispatch(fetchCurrentAuthAction())
+        dispatch(fetchGroupsAction())
     }, []);
+
 
     useEffect(() => {
         if (!auth) return

@@ -5,6 +5,7 @@ import axios from "axios";
 
 export const backend = import.meta.env.DEV ? "http://localhost:1000" :  "https://social-app-v.vercel.app"
 // export const backend = import.meta.env.DEV ?  "http://192.168.126.224:1000" :  "https://social-app-v.vercel.app"
+// export const backend = import.meta.env.DEV ?  "http://192.168.190.69:1000" :  "https://social-app-v.vercel.app"
 
 
 const api = axios.create({
