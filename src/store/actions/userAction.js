@@ -3,6 +3,7 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import apis from "src/apis/index.js";
 import {addPeople, removePeople} from "src/store/slices/feedSlice.js";
+import errorResponse from "src/utils/errorResponse.js";
 
 
 export const fetchPeoplesAction = createAsyncThunk("authSlice/fetchPeoples", async (payload, thunkAPI)=>{
@@ -13,7 +14,7 @@ export const fetchPeoplesAction = createAsyncThunk("authSlice/fetchPeoples", asy
         }
     } catch (ex){
         // send error message with reject type in reducer
-        return thunkAPI.rejectWithValue( ex.message)
+        return thunkAPI.rejectWithValue( errorResponse(ex))
     }
 })
 
@@ -30,7 +31,7 @@ export const fetchProfileMediaAction = createAsyncThunk("fetch-media", async (pa
         }
     } catch (ex){
         // send error message with reject type in reducer
-        return thunkAPI.rejectWithValue( ex.message)
+        return thunkAPI.rejectWithValue( errorResponse(ex))
     }
 })
 
@@ -44,7 +45,7 @@ export const fetchAuthFriendsAction = createAsyncThunk("authSlice/fetchAuthFrien
         }
     } catch (ex){
         // send error message with reject type in reducer
-        return thunkAPI.rejectWithValue( ex.message)
+        return thunkAPI.rejectWithValue( errorResponse(ex))
     }
 })
 
@@ -60,7 +61,7 @@ export const addFriendAction = createAsyncThunk("authSlice/add-friend", async (p
         }
     } catch (ex){
         // send error message with reject type in reducer
-        return thunkAPI.rejectWithValue( ex.message)
+        return thunkAPI.rejectWithValue( errorResponse(ex))
     }
 })
 
@@ -76,7 +77,7 @@ export const confirmFriendRequestAction = createAsyncThunk("authSlice/confirm-fr
         }
     } catch (ex){
         // send error message with reject type in reducer
-        return thunkAPI.rejectWithValue( ex.message)
+        return thunkAPI.rejectWithValue( errorResponse(ex))
     }
 })
 
@@ -90,7 +91,7 @@ export const removeFriendAction = createAsyncThunk("authSlice/remove-friend", as
         }
     } catch (ex){
         // send error message with reject type in reducer
-        return thunkAPI.rejectWithValue( ex.message)
+        return thunkAPI.rejectWithValue( errorResponse(ex))
     }
 })
 
@@ -105,7 +106,7 @@ export const addInToSaveAction = createAsyncThunk("authSlice/remove-friend", asy
         }
     } catch (ex){
         // send error message with reject type in reducer
-        return thunkAPI.rejectWithValue( ex.message)
+        return thunkAPI.rejectWithValue( errorResponse(ex))
     }
 })
 
@@ -118,10 +119,26 @@ export const fetchAllSavedAction = createAsyncThunk("authSlice/remove-friend", a
         }
     } catch (ex){
         // send error message with reject type in reducer
-        return thunkAPI.rejectWithValue( ex.message)
+        return thunkAPI.rejectWithValue( errorResponse(ex))
     }
 })
 
 
 
+
+
+/**** Update profile *****/
+
+export const updateProfileAction = createAsyncThunk("update-profile", async (payload, thunkAPI)=>{
+    try{
+        let {status, data} = await apis.post("/auth/update-profile", payload)
+
+        if(status === 201){
+            return data?.user
+        }
+    } catch (ex){
+        // send error message with reject type in reducer
+        return thunkAPI.rejectWithValue( errorResponse(ex))
+    }
+})
 

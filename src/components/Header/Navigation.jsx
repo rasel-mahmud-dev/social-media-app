@@ -12,6 +12,7 @@ import {BiPlus, BiUserCircle} from "react-icons/bi";
 import {logoutAction} from "src/store/slices/authSlice.js";
 import {openSidebarAction} from "src/store/slices/appSlice.js";
 import {FiSearch} from "react-icons/fi";
+import Avatar from "components/Shared/Avatar/Avatar.jsx";
 
 
 const Navigation = (props) => {
@@ -290,14 +291,17 @@ const Navigation = (props) => {
                                     onMouseLeave={() => setExpandDropdown("")}
                                     onClick={() => setExpandDropdown(expandDropdown ? "" : "authMenu")}
                                     onMouseEnter={() => setExpandDropdown("authMenu")}>
-                      <span className=" avatar_logo p-0 m-0 w-7 h-7 mr-1">
-                        {auth && auth._id
-                            ? <img className="rounded-full  h-full w-full flex" src={staticImage(auth.avatar
-                                ? auth.avatar : "static/avatar/Alec-Thompson-card_20200415_1603252.10e65779.jpg")}
-                                   alt=""/>
-                            : <BiUserCircle className="text-light-850  ml-1.5"/>}
-                      </span>
-                                    <h1 className="color_h2 font-medium hidden md:block ">{auth?.fullName}</h1>
+                                  <span className="">
+                                    {auth && auth._id
+                                        ? <Avatar username={auth?.fullName} imgClass={"!w-8 !h-8"} className={"!w-8 !h-8"} src={staticImage(auth?.avatar)} />
+                                        : (
+                                            <div className={"rounded_circle text-body-dark dark:text-body-light"}>
+                                                <BiUserCircle className="text-light-850 text-xl"/>
+                                            </div>
+                                        )
+                                    }
+                                  </span>
+                                    {auth && auth._id && <h1 className="color_h2 font-medium hidden md:block ml-2">{auth?.firstName}</h1> }
                                     {authDropdown(expandDropdown === "authMenu")}
                                 </li>
 

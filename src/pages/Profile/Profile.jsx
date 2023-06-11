@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import apis from "src/apis/index.js";
@@ -8,6 +8,14 @@ import AvatarGroup from "components/Shared/Avatar/AvatarGroup";
 import useCustomReducer from "src/hooks/useReducer.jsx";
 import PostSection from "components/Profile/PostSection.jsx";
 import MediaSection from "components/Profile/MediaSection.jsx";
+import {BiCamera} from "react-icons/bi";
+import ModalWithBackdrop from "components/ModalWithBackdrop/ModalWithBackdrop.jsx";
+import getCroppedImg from "src/utils/getCroppedImg.js";
+import chooseImage from "src/utils/chooseImage.js";
+import ImageEditor from "components/ImageEditor/ImageEditor.jsx";
+import {updateProfileAction} from "src/store/actions/userAction.js";
+import {MoonLoader} from "react-spinners";
+import Info from "components/Shared/Info/Info.jsx";
 
 
 const Profile = () => {
@@ -28,6 +36,15 @@ const Profile = () => {
         showSectionName: "Posts"
     })
 
+    const [updateProfile, setUpdateState] = useCustomReducer({
+        openImageChooserModal: "",
+        originalAvatar: null,
+        originalCover: null,
+        avatar: null,
+        cover: null,
+
+    })
+
     useEffect(() => {
         if (userId) {
 
@@ -44,38 +61,8 @@ const Profile = () => {
     }, [userId])
 
 
-    function renderItem(people, _friend) {
-        return (
-            <div>
-                <div className="flex items-center mb-2">
-                    <Avatar imgClass="text-xs" className="!w-9 !h-9" src={people?.avatar} username={people.fullName}/>
-                    <div className="ml-3">
-                        <h3 className="text-base font-medium text-neutral-700">{people.fullName}</h3>
-                        <p className="text-gray-600 text-sm">3 hours ago</p>
-                    </div>
-                </div>
-            </div>
-        )
-    }
-
-    function handleUploadAvatar() {
-        let input = document.createElement("input")
-        input.setAttribute("type", "file")
-        input.setAttribute("accept", "image/*")
-        input.addEventListener("change", handleUploadImage)
-        input.click()
-    }
-
-    function handleUploadImage(e) {
-        let file = e.target.files[0]
-
-
-        let formData = new FormData()
-        formData.append("avatar", file, "avatar")
-        apis.post("/auth/update-profile", formData).then(({data, status}) => {
-            console.log(data, status)
-        })
-    }
+    const [errorMessage, setError] = useState("")
+    const [isLoading, setLoading] = useState(false)
 
 
     const sectionNavs = {
@@ -86,155 +73,219 @@ const Profile = () => {
         Follower: (params) => "Working"
     }
 
-
     function handleSelectSection(sectionName) {
         setState({
             showSectionName: sectionName
         })
     }
 
+    async function handleSelectImageChooser(which) {
+        let file = await chooseImage()
+        if (!file) return;
+        if (which === "avatar") {
+            setUpdateState({
+                openImageChooserModal: which,
+                originalAvatar: file.base64,
+                originalCover: null,
+                avatar: null,
+                cover: null
+            })
+        } else if (which === "cover") {
+            setUpdateState({
+                openImageChooserModal: which,
+                originalAvatar: null,
+                originalCover: file.base64,
+                avatar: null,
+                cover: null
+            })
+        }
+    }
+
+
+    const onCropComplete = useCallback(async (croppedArea, croppedAreaPixels) => {
+        if (updateProfile?.originalAvatar) {
+            const croppedImage = await getCroppedImg(
+                updateProfile?.originalAvatar,
+                croppedAreaPixels,
+            )
+            setUpdateState({
+                avatar: croppedImage
+            })
+        }
+
+        if (updateProfile?.originalCover) {
+            const croppedImage = await getCroppedImg(
+                updateProfile?.originalCover,
+                croppedAreaPixels,
+            )
+            setUpdateState({
+                cover: croppedImage
+            })
+        }
+    }, [updateProfile?.originalAvatar, updateProfile?.originalCover])
+
+
+    function handleCloseImageChoose() {
+        setUpdateState({
+            openImageChooserModal: "",
+            originalAvatar: null,
+            originalCover: null
+        })
+    }
+
+    function handleUpload() {
+        setError("")
+        const payload = new FormData()
+
+        if (updateProfile.avatar) {
+            payload.append("avatar", updateProfile.avatar, "avatar")
+        }
+
+        if (updateProfile.cover) {
+            payload.append("cover", updateProfile.cover, "cover")
+        }
+
+        setLoading(true)
+        dispatch(updateProfileAction(payload)).unwrap().then((user) => {
+            handleCloseImageChoose()
+            if (!user) return;
+
+            setState(prev => {
+                return {
+                    ...prev,
+                    user: {
+                        ...prev.user,
+                        ...user
+                    }
+                }
+            })
+
+        }).catch(ex => {
+            setError(ex)
+        }).finally(() => {
+            setLoading(false)
+        })
+    }
+
     return (
-        <div className="profile-page ">
-            {state.user && (
-                <>
-                    <div className="profile-header-bg">
+        <>
+
+            {auth?._id === userId && <ModalWithBackdrop
+                modalClass={`${updateProfile.openImageChooserModal === "cover" ? "profile-cover-picker" : "profile-avatar-picker"} card`}
+                onClose={handleCloseImageChoose}
+                isOpen={updateProfile.openImageChooserModal}>
+                <div>
+                    <div>
+                        <h1 className="color_h1 text-sm">{
+                            updateProfile.openImageChooserModal === "avatar"
+                                ? "Resize Avatar"
+                                : "Resize Cover Image"}
+                        </h1>
+
+                        {isLoading && <MoonLoader size={20}/>}
+                        <Info className="mt-2" status="error" message={errorMessage}/>
+
+                    </div>
+
+
+                    <div className="profile-image-editor relative mt-3">
+                        {updateProfile.originalAvatar &&
+                            <ImageEditor onCropComplete={onCropComplete} aspect={1}
+                                         src={updateProfile.originalAvatar}/>}
+                        {updateProfile.originalCover &&
+                            <ImageEditor onCropComplete={onCropComplete} aspect={13 / 5}
+                                         src={updateProfile.originalCover}/>}
+                    </div>
+
+                    <div>
+                        <button onClick={handleUpload}
+                                className={`btn mt-2 ${isLoading ? "btn-disable" : "btn-primary"}`}>Upload
+                        </button>
+                    </div>
+                </div>
+            </ModalWithBackdrop>
+
+            }
+            <div className="profile-page">
+                {state.user && (
+                    <>
+                        <div className="profile-header-bg">
+
+                            <div className="container-1200">
+
+                                <div className="cover-image relative"
+                                     style={{backgroundImage: `url(${state.user.cover})`}}>
+
+                                    {auth?._id === userId && <div className="circle rounded_circle choose-cover-btn"
+                                         onClick={() => handleSelectImageChooser("cover")}>
+                                        <BiCamera className="color_p"/>
+                                    </div> }
+                                </div>
+
+                                {/*{state.user._id === auth._id && (*/}
+                                {/*    <div className="mt-2">*/}
+                                {/*        <Button onClick={handleUploadAvatar} className="btn text-xs font-medium">Change Photo*/}
+                                {/*        </Button>*/}
+                                {/*    </div>*/}
+                                {/*)}*/}
+
+                                <div className="profile-content">
+
+                                    <div className="flex items-center relative">
+                                        <Avatar
+                                            className="!h-40 !w-40 profile-image"
+                                            src={state.user?.avatar}
+                                            imgClass="!h-40 !w-40 !text-xs"
+                                            username={state.user.fullName}
+                                        />
+
+                                        {auth?._id === userId && <div onClick={() => handleSelectImageChooser("avatar")}
+                                             className="circle rounded_circle choose-avatar-btn">
+                                            <BiCamera className="color_p"/>
+                                        </div>}
+
+                                        <div className="ml-2 md:ml-4">
+                                            <h4 className="text-2xl font-semibold color_h1">{state.user.fullName}</h4>
+                                            <span className="text-md font-medium color_h3">123 Friends</span>
+                                            <AvatarGroup imgClass="!w-10 !h-10" className="!w-10 !h-10" data={[
+                                                {avatar: auth.avatar, fullName: "Rasel mahmud"},
+                                                {avatar: auth.avatar, fullName: "Rasel mahmud"},
+                                                {avatar: auth.avatar, fullName: "Rasel mahmud"},
+                                                {avatar: auth.avatar, fullName: "Rasel mahmud"},
+                                                {avatar: auth.avatar, fullName: "Rasel mahmud"},
+                                                {avatar: auth.avatar, fullName: "Rasel mahmud"},
+                                                {avatar: auth.avatar, fullName: "Rasel mahmud"},
+                                                {avatar: auth.avatar, fullName: "Rasel mahmud"},
+                                                {avatar: auth.avatar, fullName: "Rasel mahmud"},
+                                            ]}/>
+                                        </div>
+                                    </div>
+
+                                    <div className="profile-section-nav flex mt-2">
+                                        {Object.keys(sectionNavs).map((name) => (
+                                            <li key={name} onClick={() => handleSelectSection(name)}
+                                                className={["profile-section-item color_p", state.showSectionName === name ? "active" : ""].join(" ")}
+                                            >{name}</li>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                         <div className="container-1200">
 
-
-                            <div className="cover-image"
-                                 style={{backgroundImage: `url(/icons/284839287_3216494415289791_1118325018398119380_n.png)`}}>
+                            <div className="">
+                                {sectionNavs[state.showSectionName] && sectionNavs[state.showSectionName]({
+                                    authId: auth._id,
+                                    userId: state.user._id
+                                })}
                             </div>
-
-
-                            {/*{state.user._id === auth._id && (*/}
-                            {/*    <div className="mt-2">*/}
-                            {/*        <Button onClick={handleUploadAvatar} className="btn text-xs font-medium">Change Photo*/}
-                            {/*        </Button>*/}
-                            {/*    </div>*/}
-                            {/*)}*/}
-
-                            <div className="profile-content">
-
-                                <div className="flex items-center">
-                                    <Avatar
-                                        className="!h-40 !w-40 profile-image"
-                                        src={state.user?.avatar}
-                                        imgClass="!h-40 !w-40 !text-xs"
-                                        username={state.user.fullName}
-                                    />
-                                    <div className="ml-2 md:ml-4">
-                                        <h4 className="text-2xl font-semibold color_h1">{state.user.fullName}</h4>
-                                        <span className="text-md font-medium color_h3">123 Friends</span>
-                                        <AvatarGroup imgClass="!w-10 !h-10" className="!w-10 !h-10" data={[
-                                            {avatar: auth.avatar, fullName: "Rasel mahmud"},
-                                            {avatar: auth.avatar, fullName: "Rasel mahmud"},
-                                            {avatar: auth.avatar, fullName: "Rasel mahmud"},
-                                            {avatar: auth.avatar, fullName: "Rasel mahmud"},
-                                            {avatar: auth.avatar, fullName: "Rasel mahmud"},
-                                            {avatar: auth.avatar, fullName: "Rasel mahmud"},
-                                            {avatar: auth.avatar, fullName: "Rasel mahmud"},
-                                            {avatar: auth.avatar, fullName: "Rasel mahmud"},
-                                            {avatar: auth.avatar, fullName: "Rasel mahmud"},
-                                        ]}/>
-                                    </div>
-                                </div>
-
-                                <div className="profile-section-nav flex mt-2">
-                                    {Object.keys(sectionNavs).map((name) => (
-                                        <li key={name} onClick={() => handleSelectSection(name)}
-                                            className={["profile-section-item color_p", state.showSectionName === name ? "active" : ""].join(" ")}
-                                        >{name}</li>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/*<div className="col-span-2">*/}
-                            {/*    <Avatar className="!h-40 !w-40" src={state.user?.avatar} imgClass="!h-40 !w-40 !text-xs"*/}
-                            {/*            username={state.user.fullName}/>*/}
-
-                            {/*    {state.user._id === auth._id && (*/}
-                            {/*        <div className="mt-2">*/}
-                            {/*            <Button onClick={handleUploadAvatar} className="btn text-xs font-medium">Change Photo</Button>*/}
-                            {/*        </div>*/}
-                            {/*    )}*/}
-
-                            {/*    <h4 className="font-semibold">{state.user.fullName}</h4>*/}
-
-                            {/*   <div className="mt-4">*/}
-                            {/*       <div className="text-xs font-semibold">*/}
-                            {/*           Friends: {state.friends.length}*/}
-                            {/*       </div>*/}
-                            {/*       <div className="text-xs font-semibold">*/}
-                            {/*           Total Posts: {state.feeds.length}*/}
-                            {/*       </div>*/}
-                            {/*   </div>*/}
-                            {/*</div>*/}
-
-
-                            {/*<div className="col-span-10">*/}
-
-                            {/*    <div className="">*/}
-
-                            {/*        <div className="card-meta my-4">*/}
-                            {/*            <h4 className="font-semibold">Timeline</h4>*/}
-                            {/*        </div>*/}
-
-
-                            {/*        <div className="grid grid-cols-2 gap-x-4">*/}
-                            {/*            <div className="card">*/}
-                            {/*                <div className="card-meta">*/}
-                            {/*                    <h4>Posts</h4>*/}
-                            {/*                </div>*/}
-
-                            {/*                <div className="flex flex-col gap-y-4">*/}
-                            {/*                    {state.feeds && state.feeds.slice(0, 3).map(feed => (*/}
-                            {/*                        <FeedCard key={feed._id} feed={feed} authId={auth._id} dispatch={dispatch}/>*/}
-                            {/*                    ))}*/}
-                            {/*                </div>*/}
-
-
-                            {/*            </div>*/}
-
-                            {/*            <div className="card">*/}
-                            {/*                <div className="card-meta ">*/}
-                            {/*                    <h4>Friends</h4>*/}
-                            {/*                </div>*/}
-
-                            {/*                <div>*/}
-                            {/*                    <div className="mt-6">{*/}
-                            {/*                        state.friends.map((friend) => (*/}
-                            {/*                            <div className="mb-5" key={friend._id}>*/}
-                            {/*                                {renderItem((friend.receiverId === state.user._id) ? friend.sender : friend.receiver, friend)}*/}
-                            {/*                            </div>*/}
-                            {/*                        ))}*/}
-                            {/*                    </div>*/}
-                            {/*                </div>*/}
-
-                            {/*            </div>*/}
-
-                            {/*        </div>*/}
-
-
-                            {/*    </div>*/}
-                            {/*</div>*/}
-
                         </div>
-                    </div>
 
-                    <div className="container-1200">
-
-                        <div className="">
-                            {sectionNavs[state.showSectionName] && sectionNavs[state.showSectionName]({
-                                authId: auth._id,
-                                userId: state.user._id
-                            })}
-                        </div>
-                    </div>
-
-                </>
-            )}
-        </div>
+                    </>
+                )}
+            </div>
+        </>
     );
 };
 

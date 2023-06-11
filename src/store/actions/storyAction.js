@@ -1,5 +1,6 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import apis from "../../apis";
+import errorResponse from "src/utils/errorResponse.js";
 
 
 
@@ -12,7 +13,7 @@ export const getStoriesAction = createAsyncThunk("fetch-stories", async (payload
         }
     } catch (ex){
         // send error message with reject type in reducer
-        return thunkAPI.rejectWithValue( ex.message)
+        return thunkAPI.rejectWithValue( errorResponse(ex))
     }
 })
 
@@ -27,7 +28,7 @@ export const createStoryAction = createAsyncThunk("add-story", async (payload, t
         }
     } catch (ex){
         // send error message with reject type in reducer
-        return thunkAPI.rejectWithValue( ex.message)
+        return thunkAPI.rejectWithValue( errorResponse(ex))
     }
 })
 

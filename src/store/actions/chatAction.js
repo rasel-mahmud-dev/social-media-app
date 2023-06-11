@@ -1,5 +1,6 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import apis from "../../apis";
+import errorResponse from "src/utils/errorResponse.js";
 
 
 // fetch chat action
@@ -11,7 +12,7 @@ export const fetchChatMessage = createAsyncThunk("fetch-chat-message", async (pa
         }
     } catch (ex) {
         // send error message with reject type in reducer
-        return thunkAPI.rejectWithValue(ex.message)
+        return thunkAPI.rejectWithValue(errorResponse(ex))
     }
 })
 
@@ -26,7 +27,7 @@ export const fetchPrivateMessageAction = createAsyncThunk("get-private-message",
         }
     } catch (ex) {
         // send error message with reject type in reducer
-        return thunkAPI.rejectWithValue(ex.message)
+        return thunkAPI.rejectWithValue(errorResponse(ex))
     }
 })
 
@@ -43,7 +44,7 @@ export const sendPrivateMessageAction = createAsyncThunk("send-private-message",
         }
     } catch (ex) {
         // send error message with reject type in reducer
-        return thunkAPI.rejectWithValue(ex.message)
+        return thunkAPI.rejectWithValue(errorResponse(ex))
     }
 })
 

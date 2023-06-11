@@ -1,0 +1,16 @@
+.info-message{
+  background: white;
+  padding: 10px 20px;
+  width: 100%;
+  text-align: center;
+  font-size: 14px;
+  border-radius: 5px;
+  &.info-success{
+    background: rgba(44, 101, 236, 0.11);
+    color: #252525;
+  }
+  &.info-error{
+    background: rgba(101, 53, 53, 0.24);
+    color: red;
+  }
+}

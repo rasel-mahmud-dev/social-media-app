@@ -25,14 +25,13 @@
     background-size: cover;
     background-repeat: no-repeat;
     display: flex;
-    background-color: red;
+    background-color: #343434;
     aspect-ratio: 13/5;
     border-radius: 10px;
     overflow: hidden;
     @include getDown(600px) {
       border-radius: 0;
     }
-
   }
 
   .profile-content {
@@ -49,8 +48,6 @@
     }
 
     .profile-image {
-
-
       @include getDown(600px) {
         width: 100px !important;
         height: 100px !important;
@@ -60,8 +57,11 @@
         }
         //flex-direction: column !important;
       }
-
     }
+
+
+
+
 
     .profile-section-nav {
 
@@ -101,5 +101,44 @@
       }
     }
 
+  }
+
+
+  .choose-avatar-btn, .choose-cover-btn{
+    position: absolute;
+    bottom: 13px;
+    left: 123px;
+    @include getDown(600px){
+      bottom: 0px;
+      left: 0;
+      &.rounded_circle{
+        height: 1.66rem;
+        width: 1.66rem;
+      }
+    }
+  }
+
+  .choose-cover-btn{
+    position: absolute;
+    z-index:12 ;
+    right: 10px !important;
+    left: auto;
+    bottom: 10px !important  ;
+  }
+
+}
+
+.profile-cover-picker{
+  max-width: 1100px;
+  height: 550px;
+  .profile-image-editor{
+    height:430px;
+  }
+}
+.profile-avatar-picker{
+  max-width: 700px;
+  height: 420px;
+  .profile-image-editor{
+    height:300px;
   }
 }

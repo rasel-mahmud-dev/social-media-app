@@ -4,7 +4,7 @@ import {
     addFriendAction,
     confirmFriendRequestAction,
     fetchAuthFriendsAction, fetchProfileMediaAction,
-    removeFriendAction
+    removeFriendAction, updateProfileAction
 } from "src/store/actions/userAction.js";
 import {getStoriesAction} from "src/store/actions/storyAction.js";
 
@@ -118,6 +118,16 @@ export const authSlice = createSlice({
         builder.addCase(getStoriesAction.fulfilled, (state, action) => {
             if (action.payload) {
                 state.stories = action.payload.stories
+            }
+        })
+
+        // update profile
+        builder.addCase(updateProfileAction.fulfilled, (state, action) => {
+            if (action.payload) {
+                state.auth = {
+                    ...state.auth,
+                    ...action.payload
+                }
             }
         })
     }

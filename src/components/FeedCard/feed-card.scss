@@ -13,14 +13,14 @@
   .feed-media {
 
 
-      img {
-        object-position: center;
-        object-fit: cover;
-        height: 100%;
-        width: 100%;
-        //grid-row: 1 / -1;
-        //grid-column: 1;
-      }
+    img {
+      object-position: center;
+      object-fit: cover;
+      height: 100%;
+      width: 100%;
+      //grid-row: 1 / -1;
+      //grid-column: 1;
+    }
 
 
     &.image-1 {
@@ -57,4 +57,13 @@
       }
     }
   }
+
+
+
+}
+.feed-liked{
+   & > * {
+     color: #4144ff;
+     font-weight: 500;
+   }
 }

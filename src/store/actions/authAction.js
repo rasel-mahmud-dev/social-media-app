@@ -1,5 +1,6 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import apis from "../../apis";
+import errorResponse from "src/utils/errorResponse.js";
 
 
 // login action
@@ -14,12 +15,7 @@ export const loginOrRegistrationAction = createAsyncThunk("authSlice/login", asy
             return data.user
         }
     } catch (ex){
-        // send error message with reject type in reducer
-        let message = ex.message
-        if(ex?.response?.data?.message){
-            message = ex?.response?.data?.message
-        }
-        return thunkAPI.rejectWithValue( message)
+        return thunkAPI.rejectWithValue( errorResponse(ex))
     }
 })
 
@@ -35,7 +31,7 @@ export const fetchCurrentAuthAction = createAsyncThunk("authSlice/fetchCurrentAu
         }
     } catch (ex){
         // send error message with reject type in reducer
-        return thunkAPI.rejectWithValue( ex.message)
+        return thunkAPI.rejectWithValue( errorResponse(ex))
     }
 })
 
@@ -52,7 +48,7 @@ export const fetchProfileAction = createAsyncThunk("authSlice/fetchUserProfile",
         }
     } catch (ex){
         // send error message with reject type in reducer
-        return thunkAPI.rejectWithValue( ex.message)
+        return thunkAPI.rejectWithValue( errorResponse(ex))
     }
 })
 

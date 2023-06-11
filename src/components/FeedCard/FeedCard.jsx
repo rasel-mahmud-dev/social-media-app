@@ -78,6 +78,7 @@ const FeedCard = ({feed, authId, dispatch}) => {
 
     function isLiked(likes) {
         if(likes && authId){
+            console.log(likes, authId)
             return likes.findIndex(l=>l.userId === authId) !== -1
         }
     }
@@ -113,15 +114,15 @@ const FeedCard = ({feed, authId, dispatch}) => {
                     </div>
 
 
-                    <div className="my-4 feed-content">
+                    <div className="mb-4 feed-content">
 
                         <div className="mb-3">
                             <p className="dark:text-light-950 text-gray-800 whitespace-pre-line">{feed?.content?.slice(0, state.isExpand ? undefined : 300)}</p>
 
                             { feed?.content?.length > 300 ?
                                 state.isExpand
-                                    ? <span className="text-xs font-medium" onClick={() => handleExpand(false)}>Show less</span>
-                                    : <span className="text-xs font-medium" onClick={() => handleExpand(true)}>Show more</span>
+                                    ? <span className="text-xs font-medium color_p" onClick={() => handleExpand(false)}>Show less</span>
+                                    : <span className="text-xs font-medium color_p" onClick={() => handleExpand(true)}>Show more</span>
                                 : ""}
                         </div>
 
@@ -162,7 +163,7 @@ const FeedCard = ({feed, authId, dispatch}) => {
                                     <Loading />
                                 </li>
                             ) : <li onClick={() => toggleLikeHandler(feed._id)}
-                                    className={`${isLiked(feed.likes) ? "!text-blue-600" : ""} flex items-center gap-x-1 dark:hover:bg-dark-600 hover:bg-neutral-100 rounded-md cursor-pointer px-4 py-2 w-full justify-center`}>
+                                    className={`${isLiked(feed.likes) ? "feed-liked" : ""} flex items-center gap-x-1 dark:hover:bg-dark-600 hover:bg-neutral-100 rounded-md cursor-pointer px-4 py-2 w-full justify-center`}>
                                 <BiLike/>
                                 <span>Like</span>
                             </li>}
