@@ -13,7 +13,6 @@
     "@reduxjs/toolkit": "^1.9.5",
     "@splidejs/react-splide": "^0.7.12",
     "axios": "^1.4.0",
-    "flowbite": "^1.6.5",
     "moment": "^2.29.4",
     "prop-types": "^15.8.1",
     "pusher-js": "^8.0.2",
