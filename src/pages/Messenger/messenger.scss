@@ -1,0 +1,26 @@
+
+
+.messenger-page{
+  //background-color: red;
+
+
+  .message-sidebar{
+    height: calc(100vh - var(--header-height));
+    min-width: 300px;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+
+  .messenger-content{
+    padding: 20px;
+
+    position: relative;
+
+
+    .message-input{
+      bottom: 0;
+      position: absolute;
+    }
+  }
+}

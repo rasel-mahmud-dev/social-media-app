@@ -23,6 +23,9 @@ import {createGroupAction} from "src/store/actions/chatAction.js";
 import findUserGroup from "src/store/utils/findUserGroup.js";
 import {openChatUserAction, toggleOpenHomeChatsSidebar} from "src/store/slices/chatSlice.js";
 import Chats from "components/Chats/Chats.jsx";
+import {FaEllipsisV} from "react-icons/fa";
+import {CgExpand} from "react-icons/cg";
+import {BiEdit} from "react-icons/bi";
 
 
 const HomeLayout = ({children}) => {
@@ -182,6 +185,25 @@ const HomeLayout = ({children}) => {
 
 
                 {openHomeChatsSidebar && <Sidebar className="chats-sidebar" backdrop={false} isOpen={true}>
+
+                    <div className="flex items-center justify-between ">
+                        <h1 className="color_h1 font-semibold text-xl">Chats</h1>
+                        <div className="flex items-center gap-x-1">
+                            <li className="circle-hover-btn color_p text-sm">
+                                <FaEllipsisV/>
+                            </li>
+                            <Link to="/messenger">
+                                <li className="circle-hover-btn color_p">
+                                    <CgExpand/>
+                                </li>
+                            </Link>
+                            <li className="circle-hover-btn color_p">
+                                <BiEdit/>
+                            </li>
+                        </div>
+                    </div>
+
+
                     <Chats handleStartChat={handleStartChat}/>
                 </Sidebar>}
 

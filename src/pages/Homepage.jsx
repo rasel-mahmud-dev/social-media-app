@@ -26,7 +26,7 @@ const Homepage = () => {
 
 
     return (
-        <div className="mt-1.5">
+        <div className="">
 
             <HomeLayout>
                 <div className="flex gap-x-4">

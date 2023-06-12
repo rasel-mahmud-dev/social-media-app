@@ -7,6 +7,7 @@ import {useSelector} from "react-redux";
 import Avatar from "components/Shared/Avatar/Avatar.jsx";
 import apis from "src/apis/index.js";
 import moment from "moment";
+import {Link} from "react-router-dom";
 
 const Chats = ({handleStartChat}) => {
 
@@ -55,7 +56,7 @@ const Chats = ({handleStartChat}) => {
                                 username="ER SDF"/>
                         <div className="">
                             <label htmlFor="" className="text-sm ">{member?.fullName}</label>
-                            {groupMessage[group._id] && (
+                            {groupMessage[group._id] && groupMessage[group._id].length > 0 && (
                                 <li className="flex  items-center mt-1 text-sm color_h2">
                                     {groupMessage[group._id][0].senderId === auth._id && <span className="mr-1">You:</span> }
                                     <span className=""> {groupMessage[group._id][0].message}</span>
@@ -64,10 +65,7 @@ const Chats = ({handleStartChat}) => {
                                 </li>
                             )}
                         </div>
-
                     </div>
-
-
                 </div>
             </div>
         )
@@ -76,20 +74,6 @@ const Chats = ({handleStartChat}) => {
     return (
 
         <div>
-            <div className="flex items-center justify-between ">
-                <h1 className="color_h1 font-semibold text-xl">Chats</h1>
-                <div className="flex items-center gap-x-1">
-                    <li className="circle-hover-btn color_p text-sm">
-                        <FaEllipsisV/>
-                    </li>
-                    <li className="circle-hover-btn color_p">
-                        <CgExpand/>
-                    </li>
-                    <li className="circle-hover-btn color_p">
-                        <BiEdit/>
-                    </li>
-                </div>
-            </div>
 
 
             <div className="mt-4">

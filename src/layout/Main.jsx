@@ -16,11 +16,19 @@ import Navigation from "components/Header/Navigation.jsx";
 import {fetchGroupsAction} from "src/store/actions/chatAction.js";
 
 
+const pusher = new Pusher('aa79087d5d1bd3848813', {
+    cluster: 'ap2',
+    channelAuthorization: {
+        endpoint: backend + "/api/v1/auth/pusher/auth"
+    }
+});
+
 const Main = () => {
 
     const dispatch = useDispatch()
 
     const {auth} = useSelector(state => state.authState)
+    const {groups} = useSelector(state => state.chatState)
 
     useEffect(() => {
         dispatch(fetchCurrentAuthAction())
@@ -28,24 +36,13 @@ const Main = () => {
     }, []);
 
 
+
     useEffect(() => {
         if (!auth) return
 
-        const pusher = new Pusher('aa79087d5d1bd3848813', {
-            cluster: 'ap2',
-            channelAuthorization: {
-                endpoint: backend + "/api/v1/message/pusher/auth"
-            }
-        });
-
         const channel = pusher.subscribe('public-channel');
 
-        const privateChannel = pusher.subscribe(`private-chat-${auth._id}`);
 
-        channel.bind('message', function (data) {
-            playSound()
-            console.log(data)
-        });
         channel.bind('new-feed', function (data) {
             if (data.feed && data.feed.userId !== auth._id) {
                 // push all users timeline
@@ -61,24 +58,13 @@ const Main = () => {
                 dispatch(removeLocalFeedAction(data.feed))
             }
         });
+
         channel.bind("toggle-reaction", function (data) {
             // skip if this action fired from current user.
             if (data.like.userId === auth._id) return
             playSound()
             dispatch(localToggleFeedReactionAction(data.like))
         })
-
-
-        privateChannel.bind("message", (data) => {
-            if (data.message) {
-                playSound()
-                dispatch(getNewMessageAction({
-                    channelName: channelName(auth._id, data.message.senderId),
-                    message: data.message
-                }))
-            }
-        })
-
 
         return () => {
             pusher.unsubscribe("public-channel")
@@ -87,8 +73,33 @@ const Main = () => {
             }
             pusher.disconnect()
         }
-
     }, [auth]);
+
+
+    useEffect(()=>{
+        if(auth && groups){
+            for (let i = 0; i < groups.length; i++) {
+                const group = groups[i]
+                const privateChannel = pusher.subscribe(`private-chat-${group._id}`);
+                privateChannel.bind("message", (data) => {
+                    if (data.message) {
+                        if(data.message?.senderId === auth._id) return;
+                        playSound()
+                        dispatch(getNewMessageAction(data.message))
+                    }
+                })
+            }
+        }
+
+        return ()=> {
+            if (auth && groups) {
+                for (let i = 0; i < groups.length; i++) {
+                    const group = groups[i]
+                    pusher.unsubscribe(`private-chat-${group._id}`)
+                }
+            }
+        }
+    }, [auth, groups])
 
 
     return (

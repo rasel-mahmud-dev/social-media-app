@@ -65,10 +65,7 @@ export const sendPrivateMessageAction = createAsyncThunk("send-private-message",
     try {
         let {status, data} = await apis.post("chat/send", payload)
         if (status === 201) {
-            return {
-                groupId: payload.groupId,
-                message: data.message
-            }
+            return data.message
         }
     } catch (ex) {
         // send error message with reject type in reducer

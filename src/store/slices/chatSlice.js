@@ -16,12 +16,14 @@ const initialState = {
 };
 
 function addNewMessage(state, action) {
-    const {groupId, message} = action.payload
+    if (!(action.payload && action.payload.groupId)) return;
+    const {groupId} = action.payload
+
     state.messages = {
         ...state.messages,
         [groupId]: [
             ...(state.messages[groupId] || []),
-            message
+            action.payload
         ]
     }
 }
@@ -69,7 +71,7 @@ export const chatSlice = createSlice({
         })
 
         builder.addCase(createGroupAction.fulfilled, (state, action) => {
-            if(action.payload){
+            if (action.payload) {
                 state.groups.push(action.payload)
             }
         })
@@ -84,6 +86,11 @@ export const chatSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const {openChatUserAction, toggleOpenHomeChatsSidebar, closeChatUserAction, getNewMessageAction} = chatSlice.actions
+export const {
+    openChatUserAction,
+    toggleOpenHomeChatsSidebar,
+    closeChatUserAction,
+    getNewMessageAction
+} = chatSlice.actions
 
 export default chatSlice.reducer
