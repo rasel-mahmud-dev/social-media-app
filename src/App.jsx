@@ -1,9 +1,10 @@
 import './App.scss'
-import {RouterProvider} from "react-router-dom";
-import router from "./routes/index.jsx";
 import {useDispatch} from "react-redux";
 import {useEffect} from "react";
 import {toggleDarkMode} from "src/store/slices/appSlice.js";
+import {RouterProvider} from "react-router-dom";
+import router from "src/routes/index.jsx";
+
 
 function App() {
     const dispatch = useDispatch()

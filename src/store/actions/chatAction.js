@@ -45,6 +45,38 @@ export const fetchChatMessage = createAsyncThunk("fetch-chat-message", async (pa
 })
 
 
+// get group message for detail chat like messenger or quick popup chat.
+export const getChatGroupMessagesAction = createAsyncThunk("/chatState/get-group-messages", async (payload, thunkAPI) => {
+    try {
+
+        const {
+            groupId,
+            perPage = 10,
+            pageNumber = 1,
+            orderBy = "createdAt",
+            orderDirection = "desc",
+        } = payload
+
+        if (!groupId) return thunkAPI.rejectWithValue("Invalid chat group")
+
+        let queryParams = `?groupId=${groupId}&perPage=${perPage}&pageNumber=${pageNumber}&orderBy=${orderBy}&orderDirection=${orderDirection}`
+
+        let {status, data} = await apis.get("chat/group/messages" + queryParams)
+        if (status === 200) {
+            return {
+                messages: data.messages,
+                groupId: groupId,
+                perPage: perPage,
+                pageNumber: pageNumber,
+            }
+        }
+    } catch (ex) {
+        // send error message with reject type in reducer
+        return thunkAPI.rejectWithValue(errorResponse(ex))
+    }
+})
+
+
 // fetch private message action
 export const fetchPrivateMessageAction = createAsyncThunk("get-group-messages", async (payload, thunkAPI) => {
     try {
@@ -74,3 +106,5 @@ export const sendPrivateMessageAction = createAsyncThunk("send-private-message",
 })
 
 
+export class getChatGroupMessages {
+}

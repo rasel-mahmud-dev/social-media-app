@@ -7,20 +7,38 @@
   .message-sidebar{
     height: calc(100vh - var(--header-height));
     min-width: 300px;
+    width: 300px;
     padding-left: 10px;
     padding-right: 10px;
   }
 
 
   .messenger-content{
-    padding: 20px;
 
     position: relative;
 
+    .messenger-message-list{
+      padding: 10px;
+      height: calc(100vh - (var(--header-height) + 145px));
+      overflow-y: auto;
+    }
+
 
     .message-input{
-      bottom: 0;
-      position: absolute;
+      //bottom: 0;
+      //position: absolute;
+      background-color: #232323;
+      padding: 10px;
+      textarea{
+        background-color: rgb(52 52 52 / 81%);
+        border-radius: 10px;
+        color: white;
+        box-sizing: border-box;
+        padding: 12px;
+        outline: none;
+        width: 100%;
+        max-width: 600px;
+      }
     }
   }
 }

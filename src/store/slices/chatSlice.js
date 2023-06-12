@@ -3,6 +3,7 @@ import {
     createGroupAction,
     fetchGroupsAction,
     fetchPrivateMessageAction,
+    getChatGroupMessagesAction,
     sendPrivateMessageAction
 } from "src/store/actions/chatAction.js";
 
@@ -12,7 +13,8 @@ const initialState = {
     openHomeChatsSidebar: false,
     openChatUser: null,  // {...friend: {}, group: {}}
     groups: [],
-    messages: {},  // { groupId: [] }
+    messages: {},           // { [groupId: string]: [] }
+    messagePaginate: {}     // { [groupId: string]: { perPage: number, pageNumber: number, totalItem?: number }
 };
 
 function addNewMessage(state, action) {
@@ -80,6 +82,37 @@ export const chatSlice = createSlice({
         // send private message
         builder.addCase(sendPrivateMessageAction.fulfilled, (state, action) => {
             addNewMessage(state, action)
+        })
+
+        // get group message for detail chat like messenger or quick popup chat.
+        builder.addCase(getChatGroupMessagesAction.fulfilled, (state, action) => {
+            // addNewMessage(state, action)
+
+            const {groupId, messages, perPage, pageNumber} = action.payload
+
+            if(!groupId) return;
+
+            if (messages && messages.length > 0) {
+                let paginateState = state.messagePaginate[groupId]
+                if (paginateState) {
+                    paginateState.pageNumber = pageNumber ? pageNumber : 1
+                    paginateState.perPage = perPage ? perPage : 10
+                } else {
+                    state.messagePaginate[groupId] = {
+                        pageNumber: pageNumber ? pageNumber : 1,
+                        perPage: perPage ? perPage : 10
+                    }
+                }
+
+
+                state.messages = {
+                    [groupId]: [
+                        ...messages,
+                        ...(state.messages[groupId] || []),
+                    ]
+                }
+            }
+
         })
     }
 
