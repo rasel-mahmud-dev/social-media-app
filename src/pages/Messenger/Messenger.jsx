@@ -17,6 +17,8 @@ const Messenger = () => {
     const {messages, groups, openChatUser, messagePaginate} = useSelector(state => state.chatState)
     const {auth} = useSelector(state => state.authState)
 
+    const [isMobile, setMobile ] = useState(false)
+
 
     const scrollPosition = useRef(0); // Current scroll position
     const [contentHeight, setContentHeight] = useState(0); // Height of the content
@@ -28,15 +30,12 @@ const Messenger = () => {
         isLoading: false
     })
 
-    // Save the scroll position and content height when the component mounts
-    // useEffect(() => {
-    //     const {current} = divRef;
-    //     if (current) {
-    //         let scroll = (current.scrollHeight - current.clientHeight) - 10
-    //         // ref current.scrollTop = scroll  //end
-    //         scrollPosition.current = current.scrollHeight - (scroll + current.clientHeight)
-    //     }
-    // }, []);
+
+    useEffect(() => {
+        if(window.innerWidth < 768){
+            setMobile(true)
+        }
+    }, []);
 
     // Scroll to the newly calculated position when the items state changes
     useEffect(() => {
@@ -68,6 +67,7 @@ const Messenger = () => {
     //         resolve(group)
     //     })
     // }
+
     async function handleStartChat(friend, group) {
         if (!group) {
             group = findUserGroup(groups, friend._id)
@@ -151,13 +151,13 @@ const Messenger = () => {
 
             <div className="messenger-page flex ">
 
-                <div className="bg-dark-650 message-sidebar">
+                <div className="message-sidebar">
                     <Chats handleStartChat={handleStartChat}/>
                 </div>
 
                 {openChatUser && (
                     <div className="w-full">
-                        <div className="bg-dark-650 w-full py-3 px-4">
+                        <div className="messenger-header w-full py-3 px-4">
                             <div className="flex justify-between items-center">
                                <span>
                                    <div className="flex items-center gap-x-2 ">
@@ -175,7 +175,7 @@ const Messenger = () => {
                             </div>
                         </div>
 
-                        <div className="messenger-content">
+                        {!isMobile && <div className="messenger-content">
                             <div className="messenger-message-list"
                                  ref={divRef}
                                 // onWheel={(e) => handleFetchPreviousMessage(e, openChatUser)}
@@ -193,7 +193,7 @@ const Messenger = () => {
                                 <textarea placeholder="Write message"></textarea>
                             </div>
 
-                        </div>
+                        </div> }
 
                     </div>
                 )}

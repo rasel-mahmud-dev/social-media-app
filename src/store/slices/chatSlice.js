@@ -104,6 +104,7 @@ export const chatSlice = createSlice({
                     }
                 }
 
+                if(state.messages[groupId] && state.messages[groupId].length > 0) return;
 
                 state.messages = {
                     [groupId]: [

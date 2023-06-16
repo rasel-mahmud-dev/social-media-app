@@ -1,8 +1,7 @@
-
+@import "src/mixin";
 
 .messenger-page{
   //background-color: red;
-
 
   .message-sidebar{
     height: calc(100vh - var(--header-height));
@@ -10,8 +9,12 @@
     width: 300px;
     padding-left: 10px;
     padding-right: 10px;
+    @apply bg-dark-10 dark:bg-dark-600 ;
   }
 
+  .messenger-header{
+    @apply bg-dark-200/10 text-dark-650;
+  }
 
   .messenger-content{
 
@@ -27,18 +30,26 @@
     .message-input{
       //bottom: 0;
       //position: absolute;
-      background-color: #232323;
+      @apply bg-dark-10 dark:bg-dark-600 ;
       padding: 10px;
       textarea{
-        background-color: rgb(52 52 52 / 81%);
+        @apply bg-dark-200/10 dark:text-dark-50 text-dark-650;
         border-radius: 10px;
-        color: white;
         box-sizing: border-box;
         padding: 12px;
         outline: none;
         width: 100%;
         max-width: 600px;
       }
+    }
+  }
+
+  // style for mobile devices
+  @include getDown(768px){
+    .message-sidebar{
+      width: 100%;
+      height: auto;
+      min-width: 100%;
     }
   }
 }

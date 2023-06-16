@@ -1,4 +1,4 @@
-import React, {FC} from 'react';
+import React from 'react';
 
 import "./styles.scss"
 
@@ -25,16 +25,16 @@ const Radio = (props) => {
   } = props
   
   return (
-    <div className={["Input-group type-radio mb-3", className ? className : ""].join(" ")}>
+    <div className={["input-group type-radio mb-3", className ? className : ""].join(" ")}>
   
       <input
         type="radio"
         onChange={onChange ? ()=>onChange({target: {name, value: label}}) : ()=>{}}
         value={value}
         name={name}
-        id={label + "-Input"}
+        id={label + "-input"}
         placeholder={placeholder}
-        className={["Input-item"].join(" ")}
+        className={["input-item"].join(" ")}
       />
   
       { value === label
@@ -52,8 +52,8 @@ const Radio = (props) => {
       }
   
       <label className="font-normal min-w-100px block text-base font-400 text-gray-dark-4"
-             htmlFor={label + "-Input"}>{label}</label>
-        <span className={["Input--error_message", errorMessage ? "open__error_message": "close__error_message"].join(" ")}>{errorMessage}</span>
+             htmlFor={label + "-input"}>{label}</label>
+        <span className={["input--error_message", errorMessage ? "open__error_message": "close__error_message"].join(" ")}>{errorMessage}</span>
       </div>
     
   );

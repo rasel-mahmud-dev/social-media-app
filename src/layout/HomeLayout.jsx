@@ -19,13 +19,14 @@ import marketIcon from "src/assets/icon/market.png"
 import bookmarkIcon from "src/assets/icon/bookmark.png"
 import clockIcon from "src/assets/icon/time.png"
 import messengerIcon from "src/assets/icon/messenger.png"
-import {createGroupAction} from "src/store/actions/chatAction.js";
+import {createGroupAction, getChatGroupMessagesAction} from "src/store/actions/chatAction.js";
 import findUserGroup from "src/store/utils/findUserGroup.js";
 import {openChatUserAction, toggleOpenHomeChatsSidebar} from "src/store/slices/chatSlice.js";
 import Chats from "components/Chats/Chats.jsx";
 import {FaEllipsisV} from "react-icons/fa";
 import {CgExpand} from "react-icons/cg";
 import {BiEdit} from "react-icons/bi";
+import handleStartChat from "src/store/utils/handleStartChat.js";
 
 
 const HomeLayout = ({children}) => {
@@ -57,36 +58,28 @@ const HomeLayout = ({children}) => {
 
 
     // create group or fetch group
-    async function handleStartChat(friend, group) {
-        if (!group) {
-            group = findUserGroup(groups, friend._id)
-            if (!group) {
-                const groupData = await dispatch(createGroupAction({
-                    name: "",
-                    type: "private",
-                    participants: [friend._id]
-                }))
 
-                if (groupData.payload) {
-                    group = groupData.payload
-                }
-            }
-        } else {
-            // close chats right sidebar
-            dispatch(toggleOpenHomeChatsSidebar())
+
+    useEffect(()=>{
+        if(openChatUser && openChatUser.groupId){
+            fetchChatGroupMessages(openChatUser.groupId)
         }
+    }, [openChatUser])
 
-        dispatch(openChatUserAction({
-            ...friend,
-            groupId: group._id,
-            group
+
+    function fetchChatGroupMessages(groupId) {
+        dispatch(getChatGroupMessagesAction({
+            groupId,
+            perPage: 20,
+            pageNumber: 1,
+            orderBy: "createdAt",
+            orderDirection: "desc"
         }))
     }
 
-    function handleLogout() {
-        dispatch(logoutAction())
+    function handleStartChatHandler(friend, group){
+        handleStartChat(friend, group, dispatch, groups)
     }
-
     return (
         <div>
             <div className="flex justify-between ">
@@ -178,34 +171,13 @@ const HomeLayout = ({children}) => {
 
                 <Sidebar className="white right-sidebar" isOpen={openSidebar === "right-sidebar"}
                          onClose={() => dispatch(openSidebarAction(""))}>
-                    <ActiveFriend handleStartChat={handleStartChat} auth={auth} friends={friends}/>
+                    <ActiveFriend handleStartChat={handleStartChatHandler} auth={auth} friends={friends}/>
                     {/*<PendingFriendRequestCard  className="mt-4" auth={auth} pendingFriends={pendingFriends} />*/}
                     {openChatUser && <ChatWithFriend auth={auth} friend={openChatUser} openChatUser={openChatUser}/>}
                 </Sidebar>
 
 
-                {openHomeChatsSidebar && <Sidebar className="chats-sidebar" backdrop={false} isOpen={true}>
 
-                    <div className="flex items-center justify-between ">
-                        <h1 className="color_h1 font-semibold text-xl">Chats</h1>
-                        <div className="flex items-center gap-x-1">
-                            <li className="circle-hover-btn color_p text-sm">
-                                <FaEllipsisV/>
-                            </li>
-                            <Link to="/messenger">
-                                <li className="circle-hover-btn color_p">
-                                    <CgExpand/>
-                                </li>
-                            </Link>
-                            <li className="circle-hover-btn color_p">
-                                <BiEdit/>
-                            </li>
-                        </div>
-                    </div>
-
-
-                    <Chats handleStartChat={handleStartChat}/>
-                </Sidebar>}
 
 
             </div>

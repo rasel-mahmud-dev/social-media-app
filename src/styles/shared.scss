@@ -205,6 +205,8 @@ body{
   @apply border border-body-light/10
 }
 .menu_panel_card{
+  user-select: none;
+  max-width: 300px;
   @apply bg-white dark:bg-dark-700 shadow-lg border border-dark-100/20 dark:border-light-100/20 rounded-md
 }
 

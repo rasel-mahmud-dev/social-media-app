@@ -9,7 +9,7 @@ import apis from "src/apis/index.js";
 import moment from "moment";
 import {Link} from "react-router-dom";
 
-const Chats = ({handleStartChat}) => {
+const Chats = ({handleStartChat, className  = ""}) => {
 
 
     const {groups} = useSelector(state => state.chatState)
@@ -37,8 +37,8 @@ const Chats = ({handleStartChat}) => {
 
     }, [])
 
-    function handleOpenStartChatPopup(member, group) {
-        handleStartChat(member, group)
+    function handleOpenStartChatPopup(friend, group) {
+        handleStartChat(friend, group)
     }
 
     function renderChatFriend(group) {
@@ -73,16 +73,13 @@ const Chats = ({handleStartChat}) => {
 
     return (
 
-        <div>
-
-
-            <div className="mt-4">
+            <div className={className}>
                 {groups.map(group => (
                     <div key={group._id} className="text-sm color_p py-1">
                         {renderChatFriend(group)}
                     </div>
                 ))}
-            </div>
+
 
         </div>
     );

@@ -38,6 +38,7 @@
     .nav-center {
       flex-basis: 67%;
 
+
       .nav_items {
         justify-content: space-between;
         max-width: 577px;
@@ -52,6 +53,14 @@
         }
 
         margin: auto;
+        column-gap: 20px;
+
+        & > div {
+          width: 100%;
+          margin: auto;
+          display: flex;
+          justify-content: center;
+        }
 
         .avatar_logo {
           padding: 0 !important;
@@ -63,6 +72,7 @@
           //color: #444444;
           @apply text-light-850;
         }
+
 
         .active_nav {
           svg {
@@ -253,3 +263,36 @@
 .circle-hover-btn {
   @apply w-8 h-8 hover:bg-light-800 dark:hover:bg-dark-600 rounded-full flex items-center justify-center cursor-pointer;
 }
+
+
+.dropdown-top-right-animation{
+  &-enter {
+    transition: transform 200ms;
+    transform-origin: top right;
+    transform: translateY(10px) scale(0);
+  }
+  &-enter-active {
+
+  }
+
+  &-enter-done {
+    transform-origin: top right;
+    transition: transform 200ms;
+    transform: translateY(0px)  scale(1);
+  }
+
+  &-exit {
+    transform-origin: top right;
+    transition: transform 300ms;
+    transform: translateY(0px)  scale(1);
+  }
+
+  &-exit-active {
+  }
+  &-exit-done {
+    transition: transform 300ms;
+    transform-origin: top right;
+    transform: translateY(10px) scale(0);
+  }
+}
+
