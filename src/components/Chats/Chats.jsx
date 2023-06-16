@@ -9,7 +9,10 @@ import apis from "src/apis/index.js";
 import moment from "moment";
 import {Link} from "react-router-dom";
 
-const Chats = ({handleStartChat, className  = ""}) => {
+import "./chats.scss"
+import trimText from "src/utils/trimText.js";
+
+const Chats = ({handleStartChat, className  = "", footer}) => {
 
 
     const {groups} = useSelector(state => state.chatState)
@@ -59,7 +62,7 @@ const Chats = ({handleStartChat, className  = ""}) => {
                             {groupMessage[group._id] && groupMessage[group._id].length > 0 && (
                                 <li className="flex  items-center mt-1 text-sm color_h2">
                                     {groupMessage[group._id][0].senderId === auth._id && <span className="mr-1">You:</span> }
-                                    <span className=""> {groupMessage[group._id][0].message}</span>
+                                    <span className="break-words"> {trimText(groupMessage[group._id][0].message, 30)}</span>
                                     <span
                                         className="text-xs color_mute ml-2">{moment(new Date(groupMessage[group._id][0].createdAt)).fromNow(true)}</span>
                                 </li>
@@ -72,15 +75,15 @@ const Chats = ({handleStartChat, className  = ""}) => {
     }
 
     return (
-
             <div className={className}>
-                {groups.map(group => (
-                    <div key={group._id} className="text-sm color_p py-1">
-                        {renderChatFriend(group)}
-                    </div>
-                ))}
+               <div className="messenger-quick-chat-list"> {groups.map(group => (
+                   <div key={group._id} className="text-sm color_p py-1">
+                       {renderChatFriend(group)}
+                   </div>
+               ))}
 
-
+               </div>
+                {footer && footer()}
         </div>
     );
 };

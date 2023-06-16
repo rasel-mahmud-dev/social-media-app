@@ -20,7 +20,7 @@ const MessengerQuickChat = ({onClose}) => {
 
 
     return (
-        <div className="absolute top-10 right-0 ">
+        <div className="absolute top-10 right-0  messenger-quick-chat-list-parent  ">
             <div className="min-w-[350px] menu_panel_card overflow-hidden">
                 <div className="flex items-center justify-between px-4 pt-2">
                     <h1 className="color_h1 font-semibold text-xl">Chats</h1>
@@ -40,7 +40,11 @@ const MessengerQuickChat = ({onClose}) => {
                 </div>
 
 
-                <Chats className="px-2" handleStartChat={handleStartChatHandler}/>
+                <Chats footer={()=>(
+                    <div className="color_p messenger-quick-chat-footer py-2 text-sm">
+                       <Link to="/messenger"> See all in Messenger</Link>
+                    </div>
+                )} className="px-2" handleStartChat={handleStartChatHandler}/>
 
             </div>
         </div>

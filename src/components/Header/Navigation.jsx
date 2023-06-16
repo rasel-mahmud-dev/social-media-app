@@ -356,7 +356,7 @@ const Navigation = (props) => {
                                         </svg>
                                     </div>
 
-                                    <CSSTransition classNames="dropdown-top-right-animation" in={expandDropdown === "messenger"} timeout={200}>
+                                    <CSSTransition unmountOnExit classNames="dropdown-top-right-animation" in={expandDropdown === "messenger"} timeout={200}>
                                         <MessengerQuickChat onClose={()=>setExpandDropdown("")} />
                                     </CSSTransition>
 
@@ -393,7 +393,7 @@ const Navigation = (props) => {
                                             </svg>
                                         </div>
                                     </div>
-                                    <CSSTransition classNames="dropdown-top-right-animation" in={expandDropdown === "more"} timeout={200}>
+                                    <CSSTransition  unmountOnExit classNames="dropdown-top-right-animation" in={expandDropdown === "more"} timeout={200}>
                                         <MoreDropdown onSetExpandDropdown={setExpandDropdown}/>
                                     </CSSTransition>
 

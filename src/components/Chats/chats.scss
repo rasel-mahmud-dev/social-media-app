@@ -1,0 +1,23 @@
+@import "src/mixin";
+.messenger-quick-chat-list-parent{
+  max-height: calc(100vh - var(--header-height) - 8px);
+  overflow-y: hidden;
+
+  .messenger-quick-chat-footer{
+    background-color: transparent;
+    border-top: 1px solid #343434;
+    text-align: center;
+  }
+
+  .messenger-quick-chat-list{
+    max-height: calc(100vh - var(--header-height) - 90px);
+    overflow-y: auto;
+    @include scrollbar()
+  }
+}
+
+.messenger-quick-chat-list{
+  max-height: calc(100vh - var(--header-height));
+  overflow-y: auto;
+  @include scrollbar()
+}

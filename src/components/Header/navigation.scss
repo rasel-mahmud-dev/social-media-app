@@ -266,33 +266,39 @@
 
 
 .dropdown-top-right-animation{
+  //transform: translateY(10px) scale(0);
   &-enter {
+    opacity: 0;
     transition: transform 200ms;
     transform-origin: top right;
     transform: translateY(10px) scale(0);
   }
   &-enter-active {
-
+    //transition: transform 200ms;
+    //transform-origin: top right;
   }
 
   &-enter-done {
+    opacity: 1;
     transform-origin: top right;
     transition: transform 200ms;
     transform: translateY(0px)  scale(1);
   }
 
   &-exit {
+    opacity: 1;
     transform-origin: top right;
     transition: transform 300ms;
     transform: translateY(0px)  scale(1);
   }
 
   &-exit-active {
-  }
-  &-exit-done {
     transition: transform 300ms;
     transform-origin: top right;
     transform: translateY(10px) scale(0);
+  }
+  &-exit-done {
+
   }
 }
 
