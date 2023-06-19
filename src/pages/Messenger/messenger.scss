@@ -27,6 +27,18 @@
       padding: 10px;
       height: calc(100vh - (var(--header-height) + 145px));
       overflow-y: auto;
+
+
+
+      @include dark(){
+      .messenger-message-list{
+          .msg-item:not(.your-msg) {
+            background: #2c2c2c;
+            color: white;
+          }
+          }
+        }
+
     }
 
 

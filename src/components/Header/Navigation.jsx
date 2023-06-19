@@ -3,10 +3,7 @@ import "./navigation.scss"
 import "./style.scss";
 import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-
-import slugify from "src/utils/slugify";
 // import PreloadLink from "../preloadLink/PreloadLink";
-
 import MoreDropdown from "src/components/header/MoreDropdown";
 import {HiBars3} from "react-icons/hi2";
 import staticImage from "src/utils/staticImage.js";
@@ -35,7 +32,7 @@ const Navigation = (props) => {
     const [activeNav, setActiveNav] = useState("")
 
 
-    useEffect(()=>{
+    useEffect(() => {
         if (headerRef.current) {
             document.documentElement.style.setProperty(`--header-height`, headerRef.current.offsetHeight + "px");
         }
@@ -45,12 +42,12 @@ const Navigation = (props) => {
         dispatch(logoutAction())
     }
 
-    function handleOpenSidebar(){
+    function handleOpenSidebar() {
         dispatch(openSidebarAction("left-sidebar"))
     }
 
     function handleExpandDropdown(name) {
-        if(name === "messenger"){
+        if (name === "messenger") {
             dispatch(toggleOpenHomeChatsSidebar())
         }
         setExpandDropdown(expandDropdown === name ? "" : name)
@@ -71,6 +68,11 @@ const Navigation = (props) => {
 
     useEffect(() => {
         checkActiveNav(location.pathname)
+        // if this one is messenger page than close this messenger sidebar panel popup
+        if (location.pathname.startsWith("/messenger")) {
+            setExpandDropdown("")
+        }
+
     }, [location.pathname])
 
     function pushRoute(to) {
@@ -208,7 +210,8 @@ const Navigation = (props) => {
 
     return (
         <>
-            <div ref={headerRef} className="navigation px-3 sm:px-4 bg-white dark:bg-dark-700 z-50 fixed w-full shadow-xss">
+            <div ref={headerRef}
+                 className="navigation px-3 sm:px-4 bg-white dark:bg-dark-700 z-50 fixed w-full shadow-xss">
 
                 <div className="w-full mx-auto px-0 sm:px-2">
                     <ul className="main-nav ">
@@ -228,7 +231,8 @@ const Navigation = (props) => {
                                 </li>
 
 
-                                <NavLink onChange={handleNavChange} to="/" className="cursor-pointer mr-3 hidden md:block">
+                                <NavLink onChange={handleNavChange} to="/"
+                                         className="cursor-pointer mr-3 hidden md:block">
                                     <div className="logo">
                                         <svg viewBox="0 0 36 36" className="a8c37x1j ms05siws l3qrxjdp b7h9ocf4"
                                              fill="url(#jsc_s_2)"
@@ -250,15 +254,13 @@ const Navigation = (props) => {
 
                                 {/******** search icon  only for mobile devices ********/}
                                 <button className="flex items-center justify-center xl:hidden  rounded_circle  ">
-                                    <FiSearch  className="text-dark-300 dark:text-light-500"/>
+                                    <FiSearch className="text-dark-300 dark:text-light-500"/>
                                 </button>
-
-
 
 
                                 <div
                                     className="hidden xl:flex flex-1 max-w-max  justify-between items-center bg-dark-300/10 dark:bg-dark-300/30 px-3.5 rounded-2xl text-sm">
-                                    <FiSearch  className="text-dark-300 dark:text-light-500 mr-1 text-base"/>
+                                    <FiSearch className="text-dark-300 dark:text-light-500 mr-1 text-base"/>
                                     <input
                                         className="py-2 text-xs placeholder:text-dark-400 dark:placeholder:text-light-100 px-0 text-dark-400  bg-transparent  bg-opacity-0   border-none  outline-none  w-full"
                                         type="text"
@@ -301,7 +303,9 @@ const Navigation = (props) => {
                                     onMouseEnter={() => setExpandDropdown("authMenu")}>
                                   <span className="">
                                     {auth && auth._id
-                                        ? <Avatar username={auth?.fullName} imgClass={"!w-8 !h-8"} className={"!w-8 !h-8"} src={staticImage(auth?.avatar)} />
+                                        ?
+                                        <Avatar username={auth?.fullName} imgClass={"!w-8 !h-8"} className={"!w-8 !h-8"}
+                                                src={staticImage(auth?.avatar)}/>
                                         : (
                                             <div className={"rounded_circle text-body-dark dark:text-body-light"}>
                                                 <BiUserCircle className="text-light-850 text-xl"/>
@@ -309,7 +313,8 @@ const Navigation = (props) => {
                                         )
                                     }
                                   </span>
-                                    {auth && auth._id && <h1 className="color_h2 font-medium hidden md:block ml-2">{auth?.firstName}</h1> }
+                                    {auth && auth._id &&
+                                        <h1 className="color_h2 font-medium hidden md:block ml-2">{auth?.firstName}</h1>}
                                     {authDropdown(expandDropdown === "authMenu")}
                                 </li>
 
@@ -358,8 +363,9 @@ const Navigation = (props) => {
                                         </svg>
                                     </div>
 
-                                    <CSSTransition unmountOnExit classNames="dropdown-top-right-animation" in={expandDropdown === "messenger"} timeout={200}>
-                                        <MessengerQuickChat onClose={()=>setExpandDropdown("")} />
+                                    <CSSTransition unmountOnExit classNames="dropdown-top-right-animation"
+                                                   in={expandDropdown === "messenger"} timeout={200}>
+                                        <MessengerQuickChat onClose={() => setExpandDropdown("")}/>
                                     </CSSTransition>
 
 
@@ -395,7 +401,8 @@ const Navigation = (props) => {
                                             </svg>
                                         </div>
                                     </div>
-                                    <CSSTransition  unmountOnExit classNames="dropdown-top-right-animation" in={expandDropdown === "more"} timeout={200}>
+                                    <CSSTransition unmountOnExit classNames="dropdown-top-right-animation"
+                                                   in={expandDropdown === "more"} timeout={200}>
                                         <MoreDropdown onSetExpandDropdown={setExpandDropdown}/>
                                     </CSSTransition>
 

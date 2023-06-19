@@ -77,8 +77,14 @@ const HomeLayout = ({children}) => {
         }))
     }
 
+    // this function create a group with this friend
+    // if there are a not exist group with this two user id in participants array
     function handleStartChatHandler(friend, group){
-        handleStartChat(friend, group, dispatch, groups)
+        handleStartChat(friend, group, dispatch, groups, function (err){
+            if(err){
+                alert(err)
+            }
+        })
     }
     return (
         <div>
@@ -158,14 +164,9 @@ const HomeLayout = ({children}) => {
 
                 </Sidebar>
 
-
                 <div className="w-full ">
                     <div className="content">
-
-
                         {children}
-
-
                     </div>
                 </div>
 

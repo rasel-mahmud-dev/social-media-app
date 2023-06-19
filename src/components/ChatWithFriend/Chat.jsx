@@ -3,7 +3,7 @@ import Avatar from "components/Shared/Avatar/Avatar.jsx";
 import {BiChevronLeft} from "react-icons/bi";
 import "./chat.scss"
 import {TiTimes} from "react-icons/ti";
-import {openChatUserAction} from "src/store/slices/chatSlice.js";
+import MessageList from "components/MessageList/MessageList.jsx";
 
 const Chat = ({openChatUser, messages, className = "", auth, handleClose, handleSendMessage}) => {
     return (
@@ -32,13 +32,20 @@ const Chat = ({openChatUser, messages, className = "", auth, handleClose, handle
                 </div>
 
 
-                <div className="message-list p-4">
-                    {messages[openChatUser?.groupId] && messages[openChatUser?.groupId]?.map((msg) => (
-                        <div className={`msg-item ${msg.senderId === auth?._id ? "your-msg" : ""}`} key={msg._id}>
-                            <li>{msg.message}</li>
-                        </div>
-                    ))}
-                </div>
+                <MessageList
+                    auth={auth}
+                    openChatUser={openChatUser}
+                    messages={messages[openChatUser?.groupId] && messages[openChatUser?.groupId] || []}
+                />
+
+
+                {/*<div className="message-list p-4">*/}
+                {/*    {messages[openChatUser?.groupId] && messages[openChatUser?.groupId]?.map((msg) => (*/}
+                {/*        <div className={`msg-item ${msg.senderId === auth?._id ? "your-msg" : ""}`} key={msg._id}>*/}
+                {/*            <li>{msg.message}</li>*/}
+                {/*        </div>*/}
+                {/*    ))}*/}
+                {/*</div>*/}
 
 
                 <form onSubmit={handleSendMessage} className="mt-1 p-4">

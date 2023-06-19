@@ -14,16 +14,14 @@ function chooseFirstLetter(name) {
 }
 
 
-
 const Avatar = ({className = "", imgClass = "", username, src, ...attr}) => {
     let letter = chooseFirstLetter(username)
 
-    function handleErrorImage(e ) {
-
+    function handleErrorImage(e) {
         let avatarRoot = e.target.parentNode
-        if(avatarRoot) {
+        if (avatarRoot) {
             avatarRoot.innerHTML = `
-			<span class="rounded-full bg-neutral-200 w-9 h-9 flex items-center text-sm font-medium justify-center uppercase ${imgClass}>${chooseFirstLetter(username)}</span>
+			<span class="rounded-full bg-neutral-200 w-9 h-9 flex items-center text-sm font-medium justify-center uppercase ${imgClass}>${letter}</span>
 		`
         }
     }

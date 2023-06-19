@@ -17,6 +17,20 @@ export const fetchGroupsAction = createAsyncThunk("fetch-chat-groups", async (pa
 })
 
 
+// fetch group by groupId action
+export const fetchGroupByIdAction = createAsyncThunk("fetch-chat-group", async (groupId, thunkAPI) => {
+    try {
+        let {status, data} = await apis.get("chat/group/" + groupId)
+        if (status === 200) {
+            return data?.group
+        }
+    } catch (ex) {
+        // send error message with reject type in reducer
+        return thunkAPI.rejectWithValue(errorResponse(ex))
+    }
+})
+
+
 // fetch groups action
 export const createGroupAction = createAsyncThunk("create-group", async (payload, thunkAPI) => {
     try {
@@ -39,7 +53,7 @@ export const fetchChatMessage = createAsyncThunk("fetch-chat-message", async (pa
             return data
         }
     } catch (ex) {
-        // send error message with reject type in reducer
+        // send an error message with a reject type in reducer
         return thunkAPI.rejectWithValue(errorResponse(ex))
     }
 })

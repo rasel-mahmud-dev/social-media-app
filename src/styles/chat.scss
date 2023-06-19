@@ -25,7 +25,7 @@
 
 @include dark(){
   .msg-item {
-    background: #252525;
+    background: #464646;
     color: white;
     &.your-msg {
       background: var(--primary-400);

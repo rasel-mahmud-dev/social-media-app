@@ -40,7 +40,8 @@ const router = createBrowserRouter([
             {path: "saved", element: <PrivateRoute> <Saved/> </PrivateRoute>},
             {path: "groups", element: <PrivateRoute> <Groups/> </PrivateRoute>},
             {path: "join", element: <AuthExcludeRoute><Login/></AuthExcludeRoute>},
-            {path: "messenger", element: <Messenger/>}
+            {path: "messenger", element: <Messenger/>},
+            {path: "messenger/:groupId", element: <Messenger/>}
         ]
     }
 ])

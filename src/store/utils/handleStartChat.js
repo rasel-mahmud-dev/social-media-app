@@ -4,31 +4,50 @@ import {openChatUserAction, toggleOpenHomeChatsSidebar} from "src/store/slices/c
 
 
 async function handleStartChat(friend, group, dispatch, groups, cb) {
-    if (!group) {
-        group = findUserGroup(groups, friend._id)
+
+    if(!(friend && friend._id)) return  cb("Something were wrong")
+
+    try{
+
+        // const groupData = await dispatch(createGroupAction({
+        //     name: "",
+        //     type: "private",
+        //     participants: [friend._id]
+        // })).unwrap()
+
+
         if (!group) {
-            const groupData = await dispatch(createGroupAction({
-                name: "",
-                type: "private",
-                participants: [friend._id]
-            }))
+            group = findUserGroup(groups, friend._id)
+            if (!group) {
+                // create a new group
+                group = await dispatch(createGroupAction({
+                    name: "",
+                    type: "private",
+                    participants: [friend._id]
+                })).unwrap()
 
-            if (groupData.payload) {
-                group = groupData.payload
             }
+        } else {
+            // close chats right sidebar
+            dispatch(toggleOpenHomeChatsSidebar())
         }
-    } else {
-        // close chats right sidebar
-        dispatch(toggleOpenHomeChatsSidebar())
+
+        if(!group){
+            return cb("Something were wrong")
+        }
+
+        dispatch(openChatUserAction({
+            ...friend,
+            groupId: group._id,
+            group
+        }))
+
+        cb()
+
+    } catch (ex){
+        console.log(ex)
+        cb(ex)
     }
-
-    dispatch(openChatUserAction({
-        ...friend,
-        groupId: group._id,
-        group
-    }))
-
-    cb()
 }
 
 export default handleStartChat

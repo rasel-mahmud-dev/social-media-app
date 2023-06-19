@@ -22,11 +22,9 @@ const Chats = ({handleStartChat, className  = "", footer}) => {
 
     useEffect(() => {
 
-        // get latest groups message
+        // get a latest groups message
         apis.get("/chat/groups/messages").then(({data}) => {
-
             let payload = {}
-
             if (data.messages) {
                 data.messages.forEach(msg => {
                     payload[msg._id] = msg.messages
@@ -46,7 +44,6 @@ const Chats = ({handleStartChat, className  = "", footer}) => {
 
     function renderChatFriend(group) {
         // let participants = groupParticipantsByGroupId(groups, groupId)
-
         if (!auth?._id) return;
 
         let member = group.participants.find(participant => participant._id !== auth?._id)
@@ -59,10 +56,11 @@ const Chats = ({handleStartChat, className  = "", footer}) => {
                                 username="ER SDF"/>
                         <div className="">
                             <label htmlFor="" className="text-sm ">{member?.fullName}</label>
+                            <div className="text-xs color_mute">{group._id}</div>
                             {groupMessage[group._id] && groupMessage[group._id].length > 0 && (
                                 <li className="flex  items-center mt-1 text-sm color_h2">
                                     {groupMessage[group._id][0].senderId === auth._id && <span className="mr-1">You:</span> }
-                                    <span className="break-words"> {trimText(groupMessage[group._id][0].message, 30)}</span>
+                                    <span className=""> {trimText(groupMessage[group._id][0].message, 20)}</span>
                                     <span
                                         className="text-xs color_mute ml-2">{moment(new Date(groupMessage[group._id][0].createdAt)).fromNow(true)}</span>
                                 </li>
@@ -73,6 +71,8 @@ const Chats = ({handleStartChat, className  = "", footer}) => {
             </div>
         )
     }
+
+    console.log(groups)
 
     return (
             <div className={className}>
