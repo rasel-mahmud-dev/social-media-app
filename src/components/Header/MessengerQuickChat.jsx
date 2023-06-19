@@ -42,7 +42,7 @@ const MessengerQuickChat = ({onClose}) => {
 
                 <Chats footer={()=>(
                     <div className="color_p messenger-quick-chat-footer py-2 text-sm">
-                       <Link to="/messenger"> See all in Messenger</Link>
+                       <Link onClick={onClose} to="/messenger"> See all in Messenger</Link>
                     </div>
                 )} className="px-2" handleStartChat={handleStartChatHandler}/>
 

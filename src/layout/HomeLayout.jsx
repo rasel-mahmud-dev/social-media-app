@@ -57,7 +57,7 @@ const HomeLayout = ({children}) => {
     ]
 
 
-    // create group or fetch group
+    // create a group or fetch group
 
 
     useEffect(()=>{
@@ -171,9 +171,20 @@ const HomeLayout = ({children}) => {
 
                 <Sidebar className="white right-sidebar" isOpen={openSidebar === "right-sidebar"}
                          onClose={() => dispatch(openSidebarAction(""))}>
-                    <ActiveFriend handleStartChat={handleStartChatHandler} auth={auth} friends={friends}/>
-                    {/*<PendingFriendRequestCard  className="mt-4" auth={auth} pendingFriends={pendingFriends} />*/}
-                    {openChatUser && <ChatWithFriend auth={auth} friend={openChatUser} openChatUser={openChatUser}/>}
+
+                    <ActiveFriend
+                        handleStartChat={handleStartChatHandler}
+                        auth={auth}
+                        friends={friends}
+                    />
+                    {/*<PendingFriendRequestCard className="mt-4" auth={auth} pendingFriends={pendingFriends} />*/}
+                    { (openChatUser && openChatUser?.where !== "messenger") &&
+                        <ChatWithFriend
+                            auth={auth}
+                            friend={openChatUser}
+                            openChatUser={openChatUser}
+                        />
+                    }
                 </Sidebar>
 
 

@@ -2,14 +2,17 @@
 
 .messenger-page{
   //background-color: red;
-
+  display: grid;
+  grid-template-columns: 300px 1fr 300px;
+  height: calc(100vh - var(--header-height));
+  overflow-y: hidden;
   .message-sidebar{
     height: calc(100vh - var(--header-height));
     min-width: 300px;
     width: 300px;
     padding-left: 10px;
     padding-right: 10px;
-    @apply bg-dark-10 dark:bg-dark-600 ;
+    @apply bg-dark-10 dark:bg-dark-650 ;
   }
 
   .messenger-header{

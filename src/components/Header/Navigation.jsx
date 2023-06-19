@@ -3,8 +3,10 @@ import "./navigation.scss"
 import "./style.scss";
 import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
+
 import slugify from "src/utils/slugify";
 // import PreloadLink from "../preloadLink/PreloadLink";
+
 import MoreDropdown from "src/components/header/MoreDropdown";
 import {HiBars3} from "react-icons/hi2";
 import staticImage from "src/utils/staticImage.js";

@@ -17,7 +17,7 @@ const Messenger = () => {
     const {messages, groups, openChatUser, messagePaginate} = useSelector(state => state.chatState)
     const {auth} = useSelector(state => state.authState)
 
-    const [isMobile, setMobile ] = useState(false)
+    const [isMobile, setMobile] = useState(false)
 
 
     const scrollPosition = useRef(0); // Current scroll position
@@ -32,7 +32,7 @@ const Messenger = () => {
 
 
     useEffect(() => {
-        if(window.innerWidth < 768){
+        if (window.innerWidth < 768) {
             setMobile(true)
         }
     }, []);
@@ -87,6 +87,7 @@ const Messenger = () => {
         dispatch(openChatUserAction({
             ...friend,
             groupId: group._id,
+            where: "messenger",
             group
         }))
 
@@ -141,7 +142,6 @@ const Messenger = () => {
                 })
             }, 1000);
         }
-
     }
 
 
@@ -149,13 +149,13 @@ const Messenger = () => {
         <div>
 
 
-            <div className="messenger-page flex ">
+            <div className="messenger-page ">
 
                 <div className="message-sidebar">
                     <Chats handleStartChat={handleStartChat}/>
                 </div>
 
-                {openChatUser && (
+                {openChatUser ? (
                     <div className="w-full">
                         <div className="messenger-header w-full py-3 px-4">
                             <div className="flex justify-between items-center">
@@ -193,10 +193,26 @@ const Messenger = () => {
                                 <textarea placeholder="Write message"></textarea>
                             </div>
 
-                        </div> }
+                        </div>}
 
                     </div>
+                ): (
+                    <div className="w-full text-center top-1/4 relative color_p">
+                        <h4>Please select you friend to start conversation</h4>
+                    </div>
                 )}
+
+
+                <div className="message-sidebar message-sidebar-right">
+                    <div className="flex justify-center items-center flex-col">
+                        <Avatar imgClass="text-xs !w-20 !h-20" className="!w-20 !h-20" src={openChatUser?.avatar}
+                                username={openChatUser?.fullName}/>
+
+                        <label className="text-base color_h1 font-semibold">{openChatUser?.fullName}</label>
+                    </div>
+
+                </div>
+
             </div>
 
         </div>

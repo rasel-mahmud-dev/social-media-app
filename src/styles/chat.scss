@@ -1,3 +1,5 @@
+@import "src/mixin";
+
 .msg-item {
   background: #f5f5f5;
   margin-bottom: 4px;
@@ -18,5 +20,15 @@
     font-size: 14px;
     word-break: break-all;
     white-space: pre-line;
+  }
+}
+
+@include dark(){
+  .msg-item {
+    background: #252525;
+    color: white;
+    &.your-msg {
+      background: var(--primary-400);
+    }
   }
 }
