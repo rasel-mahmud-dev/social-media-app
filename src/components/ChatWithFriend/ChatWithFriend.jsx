@@ -4,7 +4,11 @@ import {openChatUserAction} from "src/store/slices/chatSlice.js";
 import "./chat-with-friend.scss"
 
 
-import {fetchPrivateMessageAction, sendPrivateMessageAction} from "src/store/actions/chatAction.js";
+import {
+    fetchPrivateMessageAction,
+    getChatGroupMessagesAction,
+    sendPrivateMessageAction
+} from "src/store/actions/chatAction.js";
 import Chat from "components/ChatWithFriend/Chat.jsx";
 
 const ChatWithFriend = ({openChatUser, auth, friend}) => {
@@ -13,12 +17,10 @@ const ChatWithFriend = ({openChatUser, auth, friend}) => {
 
     const {messages} = useSelector(state => state.chatState)
 
-    function handleSendMessage(e) {
-        e.preventDefault();
+    function handleSendMessage(message) {
 
-        if (!(openChatUser && openChatUser?.groupId)) return
+         if (!(openChatUser && openChatUser?.groupId)) return
 
-        let message = e.target.message.value
         dispatch(sendPrivateMessageAction({
             message,
             groupId: openChatUser.groupId
@@ -27,7 +29,7 @@ const ChatWithFriend = ({openChatUser, auth, friend}) => {
 
     useEffect(() => {
         if (openChatUser.groupId) {
-            dispatch(fetchPrivateMessageAction({groupId: openChatUser.groupId}))
+            dispatch(getChatGroupMessagesAction({groupId: openChatUser.groupId}))
         }
     }, [openChatUser])
 
@@ -40,7 +42,7 @@ const ChatWithFriend = ({openChatUser, auth, friend}) => {
                         messages={messages}
                         auth={auth}
                         handleClose={() => dispatch(openChatUserAction(null))}
-                        handleSendMessage={handleSendMessage}
+                        onSendMessage={handleSendMessage}
                     />
                 )}
             </div>

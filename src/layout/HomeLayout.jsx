@@ -179,13 +179,7 @@ const HomeLayout = ({children}) => {
                         friends={friends}
                     />
                     {/*<PendingFriendRequestCard className="mt-4" auth={auth} pendingFriends={pendingFriends} />*/}
-                    { (openChatUser && openChatUser?.where !== "messenger") &&
-                        <ChatWithFriend
-                            auth={auth}
-                            friend={openChatUser}
-                            openChatUser={openChatUser}
-                        />
-                    }
+
                 </Sidebar>
 
 

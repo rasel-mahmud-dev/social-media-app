@@ -5,7 +5,22 @@ import "./chat.scss"
 import {TiTimes} from "react-icons/ti";
 import MessageList from "components/MessageList/MessageList.jsx";
 
-const Chat = ({openChatUser, messages, className = "", auth, handleClose, handleSendMessage}) => {
+const Chat = ({openChatUser, messages, className = "", auth, handleClose, onSendMessage}) => {
+
+    function handleChange(e){
+        if(e.keyCode === 13){
+            onSendMessage(e.target.value.trim())
+            e.target.value = ""
+        }
+    }
+
+    function handleSendMessage(e){
+        e.preventDefault();
+        let message = e.target.message.value
+        onSendMessage(message)
+        e.form.clear()
+    }
+
     return (
         <div className={className}>
             <div>
@@ -49,7 +64,7 @@ const Chat = ({openChatUser, messages, className = "", auth, handleClose, handle
 
 
                 <form onSubmit={handleSendMessage} className="mt-1 p-4">
-                            <textarea className="input-elemtextarea" placeholder="Wrire mesasge"
+                            <textarea onKeyDown={handleChange} className="input-elemtextarea" placeholder="Wrire mesasge"
                                       name="message"></textarea>
                     <button className="btn btn-primary" type={"submit"}>Send</button>
                 </form>

@@ -16,6 +16,10 @@ import ImageEditor from "components/ImageEditor/ImageEditor.jsx";
 import {updateProfileAction} from "src/store/actions/userAction.js";
 import {MoonLoader} from "react-spinners";
 import Info from "components/Shared/Info/Info.jsx";
+import Button from "components/Shared/Button/Button.jsx";
+import findUserGroup from "src/store/utils/findUserGroup.js";
+import handleStartChat from "src/store/utils/handleStartChat.js";
+import {createGroupAction} from "src/store/actions/chatAction.js";
 
 
 const Profile = () => {
@@ -24,14 +28,13 @@ const Profile = () => {
 
     const dispatch = useDispatch()
 
-    const {auth} = useSelector(state => state.authState)
+    const {auth, friends} = useSelector(state => state.authState)
+    const {groups} = useSelector(state => state.chatState)
 
     const [state, setState] = useCustomReducer({
-        profile: {
-            feeds: [],
-            friends: [],
-            user: null
-        },
+        feeds: [],
+        friends: [],
+        user: null,
         isLoading: false,
         showSectionName: "Posts"
     })
@@ -47,16 +50,12 @@ const Profile = () => {
 
     useEffect(() => {
         if (userId) {
-
             apis.get("/users/profile/" + userId).then(({status, data}) => {
                 if (status === 200) {
                     setState(data)
                 }
-
             }).catch(ex => {
-
             })
-
         }
     }, [userId])
 
@@ -167,6 +166,51 @@ const Profile = () => {
         })
     }
 
+
+    // send a message with friend and non friend.
+    async function handleOpenChatForSendMessage() {
+
+        if (!state?.user) return;
+
+        // check a group if a group not found, then create new one.
+        let group = findUserGroup(groups, state.user._id)
+
+        if (!group) {
+            const groupData = await dispatch(createGroupAction({
+                name: "",
+                type: "private",
+                participants: [state.user._id]
+            }))
+
+            if (groupData.payload) {
+                group = groupData.payload
+            }
+        }
+
+
+        handleStartChat(state.user, group, dispatch, groups, function (err) {
+            if (err) {
+                alert(err)
+            }
+        })
+    }
+
+    function isFriend(friends, userId) {
+        let result = false
+        for (let i = 0; i < friends.length; i++) {
+            if (friends[i].senderId === userId || friends[i].receiverId === userId) {
+                result = true
+                break
+            }
+        }
+        return result;
+    }
+
+    function handleToggleFriend(isAddFriend = false) {
+        console.log(isAddFriend)
+        alert("Friend toggle not implemented  yet")
+    }
+
     return (
         <>
 
@@ -217,9 +261,9 @@ const Profile = () => {
                                      style={{backgroundImage: `url(${state.user.cover})`}}>
 
                                     {auth?._id === userId && <div className="circle rounded_circle choose-cover-btn"
-                                         onClick={() => handleSelectImageChooser("cover")}>
+                                                                  onClick={() => handleSelectImageChooser("cover")}>
                                         <BiCamera className="color_p"/>
-                                    </div> }
+                                    </div>}
                                 </div>
 
                                 {/*{state.user._id === auth._id && (*/}
@@ -240,7 +284,7 @@ const Profile = () => {
                                         />
 
                                         {auth?._id === userId && <div onClick={() => handleSelectImageChooser("avatar")}
-                                             className="circle rounded_circle choose-avatar-btn">
+                                                                      className="circle rounded_circle choose-avatar-btn">
                                             <BiCamera className="color_p"/>
                                         </div>}
 
@@ -261,13 +305,24 @@ const Profile = () => {
                                         </div>
                                     </div>
 
-                                    <div className="profile-section-nav flex mt-2">
-                                        {Object.keys(sectionNavs).map((name) => (
-                                            <li key={name} onClick={() => handleSelectSection(name)}
-                                                className={["profile-section-item color_p", state.showSectionName === name ? "active" : ""].join(" ")}
-                                            >{name}</li>
-                                        ))}
+                                    <div className="flex items-enter justify-between ">
+                                        <div className="profile-section-nav flex mt-2">
+                                            {Object.keys(sectionNavs).map((name) => (
+                                                <li key={name} onClick={() => handleSelectSection(name)}
+                                                    className={["profile-section-item color_p", state.showSectionName === name ? "active" : ""].join(" ")}
+                                                >{name}</li>
+                                            ))}
+                                        </div>
+                                        <div className="flex items-center justify-between gap-x-2">
+                                            {isFriend(friends, state.user._id)
+                                                ? <Button onClick={()=>handleToggleFriend()} className="btn-primary">Unfriend</Button>
+                                                : <Button onClick={()=>handleToggleFriend(true)} className="btn-primary">Add Friend</Button>
+                                            }
+                                            <Button onClick={handleOpenChatForSendMessage}
+                                                    className="btn-primary">Message</Button>
+                                        </div>
                                     </div>
+
                                 </div>
                             </div>
                         </div>

@@ -34,11 +34,9 @@ const OnlineFriends = () => {
     const {messages} = useSelector(state => state.chatState)
 
 
-    function handleSendMessage(e) {
-        e.preventDefault();
+    function handleSendMessage(message) {
         if(!openChatUser) return
 
-        let message = e.target.message.value
         dispatch(sendPrivateMessageAction({
             sender: auth._id,
             recipientId: openChatUser._id,
@@ -67,7 +65,7 @@ const OnlineFriends = () => {
                 openChatUser={openChatUser}
                 messages={messages}
                 auth={auth}
-                handleSendMessage={handleSendMessage}
+                onSendMessage={handleSendMessage}
             /> }
 
         </div>

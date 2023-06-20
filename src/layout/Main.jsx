@@ -10,10 +10,11 @@ import {addLocalFeedAction, localToggleFeedReactionAction, removeLocalFeedAction
 import {MoonLoader} from "react-spinners";
 import {backend} from "src/apis/index.js";
 import {getNewMessageAction} from "src/store/slices/chatSlice.js";
-import channelName from "src/utils/channelName.js";
 import Navigation from "components/Header/Navigation.jsx";
 
 import {fetchGroupsAction} from "src/store/actions/chatAction.js";
+import ChatWithFriend from "components/ChatWithFriend/ChatWithFriend.jsx";
+import {fetchAuthFriendsAction} from "src/store/actions/userAction.js";
 
 
 const pusher = new Pusher('aa79087d5d1bd3848813', {
@@ -28,13 +29,13 @@ const Main = () => {
     const dispatch = useDispatch()
 
     const {auth} = useSelector(state => state.authState)
-    const {groups} = useSelector(state => state.chatState)
+    const {groups, openChatUser} = useSelector(state => state.chatState)
 
     useEffect(() => {
         dispatch(fetchCurrentAuthAction())
         dispatch(fetchGroupsAction())
+        dispatch(fetchAuthFriendsAction())
     }, []);
-
 
 
     useEffect(() => {
@@ -76,14 +77,14 @@ const Main = () => {
     }, [auth]);
 
 
-    useEffect(()=>{
-        if(auth && groups){
+    useEffect(() => {
+        if (auth && groups) {
             for (let i = 0; i < groups.length; i++) {
                 const group = groups[i]
                 const privateChannel = pusher.subscribe(`private-chat-${group._id}`);
                 privateChannel.bind("message", (data) => {
                     if (data.message) {
-                        if(data.message?.senderId === auth._id) return;
+                        if (data.message?.senderId === auth._id) return;
                         playSound()
                         dispatch(getNewMessageAction(data.message))
                     }
@@ -91,7 +92,7 @@ const Main = () => {
             }
         }
 
-        return ()=> {
+        return () => {
             if (auth && groups) {
                 for (let i = 0; i < groups.length; i++) {
                     const group = groups[i]
@@ -112,6 +113,16 @@ const Main = () => {
                 </div>
             )}>
                 <Outlet/>
+
+
+                {(openChatUser && openChatUser?.where !== "messenger") &&
+                    <ChatWithFriend
+                        auth={auth}
+                        friend={openChatUser}
+                        openChatUser={openChatUser}
+                    />
+                }
+
             </Suspense>
         </div>
     );
