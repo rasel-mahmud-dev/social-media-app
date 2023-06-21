@@ -34,22 +34,25 @@ const Profile = () => {
     const {groups} = useSelector(state => state.chatState)
 
     const [state, setState] = useCustomReducer({
-        feeds: [],
-        friends: [],
-        user: null,
-        isLoading: false,
-        showSectionName: "Posts",
-        currentUserFollowing: {}
+        feeds: [], friends: [], user: null, isLoading: false, showSectionName: "Posts", currentUserFollowing: null // {}
     })
 
     const [updateProfile, setUpdateState] = useCustomReducer({
-        openImageChooserModal: "",
-        originalAvatar: null,
-        originalCover: null,
-        avatar: null,
-        cover: null,
+        openImageChooserModal: "", originalAvatar: null, originalCover: null, avatar: null, cover: null,
 
     })
+
+    // check the following status with current logged user.
+    function fetchFollowerInfo(userId) {
+        apis.get("/follow/status/?userId=" + userId).then(({status, data}) => {
+            if (status === 200 && data?.following) {
+                setState({
+                    currentUserFollowing: data.following
+                })
+            }
+        }).catch(() => {
+        })
+    }
 
     useEffect(() => {
         if (userId) {
@@ -61,14 +64,7 @@ const Profile = () => {
                     if (auth._id === data.user._id) return;
 
                     // check the following status with current logged user.
-                    apis.get("/follow/status/?userId=" + userId).then(({status, data}) => {
-                        if (status === 200 && data?.following) {
-                            setState({
-                                currentUserFollowing: data.following
-                            })
-                        }
-                    }).catch(() => {
-                    })
+                    fetchFollowerInfo(data.user._id)
                 }
             }).catch(() => {
             })
@@ -119,20 +115,14 @@ const Profile = () => {
 
     const onCropComplete = useCallback(async (croppedArea, croppedAreaPixels) => {
         if (updateProfile?.originalAvatar) {
-            const croppedImage = await getCroppedImg(
-                updateProfile?.originalAvatar,
-                croppedAreaPixels,
-            )
+            const croppedImage = await getCroppedImg(updateProfile?.originalAvatar, croppedAreaPixels,)
             setUpdateState({
                 avatar: croppedImage
             })
         }
 
         if (updateProfile?.originalCover) {
-            const croppedImage = await getCroppedImg(
-                updateProfile?.originalCover,
-                croppedAreaPixels,
-            )
+            const croppedImage = await getCroppedImg(updateProfile?.originalCover, croppedAreaPixels,)
             setUpdateState({
                 cover: croppedImage
             })
@@ -142,9 +132,7 @@ const Profile = () => {
 
     function handleCloseImageChoose() {
         setUpdateState({
-            openImageChooserModal: "",
-            originalAvatar: null,
-            originalCover: null
+            openImageChooserModal: "", originalAvatar: null, originalCover: null
         })
     }
 
@@ -167,10 +155,8 @@ const Profile = () => {
 
             setState(prev => {
                 return {
-                    ...prev,
-                    user: {
-                        ...prev.user,
-                        ...user
+                    ...prev, user: {
+                        ...prev.user, ...user
                     }
                 }
             })
@@ -193,16 +179,13 @@ const Profile = () => {
 
         if (!group) {
             const groupData = await dispatch(createGroupAction({
-                name: "",
-                type: "private",
-                participants: [state.user._id]
+                name: "", type: "private", participants: [state.user._id]
             }))
 
             if (groupData.payload) {
                 group = groupData.payload
             }
         }
-
 
         handleStartChat(state.user, group, dispatch, groups, function (err) {
             if (err) {
@@ -229,14 +212,18 @@ const Profile = () => {
 
     async function toggleFollowFriend(fiendId) {
         try {
-            if(state?.currentUserFollowing?.following){
+            if (state?.currentUserFollowing?.following === fiendId) {
                 // remove
-                const {data} = await apis.post("/follow/remove", {following: fiendId})
-                console.log(data)
+                const {data, status} = await apis.post("/follow/remove", {following: fiendId})
+                if (status === 201) {
+                    fetchFollowerInfo(fiendId)
+                }
             } else {
                 //add
-                const {data} = await apis.post("/follow/add", {following: fiendId})
-                console.log(data)
+                const {data, status} = await apis.post("/follow/add", {following: fiendId})
+                if (status === 201) {
+                    fetchFollowerInfo(fiendId)
+                }
             }
 
         } catch (ex) {
@@ -244,146 +231,139 @@ const Profile = () => {
         }
     }
 
-    return (
-        <>
+    console.log(state?.currentUserFollowing)
 
-            {auth?._id === userId && <ModalWithBackdrop
-                modalClass={`${updateProfile.openImageChooserModal === "cover" ? "profile-cover-picker" : "profile-avatar-picker"} card`}
-                onClose={handleCloseImageChoose}
-                isOpen={updateProfile.openImageChooserModal}>
+    return (<>
+
+        {auth?._id === userId && <ModalWithBackdrop
+            modalClass={`${updateProfile.openImageChooserModal === "cover" ? "profile-cover-picker" : "profile-avatar-picker"} card`}
+            onClose={handleCloseImageChoose}
+            isOpen={updateProfile.openImageChooserModal}>
+            <div>
                 <div>
-                    <div>
-                        <h1 className="color_h1 text-sm">{
-                            updateProfile.openImageChooserModal === "avatar"
-                                ? "Resize Avatar"
-                                : "Resize Cover Image"}
-                        </h1>
+                    <h1 className="color_h1 text-sm">{updateProfile.openImageChooserModal === "avatar" ? "Resize Avatar" : "Resize Cover Image"}
+                    </h1>
 
-                        {isLoading && <MoonLoader size={20}/>}
-                        <Info className="mt-2" status="error" message={errorMessage}/>
+                    {isLoading && <MoonLoader size={20}/>}
+                    <Info className="mt-2" status="error" message={errorMessage}/>
 
-                    </div>
+                </div>
 
 
-                    <div className="profile-image-editor relative mt-3">
-                        {updateProfile.originalAvatar &&
-                            <ImageEditor onCropComplete={onCropComplete} aspect={1}
-                                         src={updateProfile.originalAvatar}/>}
-                        {updateProfile.originalCover &&
-                            <ImageEditor onCropComplete={onCropComplete} aspect={13 / 5}
-                                         src={updateProfile.originalCover}/>}
-                    </div>
+                <div className="profile-image-editor relative mt-3">
+                    {updateProfile.originalAvatar && <ImageEditor onCropComplete={onCropComplete} aspect={1}
+                                                                  src={updateProfile.originalAvatar}/>}
+                    {updateProfile.originalCover && <ImageEditor onCropComplete={onCropComplete} aspect={13 / 5}
+                                                                 src={updateProfile.originalCover}/>}
+                </div>
 
-                    <div>
-                        <button onClick={handleUpload}
-                                className={`btn mt-2 ${isLoading ? "btn-disable" : "btn-primary"}`}>Upload
-                        </button>
+                <div>
+                    <button onClick={handleUpload}
+                            className={`btn mt-2 ${isLoading ? "btn-disable" : "btn-primary"}`}>Upload
+                    </button>
+                </div>
+            </div>
+        </ModalWithBackdrop>
+
+        }
+        <div className="profile-page">
+            {state.user && (<>
+                <div className="profile-header-bg">
+
+                    <div className="container-1200">
+
+                        <div className="cover-image relative"
+                             style={{backgroundImage: `url(${state.user.cover})`}}>
+
+                            {auth?._id === userId && <div className="circle rounded_circle choose-cover-btn"
+                                                          onClick={() => handleSelectImageChooser("cover")}>
+                                <BiCamera className="color_p"/>
+                            </div>}
+                        </div>
+
+                        {/*{state.user._id === auth._id && (*/}
+                        {/*    <div className="mt-2">*/}
+                        {/*        <Button onClick={handleUploadAvatar} className="btn text-xs font-medium">Change Photo*/}
+                        {/*        </Button>*/}
+                        {/*    </div>*/}
+                        {/*)}*/}
+
+                        <div className="profile-content">
+
+                            <div className="flex items-center relative">
+                                <Avatar
+                                    className="!h-40 !w-40 profile-image"
+                                    src={state.user?.avatar}
+                                    imgClass="!h-40 !w-40 !text-xs"
+                                    username={state.user.fullName}
+                                />
+
+                                {auth?._id === userId && <div onClick={() => handleSelectImageChooser("avatar")}
+                                                              className="circle rounded_circle choose-avatar-btn">
+                                    <BiCamera className="color_p"/>
+                                </div>}
+
+                                <div className="ml-2 md:ml-4">
+                                    <h4 className="text-2xl font-semibold color_h1">{state.user.fullName}</h4>
+                                    <span className="text-md font-medium color_h3">123 Friends</span>
+                                    <AvatarGroup imgClass="!w-10 !h-10" className="!w-10 !h-10" data={[{
+                                        avatar: auth.avatar,
+                                        fullName: "Rasel mahmud"
+                                    }, {avatar: auth.avatar, fullName: "Rasel mahmud"}, {
+                                        avatar: auth.avatar,
+                                        fullName: "Rasel mahmud"
+                                    }, {avatar: auth.avatar, fullName: "Rasel mahmud"}, {
+                                        avatar: auth.avatar,
+                                        fullName: "Rasel mahmud"
+                                    }, {avatar: auth.avatar, fullName: "Rasel mahmud"}, {
+                                        avatar: auth.avatar,
+                                        fullName: "Rasel mahmud"
+                                    }, {avatar: auth.avatar, fullName: "Rasel mahmud"}, {
+                                        avatar: auth.avatar,
+                                        fullName: "Rasel mahmud"
+                                    },]}/>
+                                </div>
+                            </div>
+
+                            <div className="flex items-enter justify-between ">
+                                <div className="profile-section-nav flex mt-2">
+                                    {Object.keys(sectionNavs).map((name) => (
+                                        <li key={name} onClick={() => handleSelectSection(name)}
+                                            className={["profile-section-item color_p", state.showSectionName === name ? "active" : ""].join(" ")}
+                                        >{name}</li>))}
+                                </div>
+                                <div className="flex items-center justify-between gap-x-2">
+                                    {isFriend(friends, state.user._id) ?
+                                        <Button onClick={() => handleToggleFriend()}
+                                                className="btn-primary">Unfriend</Button> :
+                                        <Button onClick={() => handleToggleFriend(true)}
+                                                className="btn-primary">Add Friend</Button>}
+                                    <Button onClick={handleOpenChatForSendMessage}
+                                            className="btn-primary">Message</Button>
+
+
+                                    <Button onClick={() => toggleFollowFriend(state.user._id)}
+                                            className="btn-primary">{state?.currentUserFollowing?.following ? "UnFollow" : "Follow"}</Button>
+
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
-            </ModalWithBackdrop>
 
-            }
-            <div className="profile-page">
-                {state.user && (
-                    <>
-                        <div className="profile-header-bg">
+                <div className="container-1200">
 
-                            <div className="container-1200">
+                    <div className="">
+                        {sectionNavs[state.showSectionName] && sectionNavs[state.showSectionName]({
+                            authId: auth._id, userId: state.user._id
+                        })}
+                    </div>
+                </div>
 
-                                <div className="cover-image relative"
-                                     style={{backgroundImage: `url(${state.user.cover})`}}>
-
-                                    {auth?._id === userId && <div className="circle rounded_circle choose-cover-btn"
-                                                                  onClick={() => handleSelectImageChooser("cover")}>
-                                        <BiCamera className="color_p"/>
-                                    </div>}
-                                </div>
-
-                                {/*{state.user._id === auth._id && (*/}
-                                {/*    <div className="mt-2">*/}
-                                {/*        <Button onClick={handleUploadAvatar} className="btn text-xs font-medium">Change Photo*/}
-                                {/*        </Button>*/}
-                                {/*    </div>*/}
-                                {/*)}*/}
-
-                                <div className="profile-content">
-
-                                    <div className="flex items-center relative">
-                                        <Avatar
-                                            className="!h-40 !w-40 profile-image"
-                                            src={state.user?.avatar}
-                                            imgClass="!h-40 !w-40 !text-xs"
-                                            username={state.user.fullName}
-                                        />
-
-                                        {auth?._id === userId && <div onClick={() => handleSelectImageChooser("avatar")}
-                                                                      className="circle rounded_circle choose-avatar-btn">
-                                            <BiCamera className="color_p"/>
-                                        </div>}
-
-                                        <div className="ml-2 md:ml-4">
-                                            <h4 className="text-2xl font-semibold color_h1">{state.user.fullName}</h4>
-                                            <span className="text-md font-medium color_h3">123 Friends</span>
-                                            <AvatarGroup imgClass="!w-10 !h-10" className="!w-10 !h-10" data={[
-                                                {avatar: auth.avatar, fullName: "Rasel mahmud"},
-                                                {avatar: auth.avatar, fullName: "Rasel mahmud"},
-                                                {avatar: auth.avatar, fullName: "Rasel mahmud"},
-                                                {avatar: auth.avatar, fullName: "Rasel mahmud"},
-                                                {avatar: auth.avatar, fullName: "Rasel mahmud"},
-                                                {avatar: auth.avatar, fullName: "Rasel mahmud"},
-                                                {avatar: auth.avatar, fullName: "Rasel mahmud"},
-                                                {avatar: auth.avatar, fullName: "Rasel mahmud"},
-                                                {avatar: auth.avatar, fullName: "Rasel mahmud"},
-                                            ]}/>
-                                        </div>
-                                    </div>
-
-                                    <div className="flex items-enter justify-between ">
-                                        <div className="profile-section-nav flex mt-2">
-                                            {Object.keys(sectionNavs).map((name) => (
-                                                <li key={name} onClick={() => handleSelectSection(name)}
-                                                    className={["profile-section-item color_p", state.showSectionName === name ? "active" : ""].join(" ")}
-                                                >{name}</li>
-                                            ))}
-                                        </div>
-                                        <div className="flex items-center justify-between gap-x-2">
-                                            {isFriend(friends, state.user._id)
-                                                ? <Button onClick={() => handleToggleFriend()}
-                                                          className="btn-primary">Unfriend</Button>
-                                                : <Button onClick={() => handleToggleFriend(true)}
-                                                          className="btn-primary">Add Friend</Button>
-                                            }
-                                            <Button onClick={handleOpenChatForSendMessage}
-                                                    className="btn-primary">Message</Button>
-
-
-                                            <Button onClick={() => toggleFollowFriend(state.user._id)}
-                                                    className="btn-primary">{state?.currentUserFollowing?.following ? "UnFollow" : "Follow"}</Button>
-
-                                            }
-
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="container-1200">
-
-                            <div className="">
-                                {sectionNavs[state.showSectionName] && sectionNavs[state.showSectionName]({
-                                    authId: auth._id,
-                                    userId: state.user._id
-                                })}
-                            </div>
-                        </div>
-
-                    </>
-                )}
-            </div>
-        </>
-    );
+            </>)}
+        </div>
+    </>);
 };
 
 export default Profile;

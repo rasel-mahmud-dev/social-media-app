@@ -10,6 +10,7 @@ import {fetchPeoplesAction} from "src/store/actions/userAction.js";
 
 const initialState = {
     feeds: [],
+    feedPageNumber: 1,
     peoples: [],
     userFeeds: {}
 };
@@ -84,9 +85,18 @@ export const feedSlice = createSlice({
 
         // fetch all feeds
         builder.addCase(fetchFeedsAction.fulfilled, (state, action) => {
-            const {isTimeline, feeds, userId} = action.payload
+            const {isTimeline, feeds, userId, pageNumber} = action.payload
+
+            // if no feed return
+            if(feeds.length === 0) return;
+
             if (isTimeline) {
-                state.feeds = feeds
+                if(pageNumber > 1){
+                    state.feeds = [...state.feeds, ...feeds]
+                } else {
+                    state.feeds = feeds
+                }
+                state.feedPageNumber = pageNumber
             } else {
                 state.userFeeds[userId] = feeds
             }
