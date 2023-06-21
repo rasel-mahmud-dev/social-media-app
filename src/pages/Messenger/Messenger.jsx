@@ -1,6 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {createGroupAction, fetchGroupByIdAction, getChatGroupMessagesAction} from "src/store/actions/chatAction.js";
+import {
+    createGroupAction,
+    fetchGroupByIdAction,
+    getChatGroupMessagesAction,
+    sendPrivateMessageAction
+} from "src/store/actions/chatAction.js";
 import Chats from "components/Chats/Chats.jsx";
 import findUserGroup from "src/store/utils/findUserGroup.js";
 import {openChatUserAction} from "src/store/slices/chatSlice.js";
@@ -10,6 +15,7 @@ import "./messenger.scss"
 import {FaEllipsisV} from "react-icons/fa";
 import MessageList from "components/MessageList/MessageList.jsx";
 import {useNavigate, useParams} from "react-router-dom";
+import Button from "components/Shared/Button/Button.jsx";
 
 
 const Messenger = () => {
@@ -105,6 +111,33 @@ const Messenger = () => {
         }))
     }
 
+
+    function sendMessage(message) {
+
+        if (!(openChatUser && openChatUser?.groupId)) return
+
+        dispatch(sendPrivateMessageAction({
+            message,
+            groupId: openChatUser.groupId
+        }))
+    }
+
+    function handleChange(e) {
+        if (e.keyCode === 13) {
+            sendMessage(e.target.value.trim())
+            e.target.value = ""
+        }
+    }
+
+    function handleSendMessage(e) {
+
+        e.preventDefault();
+        const message = e.target.message.value
+        sendMessage(message)
+        e.target.message.value = ""
+    }
+
+
     return (
         <div>
             <div className="messenger-page ">
@@ -142,9 +175,14 @@ const Messenger = () => {
                                 messages={messages && messages[openChatUser.groupId] && messages[openChatUser.groupId] || []}
                             />
 
-                            <div className="message-input">
-                                <textarea placeholder="Write message"></textarea>
-                            </div>
+                            <form onSubmit={handleSendMessage}>
+                                <div className="message-input gap-x-4">
+                                    <textarea onChange={handleChange} name="message"
+                                              placeholder="Write message"></textarea>
+                                    <Button type="submit" className="btn-primary whitespace-nowrap rounded-lg">Send
+                                        Message</Button>
+                                </div>
+                            </form>
 
                         </div>}
 

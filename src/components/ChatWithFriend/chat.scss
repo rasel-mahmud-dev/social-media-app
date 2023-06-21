@@ -17,6 +17,7 @@
 
   .chat-header{
     padding: 10px 5px;
+
     .quit-chat-btn{
       @include getUp(600px){
         display: none;
@@ -54,18 +55,18 @@
 }
 
 
-.message-list {
-  min-height: 200px;
-  max-height: 400px;
-  overflow-y: auto;
-
-  &::-webkit-scrollbar {
-    width: 3px;
-    background: transparent;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: rgba(44, 101, 236, 0.13);
-    border-radius: 10px;
-  }
-}
+//.message-list {
+//  min-height: 200px;
+//  max-height: 400px;
+//  overflow-y: auto;
+//
+//  &::-webkit-scrollbar {
+//    width: 3px;
+//    background: transparent;
+//  }
+//
+//  &::-webkit-scrollbar-thumb {
+//    background: rgba(44, 101, 236, 0.13);
+//    border-radius: 10px;
+//  }
+//}

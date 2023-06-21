@@ -67,13 +67,13 @@ const MessageList = (props) => {
 
     return (
         <div className={className}>
-            <div className="message-list p-4"
+            <div className="message-list "
                  ref={divRef}
                 // onWheel={(e) => handleFetchPreviousMessage(e, openChatUser)}
                  onScroll={(e) => handleFetchPreviousMessage(e, openChatUser)}>
                 <div>
                     {/**** user info ****/}
-                    <div className="flex flex-col items-center mb-4 border-b pb-4 border-light-10">
+                    <div className="flex flex-col items-center border-b pb-4 pt-2 dark:border-light-10 border-dark-30 dark:bg-dark-700 bg-light-900">
                         <Avatar
                             src={openChatUser.avatar}
                             username={openChatUser.fullName}
@@ -83,11 +83,13 @@ const MessageList = (props) => {
                         <h4 className="color_h2 mt-2">{openChatUser.fullName}</h4>
                         <p className="color_p mt-2 text-sm">Very beginning of chat</p>
                     </div>
-                    {messages.map((msg) => (
-                        <div className={`msg-item ${msg.senderId === auth?._id ? "your-msg" : ""}`} key={msg._id}>
-                            <li>{msg.message}</li>
-                        </div>
-                    ))}
+                    <div className="p-4">
+                        {messages.map((msg) => (
+                            <div className={`msg-item ${msg.senderId === auth?._id ? "your-msg" : ""}`} key={msg._id}>
+                                <li>{msg.message}</li>
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
         </div>

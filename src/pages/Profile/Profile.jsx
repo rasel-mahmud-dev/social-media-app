@@ -20,6 +20,8 @@ import Button from "components/Shared/Button/Button.jsx";
 import findUserGroup from "src/store/utils/findUserGroup.js";
 import handleStartChat from "src/store/utils/handleStartChat.js";
 import {createGroupAction} from "src/store/actions/chatAction.js";
+import api from "src/apis/index.js";
+import Loading from "components/Shared/Loading/Loading.jsx";
 
 
 const Profile = () => {
@@ -36,7 +38,8 @@ const Profile = () => {
         friends: [],
         user: null,
         isLoading: false,
-        showSectionName: "Posts"
+        showSectionName: "Posts",
+        currentUserFollowing: {}
     })
 
     const [updateProfile, setUpdateState] = useCustomReducer({
@@ -53,8 +56,21 @@ const Profile = () => {
             apis.get("/users/profile/" + userId).then(({status, data}) => {
                 if (status === 200) {
                     setState(data)
+
+                    // if view current logged user profile
+                    if (auth._id === data.user._id) return;
+
+                    // check the following status with current logged user.
+                    apis.get("/follow/status/?userId=" + userId).then(({status, data}) => {
+                        if (status === 200 && data?.following) {
+                            setState({
+                                currentUserFollowing: data.following
+                            })
+                        }
+                    }).catch(() => {
+                    })
                 }
-            }).catch(ex => {
+            }).catch(() => {
             })
         }
     }, [userId])
@@ -211,6 +227,23 @@ const Profile = () => {
         alert("Friend toggle not implemented  yet")
     }
 
+    async function toggleFollowFriend(fiendId) {
+        try {
+            if(state?.currentUserFollowing?.following){
+                // remove
+                const {data} = await apis.post("/follow/remove", {following: fiendId})
+                console.log(data)
+            } else {
+                //add
+                const {data} = await apis.post("/follow/add", {following: fiendId})
+                console.log(data)
+            }
+
+        } catch (ex) {
+            console.log(ex)
+        }
+    }
+
     return (
         <>
 
@@ -315,11 +348,20 @@ const Profile = () => {
                                         </div>
                                         <div className="flex items-center justify-between gap-x-2">
                                             {isFriend(friends, state.user._id)
-                                                ? <Button onClick={()=>handleToggleFriend()} className="btn-primary">Unfriend</Button>
-                                                : <Button onClick={()=>handleToggleFriend(true)} className="btn-primary">Add Friend</Button>
+                                                ? <Button onClick={() => handleToggleFriend()}
+                                                          className="btn-primary">Unfriend</Button>
+                                                : <Button onClick={() => handleToggleFriend(true)}
+                                                          className="btn-primary">Add Friend</Button>
                                             }
                                             <Button onClick={handleOpenChatForSendMessage}
                                                     className="btn-primary">Message</Button>
+
+
+                                            <Button onClick={() => toggleFollowFriend(state.user._id)}
+                                                    className="btn-primary">{state?.currentUserFollowing?.following ? "UnFollow" : "Follow"}</Button>
+
+                                            }
+
                                         </div>
                                     </div>
 

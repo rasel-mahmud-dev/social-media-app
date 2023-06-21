@@ -16,7 +16,7 @@ const Chat = ({openChatUser, messages, className = "", auth, handleClose, onSend
 
     function handleSendMessage(e){
         e.preventDefault();
-        let message = e.target.message.value
+        const message = e.target.message.value
         onSendMessage(message)
         e.form.clear()
     }
