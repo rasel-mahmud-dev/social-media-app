@@ -7,6 +7,7 @@ import {
     removeFriendAction, updateProfileAction
 } from "src/store/actions/userAction.js";
 import {getStoriesAction} from "src/store/actions/storyAction.js";
+import {fetchMyGroupsAction} from "src/store/actions/groupAction.js";
 
 
 const initialState = {
@@ -16,9 +17,8 @@ const initialState = {
     friends: [],
     pendingFriends: [],
     stories: [],
-    media: {
-
-    }
+    media: {},
+    groups: []
 };
 
 export const authSlice = createSlice({
@@ -88,7 +88,7 @@ export const authSlice = createSlice({
         // handle store all media user
         builder.addCase(fetchProfileMediaAction.fulfilled, (state, action) => {
             if (action.payload && action.payload.userId) {
-                state.media[action.payload.userId]  = action.payload.media
+                state.media[action.payload.userId] = action.payload.media
             }
         })
 
@@ -128,6 +128,13 @@ export const authSlice = createSlice({
                     ...state.auth,
                     ...action.payload
                 }
+            }
+        })
+
+        // fetch my groups
+        builder.addCase(fetchMyGroupsAction.fulfilled, (state, action) => {
+            if (action.payload) {
+                state.groups = action.payload
             }
         })
     }

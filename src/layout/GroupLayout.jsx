@@ -11,6 +11,8 @@ import {TiTimes} from "react-icons/ti";
 import Avatar from "components/Shared/Avatar/Avatar.jsx";
 import chooseImage from "src/utils/chooseImage.js";
 import resizeImageByMaxWidth from "src/utils/resizeImage.js";
+import {createGroupAction, fetchMyGroupsAction} from "src/store/actions/groupAction.js";
+import staticImage from "src/utils/staticImage.js";
 
 
 const GroupLayout = ({children}) => {
@@ -22,6 +24,10 @@ const GroupLayout = ({children}) => {
     const location = useLocation()
 
     const navigate = useNavigate()
+
+    useEffect(()=>{
+        dispatch(fetchMyGroupsAction())
+    }, [])
 
     useEffect(() => {
         if (location.pathname === "/groups/create") {
@@ -39,15 +45,17 @@ const GroupLayout = ({children}) => {
     }, [location.pathname])
 
 
-    const {rooms, openHomeChatsSidebar, openChatUser} = useSelector(state => state.chatState)
     const {openSidebar} = useSelector(state => state.appState)
-    const {auth} = useSelector(state => state.authState)
+    const {auth, groups} = useSelector(state => state.authState)
 
 
     function handleCreateGroup() {
-        dispatch(createGroupAction({
+        const payload = new FormData()
+        payload.append("name", state.name)
+        payload.append("description", state?.description)
+        payload.append("coverPhoto", state.groupCoverPhoto.blob, "group-cover")
 
-        }))
+        dispatch(createGroupAction(payload))
     }
 
     async function handleChooseGroupCoverPhoto(){
@@ -117,8 +125,8 @@ const GroupLayout = ({children}) => {
                                 </div>
 
                                 <div>
-                                    <Link to="/groups">
-                                        <Button onClick={()=>navigate("/groups/create")} className="btn-primary w-full block">Create
+                                    <Link to="/groups/create">
+                                        <Button  className="btn-primary w-full block">Create
                                             Group</Button>
                                     </Link>
                                 </div>
@@ -127,6 +135,16 @@ const GroupLayout = ({children}) => {
                                     <h4 className="font-medium color_h2 text-base">Groups you've joined</h4>
                                     <span className="text-primary text-xs">See all</span>
                                 </div>
+
+                                <div className="mt-6">
+                                    {groups.map(group=>(
+                                        <div key={group._id} className="flex items-center gap-x-2 my-2">
+                                            <Avatar className="!w-12 !h-12" imgClass="object-cover !rounded-lg !w-12 !h-12" src={staticImage(group?.coverPhoto)} />
+                                            <h2 className="color_h2 text-sm">{group.name}</h2>
+                                        </div>
+                                    ))}
+                                </div>
+
                             </div>
                         )
 
