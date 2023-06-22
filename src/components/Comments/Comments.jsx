@@ -8,29 +8,28 @@ const Comments = ({comments = [], handleDeleteComment}) => {
 
     return (
         <div>
-            {comments.map(comment=>(
+            {comments.map(comment => (
                 <div key={comment._id} className="mb-4">
                     <div className="flex items-center gap-x-2 mt-2">
-                        <Avatar imgClass="text-xs !w-9 !h-9" className="!w-9 !h-9" username="ER SDF" src={comment?.author?.avatar}/>
-                        <div>
-                            <p className="text-sm" >{comment?.author?.fullName}</p>
-                            <p className="text-xs text-neutral-400" >{new Date(comment?.createdAt).toDateString()}</p>
+                        <Avatar imgClass="text-xs !w-6 !h-6" className="!w-6 !h-6" username="ER SDF"
+                                src={comment?.author?.avatar}/>
+                        <div >
+                            <p className="text-sm color_h2">{comment?.author?.fullName}</p>
+                            <p className="text-xs color_mute">{new Date(comment?.createdAt).toDateString()}</p>
                         </div>
                     </div>
 
-                    <div className="ml-10">
+                    <div className="ml-0 mt-2">
+                        <p className="color_p text-sm whitespace-pre-line">{comment.comment}</p>
 
-
-                    <p className=" whitespace-pre-line">{comment.comment}</p>
-
-                    <div className="flex items-center gap-x-2 mt-2">
-                        <li className="list-none ">
-                            <img src="/icons/like.svg" className="w-4" alt=""/>
-                        </li>
-                        <li onClick={()=>handleDeleteComment(comment._id)} className="list-none">
-                            <BsFillTrash2Fill className="text-sm" />
-                        </li>
-                    </div>
+                        <div className="flex items-center gap-x-2 mt-2">
+                            {/*<li className="list-none ">*/}
+                            {/*    <img src="/icons/like.svg" className="w-4" alt=""/>*/}
+                            {/*</li>*/}
+                            {/*<li onClick={() => handleDeleteComment(comment._id)} className="list-none">*/}
+                            {/*    <BsFillTrash2Fill className="color_p text-sm"/>*/}
+                            {/*</li>*/}
+                        </div>
 
                     </div>
                 </div>

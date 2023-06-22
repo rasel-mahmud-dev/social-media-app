@@ -78,7 +78,6 @@ const FeedCard = ({feed, authId, dispatch}) => {
 
     function isLiked(likes) {
         if(likes && authId){
-            console.log(likes, authId)
             return likes.findIndex(l=>l.userId === authId) !== -1
         }
     }
@@ -145,7 +144,7 @@ const FeedCard = ({feed, authId, dispatch}) => {
                     </div>
 
 
-                    <div className="px-4 pb-6">
+                    <div className="px-4 pb-4">
                         <div className="flex items-center justify-between mt-4 dark:text-dark-50 text-dark-850">
                             <li className="list-none flex items-center gap-x-1">
                                 <img src="/icons/like.svg" className="w-5" alt=""/>
@@ -153,7 +152,7 @@ const FeedCard = ({feed, authId, dispatch}) => {
                             </li>
                             <li className="list-none flex items-center gap-x-1">
                                 <BiComment/>
-                                <span></span>
+                                <span>{feed.totalComment ?? 0}</span>
                             </li>
                         </div>
 
@@ -177,9 +176,15 @@ const FeedCard = ({feed, authId, dispatch}) => {
                             </li>
                         </div>
 
+                        {  !state.isShowComment && feed.comments &&  <div>
+                            <h4 className="cursor-pointer text-xs mt-4 color_p" onClick={handleShowComment}>View All Comments</h4>
+                            <Comments handleDeleteComment={handleDeleteComment} comments={[feed.comments]} />
+                        </div>}
+
                         {
                             state.isShowComment && (
                                 <div>
+                                    <h4 className="mt-4 color_p text-xs">Comments</h4>
                                     <Comments handleDeleteComment={handleDeleteComment} comments={state.comments} />
                                     <AddComment handleAddComment={handleAddComment} feedId={feed._id}/>
                                 </div>

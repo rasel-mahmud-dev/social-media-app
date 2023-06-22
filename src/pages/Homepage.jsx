@@ -24,7 +24,8 @@ const Homepage = () => {
             query: "?pageNumber=" + 1
         }))
         dispatch(fetchPeoplesAction())
-    }, [])
+    }, [dispatch])
+
 
     function handleLoadMoreFeed({pageNumber}) {
         dispatch(fetchFeedsAction({

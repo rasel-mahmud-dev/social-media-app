@@ -9,14 +9,12 @@ const InfiniteScroll = ({onLoadMore, pageNumber, children}) => {
         pageNumberRef.current = pageNumber;
     }, [pageNumber]);
 
-
     useEffect(() => {
         window.addEventListener("scroll", handleScroll)
-
         return () => {
             window.removeEventListener("scroll", handleScroll)
         }
-    }, [onLoadMore])
+    }, [handleScroll, onLoadMore])
 
     function handleScroll() {
         if (

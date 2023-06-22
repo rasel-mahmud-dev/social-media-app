@@ -2,6 +2,13 @@
 
 .quick-chat-popup {
   width: 350px;
+
+
+  .message-list{
+    padding: 10px;
+    height: calc(60vh - (var(--header-height) + 145px));
+    overflow-y: auto;
+  }
 }
 
 

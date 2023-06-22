@@ -20,8 +20,6 @@ import Button from "components/Shared/Button/Button.jsx";
 import findUserGroup from "src/store/utils/findUserGroup.js";
 import handleStartChat from "src/store/utils/handleStartChat.js";
 import {createGroupAction} from "src/store/actions/chatAction.js";
-import api from "src/apis/index.js";
-import Loading from "components/Shared/Loading/Loading.jsx";
 
 
 const Profile = () => {
@@ -45,7 +43,7 @@ const Profile = () => {
     // check the following status with current logged user.
     function fetchFollowerInfo(userId) {
         apis.get("/follow/status/?userId=" + userId).then(({status, data}) => {
-            if (status === 200 && data?.following) {
+            if (status === 200) {
                 setState({
                     currentUserFollowing: data.following
                 })
