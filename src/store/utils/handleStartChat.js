@@ -1,9 +1,10 @@
-import findUserGroup from "src/store/utils/findUserGroup.js";
-import {createGroupAction} from "src/store/actions/chatAction.js";
+import findUserRoom from "src/store/utils/findUserRoom.js";
+
 import {openChatUserAction, toggleOpenHomeChatsSidebar} from "src/store/slices/chatSlice.js";
+import {createRoomAction} from "src/store/actions/chatAction.js";
 
 
-async function handleStartChat(friend, group, dispatch, groups, cb) {
+async function handleStartChat(friend, room, dispatch, roooms, cb) {
 
     if(!(friend && friend._id)) return  cb("Something were wrong")
 
@@ -16,11 +17,11 @@ async function handleStartChat(friend, group, dispatch, groups, cb) {
         // })).unwrap()
 
 
-        if (!group) {
-            group = findUserGroup(groups, friend._id)
-            if (!group) {
+        if (!room) {
+            room = findUserRoom(roooms, friend._id)
+            if (!room) {
                 // create a new group
-                group = await dispatch(createGroupAction({
+                room = await dispatch(createRoomAction({
                     name: "",
                     type: "private",
                     participants: [friend._id]
@@ -32,14 +33,14 @@ async function handleStartChat(friend, group, dispatch, groups, cb) {
             dispatch(toggleOpenHomeChatsSidebar())
         }
 
-        if(!group){
+        if(!room){
             return cb("Something were wrong")
         }
 
         dispatch(openChatUserAction({
             ...friend,
-            groupId: group._id,
-            group
+            roomId: room._id,
+            room
         }))
 
         cb()

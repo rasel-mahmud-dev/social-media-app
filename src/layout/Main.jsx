@@ -12,7 +12,7 @@ import {backend} from "src/apis/index.js";
 import {getNewMessageAction} from "src/store/slices/chatSlice.js";
 import Navigation from "components/Header/Navigation.jsx";
 
-import {fetchGroupsAction} from "src/store/actions/chatAction.js";
+import {fetchRoomsAction} from "src/store/actions/chatAction.js";
 import ChatWithFriend from "components/ChatWithFriend/ChatWithFriend.jsx";
 import {fetchAuthFriendsAction} from "src/store/actions/userAction.js";
 
@@ -33,7 +33,7 @@ const Main = () => {
 
     useEffect(() => {
         dispatch(fetchCurrentAuthAction())
-        dispatch(fetchGroupsAction())
+        dispatch(fetchRoomsAction())
         dispatch(fetchAuthFriendsAction())
     }, []);
 

@@ -17,9 +17,9 @@ import {updateProfileAction} from "src/store/actions/userAction.js";
 import {MoonLoader} from "react-spinners";
 import Info from "components/Shared/Info/Info.jsx";
 import Button from "components/Shared/Button/Button.jsx";
-import findUserGroup from "src/store/utils/findUserGroup.js";
+import findUserRoom from "src/store/utils/findUserRoom.js";
 import handleStartChat from "src/store/utils/handleStartChat.js";
-import {createGroupAction} from "src/store/actions/chatAction.js";
+import {createRoomAction} from "src/store/actions/chatAction.js";
 
 
 const Profile = () => {
@@ -173,10 +173,10 @@ const Profile = () => {
         if (!state?.user) return;
 
         // check a group if a group not found, then create new one.
-        let group = findUserGroup(groups, state.user._id)
+        let group = findUserRoom(groups, state.user._id)
 
         if (!group) {
-            const groupData = await dispatch(createGroupAction({
+            const groupData = await dispatch(createRoomAction({
                 name: "", type: "private", participants: [state.user._id]
             }))
 

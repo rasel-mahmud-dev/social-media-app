@@ -3,10 +3,10 @@ import apis from "../../apis";
 import errorResponse from "src/utils/errorResponse.js";
 
 
-// fetch groups action
-export const fetchGroupsAction = createAsyncThunk("fetch-chat-groups", async (payload, thunkAPI) => {
+// fetch rooms action
+export const fetchRoomsAction = createAsyncThunk("fetch-chat-rooms", async (payload, thunkAPI) => {
     try {
-        let {status, data} = await apis.get("chat/groups")
+        let {status, data} = await apis.get("chat/rooms")
         if (status === 200) {
             return data
         }
@@ -17,12 +17,12 @@ export const fetchGroupsAction = createAsyncThunk("fetch-chat-groups", async (pa
 })
 
 
-// fetch group by groupId action
-export const fetchGroupByIdAction = createAsyncThunk("fetch-chat-group", async (groupId, thunkAPI) => {
+// fetch room by roomId action
+export const fetchRoomByIdAction = createAsyncThunk("fetch-chat-room", async (roomId, thunkAPI) => {
     try {
-        let {status, data} = await apis.get("chat/group/" + groupId)
+        let {status, data} = await apis.get("chat/room/" + roomId)
         if (status === 200) {
-            return data?.group
+            return data?.room
         }
     } catch (ex) {
         // send error message with reject type in reducer
@@ -31,12 +31,12 @@ export const fetchGroupByIdAction = createAsyncThunk("fetch-chat-group", async (
 })
 
 
-// fetch groups action
-export const createGroupAction = createAsyncThunk("create-group", async (payload, thunkAPI) => {
+// fetch rooms action
+export const createRoomAction = createAsyncThunk("create-room", async (payload, thunkAPI) => {
     try {
-        let {status, data} = await apis.post("chat/group", payload)
+        let {status, data} = await apis.post("chat/room", payload)
         if (status === 201) {
-            return data.group
+            return data.room
         }
     } catch (ex) {
         // send error message with reject type in reducer
@@ -59,27 +59,27 @@ export const fetchChatMessage = createAsyncThunk("fetch-chat-message", async (pa
 })
 
 
-// get group message for detail chat like messenger or quick popup chat.
-export const getChatGroupMessagesAction = createAsyncThunk("/chatState/get-group-messages", async (payload, thunkAPI) => {
+// get room message for detail chat like messenger or quick popup chat.
+export const getChatRoomMessagesAction = createAsyncThunk("/chatState/get-room-messages", async (payload, thunkAPI) => {
     try {
 
         const {
-            groupId,
+            roomId,
             perPage = 10,
             pageNumber = 1,
             orderBy = "createdAt",
             orderDirection = "desc",
         } = payload
 
-        if (!groupId) return thunkAPI.rejectWithValue("Invalid chat group")
+        if (!roomId) return thunkAPI.rejectWithValue("Invalid chat room")
 
-        let queryParams = `?groupId=${groupId}&perPage=${perPage}&pageNumber=${pageNumber}&orderBy=${orderBy}&orderDirection=${orderDirection}`
+        let queryParams = `?roomId=${roomId}&perPage=${perPage}&pageNumber=${pageNumber}&orderBy=${orderBy}&orderDirection=${orderDirection}`
 
-        let {status, data} = await apis.get("chat/group/messages" + queryParams)
+        let {status, data} = await apis.get("chat/room/messages" + queryParams)
         if (status === 200) {
             return {
                 messages: data.messages,
-                groupId: groupId,
+                roomId: roomId,
                 perPage: perPage,
                 pageNumber: pageNumber,
             }
@@ -92,12 +92,12 @@ export const getChatGroupMessagesAction = createAsyncThunk("/chatState/get-group
 
 
 // fetch private message action
-export const fetchPrivateMessageAction = createAsyncThunk("get-group-messages", async (payload, thunkAPI) => {
+export const fetchPrivateMessageAction = createAsyncThunk("get-room-messages", async (payload, thunkAPI) => {
     try {
-        const {groupId} = payload
-        let {status, data} = await apis.get("/chat/messages/" + groupId)
+        const {roomId} = payload
+        let {status, data} = await apis.get("/chat/messages/" + roomId)
         if (status === 200) {
-            return {groupId: groupId, messages: data.messages}
+            return {roomId: roomId, messages: data.messages}
         }
     } catch (ex) {
         // send error message with reject type in reducer
@@ -120,5 +120,5 @@ export const sendPrivateMessageAction = createAsyncThunk("send-private-message",
 })
 
 
-export class getChatGroupMessages {
+export class getChatRoomMessages {
 }

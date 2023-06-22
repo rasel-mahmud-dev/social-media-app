@@ -1,13 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {
-    createGroupAction,
-    fetchGroupByIdAction,
-    getChatGroupMessagesAction,
+    createRoomAction,
+    fetchRoomByIdAction,
+    getChatRoomMessagesAction,
     sendPrivateMessageAction
 } from "src/store/actions/chatAction.js";
 import Chats from "components/Chats/Chats.jsx";
-import findUserGroup from "src/store/utils/findUserGroup.js";
+import findUserRoom from "src/store/utils/findUserRoom.js";
 import {openChatUserAction} from "src/store/slices/chatSlice.js";
 import Avatar from "components/Shared/Avatar/Avatar.jsx";
 
@@ -20,11 +20,11 @@ import Button from "components/Shared/Button/Button.jsx";
 
 const Messenger = () => {
 
-    const {messages, groups, openChatUser, messagePaginate} = useSelector(state => state.chatState)
+    const {messages, rooms, openChatUser, messagePaginate} = useSelector(state => state.chatState)
     const {auth} = useSelector(state => state.authState)
 
     const navigate = useNavigate()
-    const {groupId} = useParams()
+    const {roomId} = useParams()
 
     const [isMobile, setMobile] = useState(false)
     const dispatch = useDispatch()
@@ -36,74 +36,74 @@ const Messenger = () => {
     }, []);
 
 
-    function handleOpenPrivateGroupChat(group) {
-        if (group) {
-            let friend = group.participants.filter(participant => participant._id !== auth._id)
+    function handleOpenPrivateRoomChat(room) {
+        if (room) {
+            let friend = room.participants.filter(participant => participant._id !== auth._id)
             if (friend.length === 1) {
                 friend = friend[0]
             }
             dispatch(openChatUserAction({
                 ...friend,
-                groupId: group._id,
+                roomId: room._id,
                 where: "messenger",
-                group
+                room
             }))
 
-            fetchChatGroupMessages(group._id)
+            fetchChatRoomMessages(room._id)
         }
     }
 
 
-    // fetch group by group id
+    // fetch room by room id
     useEffect(() => {
-        if (groupId && auth) {
-            if (groups) {
-                let group = groups.find(group => group._id === groupId)
-                handleOpenPrivateGroupChat(group)
+        if (roomId && auth) {
+            if (rooms) {
+                let room = rooms.find(room => room._id === roomId)
+                handleOpenPrivateRoomChat(room)
             } else {
-                dispatch(fetchGroupByIdAction(groupId)).unwrap().then((group) => {
-                    handleOpenPrivateGroupChat(group)
+                dispatch(fetchRoomByIdAction(roomId)).unwrap().then((room) => {
+                    handleOpenPrivateRoomChat(room)
                 }).catch(err => {
                     console.log(err)
                 })
             }
         }
-    }, [groupId, auth, groups])
+    }, [roomId, auth, rooms])
 
     // Scroll to the newly calculated position when the items state changes
 
 
-    async function handleStartChat(friend, group) {
-        if (!group) {
-            group = findUserGroup(groups, friend._id)
-            if (!group) {
-                const groupData = await dispatch(createGroupAction({
+    async function handleStartChat(friend, room) {
+        if (!room) {
+            room = findUserRoom(rooms, friend._id)
+            if (!room) {
+                const roomData = await dispatch(createRoomAction({
                     name: "",
                     type: "private",
                     participants: [friend._id]
                 }))
 
-                if (groupData.payload) {
-                    group = groupData.payload
+                if (roomData.payload) {
+                    room = roomData.payload
                 }
             }
         }
 
-        navigate("/messenger/" + group._id)
+        navigate("/messenger/" + room._id)
 
         dispatch(openChatUserAction({
             ...friend,
-            groupId: group._id,
+            roomId: room._id,
             where: "messenger",
-            group
+            room
         }))
 
-        fetchChatGroupMessages(group._id)
+        fetchChatRoomMessages(room._id)
     }
 
-    function fetchChatGroupMessages(groupId) {
-        dispatch(getChatGroupMessagesAction({
-            groupId,
+    function fetchChatRoomMessages(roomId) {
+        dispatch(getChatRoomMessagesAction({
+            roomId,
             perPage: 20,
             pageNumber: 1,
             orderBy: "createdAt",
@@ -114,11 +114,11 @@ const Messenger = () => {
 
     function sendMessage(message) {
 
-        if (!(openChatUser && openChatUser?.groupId)) return
+        if (!(openChatUser && openChatUser?.roomId)) return
 
         dispatch(sendPrivateMessageAction({
             message,
-            groupId: openChatUser.groupId
+            roomId: openChatUser.roomId
         }))
     }
 
@@ -172,7 +172,7 @@ const Messenger = () => {
                                 className="messenger-message-list"
                                 auth={auth}
                                 openChatUser={openChatUser}
-                                messages={messages && messages[openChatUser.groupId] && messages[openChatUser.groupId] || []}
+                                messages={messages && messages[openChatUser.roomId] && messages[openChatUser.roomId] || []}
                             />
 
                             <form onSubmit={handleSendMessage}>

@@ -5,10 +5,10 @@ import "./chat-with-friend.scss"
 
 
 import {
-    fetchPrivateMessageAction,
-    getChatGroupMessagesAction,
+    getChatRoomMessagesAction,
     sendPrivateMessageAction
 } from "src/store/actions/chatAction.js";
+
 import Chat from "components/ChatWithFriend/Chat.jsx";
 
 const ChatWithFriend = ({openChatUser, auth, friend}) => {
@@ -19,17 +19,17 @@ const ChatWithFriend = ({openChatUser, auth, friend}) => {
 
     function handleSendMessage(message) {
 
-         if (!(openChatUser && openChatUser?.groupId)) return
+        if (!(openChatUser && openChatUser?.roomId)) return
 
         dispatch(sendPrivateMessageAction({
             message,
-            groupId: openChatUser.groupId
+            roomId: openChatUser.roomId
         }))
     }
 
     useEffect(() => {
-        if (openChatUser.groupId) {
-            dispatch(getChatGroupMessagesAction({groupId: openChatUser.groupId}))
+        if (openChatUser.roomId) {
+            dispatch(getChatRoomMessagesAction({roomId: openChatUser.roomId}))
         }
     }, [openChatUser])
 

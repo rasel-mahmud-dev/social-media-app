@@ -1,25 +1,28 @@
 import React from 'react';
-import HomeLayout from "layout/HomeLayout.jsx";
 
-const Groups = () => {
-
-
+const GroupHome = () => {
     return (
-        <HomeLayout>
+        <div>
 
             <div className="card">
-
+                       sdasd
                 <div className="card-meta">
                     <h4>My Groups</h4>
                 </div>
 
                 <div className="mt-6">
                     <p>This features will be implemented soon</p>
+
+
+
+                    Groups you've joined
+                    Recent activity
+
                 </div>
 
             </div>
-        </HomeLayout>
+        </div>
     );
 };
 
-export default Groups;
+export default GroupHome;

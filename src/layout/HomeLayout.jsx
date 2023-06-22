@@ -19,15 +19,8 @@ import marketIcon from "src/assets/icon/market.png"
 import bookmarkIcon from "src/assets/icon/bookmark.png"
 import clockIcon from "src/assets/icon/time.png"
 import messengerIcon from "src/assets/icon/messenger.png"
-import {createGroupAction, getChatGroupMessagesAction} from "src/store/actions/chatAction.js";
-import findUserGroup from "src/store/utils/findUserGroup.js";
-import {openChatUserAction, toggleOpenHomeChatsSidebar} from "src/store/slices/chatSlice.js";
-import Chats from "components/Chats/Chats.jsx";
-import {FaEllipsisV} from "react-icons/fa";
-import {CgExpand} from "react-icons/cg";
-import {BiEdit} from "react-icons/bi";
+import { getChatRoomMessagesAction} from "src/store/actions/chatAction.js";
 import handleStartChat from "src/store/utils/handleStartChat.js";
-
 
 const HomeLayout = ({children}) => {
 
@@ -40,7 +33,7 @@ const HomeLayout = ({children}) => {
     }, [])
 
     const {friends, pendingFriends, auth} = useSelector(state => state.authState)
-    const {groups, openHomeChatsSidebar, openChatUser} = useSelector(state => state.chatState)
+    const {rooms, openHomeChatsSidebar, openChatUser} = useSelector(state => state.chatState)
     const {openSidebar} = useSelector(state => state.appState)
 
 
@@ -60,16 +53,16 @@ const HomeLayout = ({children}) => {
     // create a group or fetch group
 
 
-    useEffect(()=>{
-        if(openChatUser && openChatUser.groupId){
-            fetchChatGroupMessages(openChatUser.groupId)
+    useEffect(() => {
+        if (openChatUser && openChatUser.groupId) {
+            fetchChatRoomMessages(openChatUser.groupId)
         }
     }, [openChatUser])
 
 
-    function fetchChatGroupMessages(groupId) {
-        dispatch(getChatGroupMessagesAction({
-            groupId,
+    function fetchChatRoomMessages(roomId) {
+        dispatch(getChatRoomMessagesAction({
+            roomId,
             perPage: 20,
             pageNumber: 1,
             orderBy: "createdAt",
@@ -79,13 +72,14 @@ const HomeLayout = ({children}) => {
 
     // this function create a group with this friend
     // if there are a not exist group with this two user id in participants array
-    function handleStartChatHandler(friend, group){
-        handleStartChat(friend, group, dispatch, groups, function (err){
-            if(err){
+    function handleStartChatHandler(friend, room) {
+        handleStartChat(friend, room, dispatch, rooms, function (err) {
+            if (err) {
                 alert(err)
             }
         })
     }
+
     return (
         <div>
             <div className="flex justify-between ">
@@ -181,9 +175,6 @@ const HomeLayout = ({children}) => {
                     {/*<PendingFriendRequestCard className="mt-4" auth={auth} pendingFriends={pendingFriends} />*/}
 
                 </Sidebar>
-
-
-
 
 
             </div>

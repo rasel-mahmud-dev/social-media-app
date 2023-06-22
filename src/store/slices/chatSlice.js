@@ -1,9 +1,9 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {
-    createGroupAction,
-    fetchGroupsAction,
+    createRoomAction,
+    fetchRoomsAction,
     fetchPrivateMessageAction,
-    getChatGroupMessagesAction,
+    getChatRoomMessagesAction,
     sendPrivateMessageAction
 } from "src/store/actions/chatAction.js";
 
@@ -11,20 +11,20 @@ import {
 const initialState = {
     auth: null,
     openHomeChatsSidebar: false,
-    openChatUser: null,  // {...friend: {}, group: {}}
-    groups: [],
-    messages: {},           // { [groupId: string]: [] }
-    messagePaginate: {}     // { [groupId: string]: { perPage: number, pageNumber: number, totalItem?: number }
+    openChatUser: null,  // {...friend: {}, room: {}}
+    rooms: [],
+    messages: {},           // { [roomId: string]: [] }
+    messagePaginate: {}     // { [roomId: string]: { perPage: number, pageNumber: number, totalItem?: number }
 };
 
 function addNewMessage(state, action) {
-    if (!(action.payload && action.payload.groupId)) return;
-    const {groupId} = action.payload
+    if (!(action.payload && action.payload.roomId)) return;
+    const {roomId} = action.payload
 
     state.messages = {
         ...state.messages,
-        [groupId]: [
-            ...(state.messages[groupId] || []),
+        [roomId]: [
+            ...(state.messages[roomId] || []),
             action.payload
         ]
     }
@@ -53,14 +53,14 @@ export const chatSlice = createSlice({
     extraReducers: (builder) => {
 
         builder.addCase(fetchPrivateMessageAction.fulfilled, (state, action) => {
-            const {messages, groupId} = action.payload
+            const {messages, roomId} = action.payload
             state.messages = {
                 ...state.messages,
-                [groupId]: messages || []
+                [roomId]: messages || []
             }
         })
 
-        builder.addCase(fetchGroupsAction.fulfilled, (state, action) => {
+        builder.addCase(fetchRoomsAction.fulfilled, (state, action) => {
             // const {messages, channelName} = action.payload
             // state.messages = {
             //     ...state.messages,
@@ -69,12 +69,12 @@ export const chatSlice = createSlice({
             //
             // const {messages, channelName} = action.payload
 
-            state.groups = action.payload.groups || []
+            state.rooms = action.payload.rooms || []
         })
 
-        builder.addCase(createGroupAction.fulfilled, (state, action) => {
+        builder.addCase(createRoomAction.fulfilled, (state, action) => {
             if (action.payload) {
-                state.groups.push(action.payload)
+                state.rooms.push(action.payload)
             }
         })
 
@@ -84,32 +84,32 @@ export const chatSlice = createSlice({
             addNewMessage(state, action)
         })
 
-        // get group message for detail chat like messenger or quick popup chat.
-        builder.addCase(getChatGroupMessagesAction.fulfilled, (state, action) => {
+        // get room message for detail chat like messenger or quick popup chat.
+        builder.addCase(getChatRoomMessagesAction.fulfilled, (state, action) => {
             // addNewMessage(state, action)
 
-            const {groupId, messages, perPage, pageNumber} = action.payload
+            const {roomId, messages, perPage, pageNumber} = action.payload
 
-            if(!groupId) return;
+            if(!roomId) return;
 
             if (messages && messages.length > 0) {
-                let paginateState = state.messagePaginate[groupId]
+                let paginateState = state.messagePaginate[roomId]
                 if (paginateState) {
                     paginateState.pageNumber = pageNumber ? pageNumber : 1
                     paginateState.perPage = perPage ? perPage : 10
                 } else {
-                    state.messagePaginate[groupId] = {
+                    state.messagePaginate[roomId] = {
                         pageNumber: pageNumber ? pageNumber : 1,
                         perPage: perPage ? perPage : 10
                     }
                 }
 
-                if(state.messages[groupId] && state.messages[groupId].length > 0) return;
+                if(state.messages[roomId] && state.messages[roomId].length > 0) return;
 
                 state.messages = {
-                    [groupId]: [
+                    [roomId]: [
                         ...messages,
-                        ...(state.messages[groupId] || []),
+                        ...(state.messages[roomId] || []),
                     ]
                 }
             }

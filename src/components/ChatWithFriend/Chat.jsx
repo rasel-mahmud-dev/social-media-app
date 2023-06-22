@@ -7,14 +7,14 @@ import MessageList from "components/MessageList/MessageList.jsx";
 
 const Chat = ({openChatUser, messages, className = "", auth, handleClose, onSendMessage}) => {
 
-    function handleChange(e){
-        if(e.keyCode === 13){
+    function handleChange(e) {
+        if (e.keyCode === 13) {
             onSendMessage(e.target.value.trim())
             e.target.value = ""
         }
     }
 
-    function handleSendMessage(e){
+    function handleSendMessage(e) {
         e.preventDefault();
         const message = e.target.message.value
         onSendMessage(message)
@@ -50,12 +50,12 @@ const Chat = ({openChatUser, messages, className = "", auth, handleClose, onSend
                 <MessageList
                     auth={auth}
                     openChatUser={openChatUser}
-                    messages={messages[openChatUser?.groupId] && messages[openChatUser?.groupId] || []}
+                    messages={messages[openChatUser?.roomId] && messages[openChatUser?.roomId] || []}
                 />
 
 
                 {/*<div className="message-list p-4">*/}
-                {/*    {messages[openChatUser?.groupId] && messages[openChatUser?.groupId]?.map((msg) => (*/}
+                {/*    {messages[openChatUser?.roomId] && messages[openChatUser?.roomId]?.map((msg) => (*/}
                 {/*        <div className={`msg-item ${msg.senderId === auth?._id ? "your-msg" : ""}`} key={msg._id}>*/}
                 {/*            <li>{msg.message}</li>*/}
                 {/*        </div>*/}
@@ -64,7 +64,8 @@ const Chat = ({openChatUser, messages, className = "", auth, handleClose, onSend
 
 
                 <form onSubmit={handleSendMessage} className="mt-1 p-4">
-                            <textarea onKeyDown={handleChange} className="input-elemtextarea" placeholder="Wrire mesasge"
+                            <textarea onKeyDown={handleChange} className="input-elemtextarea"
+                                      placeholder="Wrire mesasge"
                                       name="message"></textarea>
                     <button className="btn btn-primary" type={"submit"}>Send</button>
                 </form>

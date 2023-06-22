@@ -15,15 +15,15 @@ import trimText from "src/utils/trimText.js";
 const Chats = ({handleStartChat, className  = "", footer}) => {
 
 
-    const {groups} = useSelector(state => state.chatState)
+    const {rooms} = useSelector(state => state.chatState)
     const {auth} = useSelector(state => state.authState)
 
-    const [groupMessage, setGroupMessage] = useState({})
+    const [roomMessage, setGroupMessage] = useState({})
 
     useEffect(() => {
 
-        // get a latest groups message
-        apis.get("/chat/groups/messages").then(({data}) => {
+        // get a latest rooms message
+        apis.get("/chat/rooms/messages").then(({data}) => {
             let payload = {}
             if (data.messages) {
                 data.messages.forEach(msg => {
@@ -38,31 +38,31 @@ const Chats = ({handleStartChat, className  = "", footer}) => {
 
     }, [])
 
-    function handleOpenStartChatPopup(friend, group) {
-        handleStartChat(friend, group)
+    function handleOpenStartChatPopup(friend, room) {
+        handleStartChat(friend, room)
     }
 
-    function renderChatFriend(group) {
-        // let participants = groupParticipantsByGroupId(groups, groupId)
+    function renderChatFriend(room) {
+        // let participants = roomParticipantsByGroupId(rooms, roomId)
         if (!auth?._id) return;
 
-        let member = group.participants.find(participant => participant._id !== auth?._id)
+        let member = room.participants.find(participant => participant._id !== auth?._id)
 
         return member && (
             <div>
-                <div onClick={() => handleOpenStartChatPopup(member, group)} className="flex items-center justify-between color_h1 list-hover-able">
+                <div onClick={() => handleOpenStartChatPopup(member, room)} className="flex items-center justify-between color_h1 list-hover-able">
                     <div className="flex items-center gap-x-2 w-full ">
                         <Avatar imgClass="text-xs !w-9 !h-9" className="!w-9 !h-9" src={member?.avatar}
                                 username="ER SDF"/>
                         <div className="">
                             <label htmlFor="" className="text-sm ">{member?.fullName}</label>
-                            <div className="text-xs color_mute">{group._id}</div>
-                            {groupMessage[group._id] && groupMessage[group._id].length > 0 && (
+                            <div className="text-xs color_mute">{room._id}</div>
+                            {roomMessage[room._id] && roomMessage[room._id].length > 0 && (
                                 <li className="flex  items-center mt-1 text-sm color_h2">
-                                    {groupMessage[group._id][0].senderId === auth._id && <span className="mr-1">You:</span> }
-                                    <span className=""> {trimText(groupMessage[group._id][0].message, 20)}</span>
+                                    {roomMessage[room._id][0].senderId === auth._id && <span className="mr-1">You:</span> }
+                                    <span className=""> {trimText(roomMessage[room._id][0].message, 20)}</span>
                                     <span
-                                        className="text-xs color_mute ml-2">{moment(new Date(groupMessage[group._id][0].createdAt)).fromNow(true)}</span>
+                                        className="text-xs color_mute ml-2">{moment(new Date(roomMessage[room._id][0].createdAt)).fromNow(true)}</span>
                                 </li>
                             )}
                         </div>
@@ -72,13 +72,13 @@ const Chats = ({handleStartChat, className  = "", footer}) => {
         )
     }
 
-    console.log(groups)
+    console.log(rooms)
 
     return (
             <div className={className}>
-               <div className="messenger-quick-chat-list"> {groups.map(group => (
-                   <div key={group._id} className="text-sm color_p py-1">
-                       {renderChatFriend(group)}
+               <div className="messenger-quick-chat-list"> {rooms.map(room => (
+                   <div key={room._id} className="text-sm color_p py-1">
+                       {renderChatFriend(room)}
                    </div>
                ))}
 
