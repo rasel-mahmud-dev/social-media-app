@@ -15,6 +15,7 @@ import Navigation from "components/Header/Navigation.jsx";
 import {fetchRoomsAction} from "src/store/actions/chatAction.js";
 import ChatWithFriend from "components/ChatWithFriend/ChatWithFriend.jsx";
 import {fetchAuthFriendsAction} from "src/store/actions/userAction.js";
+import Toast from "components/Shared/Toast/Toast.jsx";
 
 
 const pusher = new Pusher('aa79087d5d1bd3848813', {
@@ -123,7 +124,13 @@ const Main = () => {
                     />
                 }
 
+
+
             </Suspense>
+
+
+            <Toast />
+
         </div>
     );
 };

@@ -8,6 +8,7 @@ import GroupLayout from "layout/GroupLayout.jsx";
 
 import CreateGroup from "pages/Group/CreateGroup.jsx";
 import GroupLayoutProvider from "src/store/GroupLayoutContext.jsx";
+import GroupDetail from "pages/Group/GroupDetail.jsx";
 
 const Homepage = lazy(() => import("pages/Homepage"));
 const PrivateRoute = lazy(() => import("src/middleware/PrivateRoute.jsx"));
@@ -52,6 +53,7 @@ const router = createBrowserRouter([
                 element: <PrivateRoute>  <GroupLayout/>  </PrivateRoute>,
                 children: [
                     {path: "", element: <PrivateRoute> <GroupHome/> </PrivateRoute>},
+                    {path: ":groupId", element: <PrivateRoute> <GroupDetail/> </PrivateRoute>},
                     {path: "create", element: <PrivateRoute> <CreateGroup/> </PrivateRoute>},
                 ]
             },

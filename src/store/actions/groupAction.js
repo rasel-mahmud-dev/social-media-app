@@ -17,21 +17,8 @@ export const fetchMyGroupsAction = createAsyncThunk("fetch-my-groups", async (pa
 })
 
 
-// // fetch room by roomId action
-// export const fetchGroupByIdAction = createAsyncThunk("fetch-chat-room", async (roomId, thunkAPI) => {
-//     try {
-//         let {status, data} = await apis.get("chat/room/" + roomId)
-//         if (status === 200) {
-//             return data?.room
-//         }
-//     } catch (ex) {
-//         // send error message with reject type in reducer
-//         return thunkAPI.rejectWithValue(errorResponse(ex))
-//     }
-// })
 
-
-// fetch rooms action
+// create group action
 export const createGroupAction = createAsyncThunk("create-group", async (payload, thunkAPI) => {
     try {
         let {status, data} = await apis.post("groups/create", payload)
@@ -44,3 +31,17 @@ export const createGroupAction = createAsyncThunk("create-group", async (payload
     }
 })
 
+
+
+// fetch group detail  action
+export const fetchGroupDetailAction = createAsyncThunk("fetch-chat-room", async (groupId, thunkAPI) => {
+    try {
+        let {status, data} = await apis.get("groups/" + groupId)
+        if (status === 200) {
+            return data?.group
+        }
+    } catch (ex) {
+        // send error message with reject type in reducer
+        return thunkAPI.rejectWithValue(errorResponse(ex))
+    }
+})

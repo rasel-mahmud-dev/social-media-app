@@ -18,7 +18,7 @@ const CreateGroup = () => {
 
                 <div className="mt-6">
                     <h1 className={`text-2xl font-medium ${state.name ? "color_h1" : "color_mute"}`}>{state.name ? state.name : "Group Name"}</h1>
-                    <p className="mt-2 text-sm color_h3">Group Privacy 1 member</p>
+                    <p className="mt-2 text-sm color_h3">Group Privacy 1 member {state.isPublic ? " Public" : " Private"}</p>
                 </div>
 
             </div>

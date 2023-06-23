@@ -20,10 +20,14 @@ const Avatar = ({className = "", imgClass = "", username, src, ...attr}) => {
     function handleErrorImage(e) {
         let avatarRoot = e.target.parentNode
         if (avatarRoot) {
-            avatarRoot.innerHTML = `
-			<span class="rounded-full bg-neutral-200 w-9 h-9 flex items-center text-sm font-medium justify-center uppercase ${imgClass}>${letter}</span>
-		`
+            let d = document.createElement("div")
+            d.classList = `rounded-full h-full w-full dark:text-light-950 text-dark-850 dark:bg-dark-800 bg-light-700 flex text-sm font-semibold items-center justify-center uppercase ${imgClass}`
+            avatarRoot.innerHTML = null
+            d.innerText = letter
+            avatarRoot.appendChild(d)
+
         }
+
     }
 
     return (
@@ -34,7 +38,7 @@ const Avatar = ({className = "", imgClass = "", username, src, ...attr}) => {
                      className={`rounded-full w-full ${imgClass}`}/>
 
                 : <div
-                    className={`rounded-full h-full w-full bg-neutral-200 flex text-sm font-semibold items-center justify-center uppercase ${imgClass}`}>{letter}</div>
+                    className={`rounded-full h-full w-full dark:text-light-950 text-dark-850 dark:bg-dark-800 bg-light-700 flex text-sm font-semibold items-center justify-center uppercase ${imgClass}`}>{letter}</div>
             }
         </div>
     );

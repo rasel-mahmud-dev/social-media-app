@@ -1,0 +1,48 @@
+.input {
+  border: none;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 8px 12px;
+  border-radius: 5px;
+  box-shadow: 0 0 0 1px rgba(138, 138, 138, 0.45);
+  background: rgba(101, 101, 101, 0.2);
+  outline: none;
+  transition: box-shadow .2s ease;
+
+  @apply text-light-950;
+
+  &:focus {
+    box-shadow: 0 0 0 1px rgb(75, 141, 255);
+  }
+
+
+}
+
+textarea {
+  min-height: 130px;
+}
+
+
+.react-datepicker__input-container {
+
+}
+
+.react-datepicker__input-container input {
+  border: none;
+
+  font-size: 14px;
+  font-weight: 400;
+  padding: 7px 12px;
+  border-radius: 5px;
+  box-shadow: 0 0 0 1px rgba(138, 138, 138, 0.45);
+  background: rgba(101, 101, 101, 0.2);
+  outline: none;
+  transition: box-shadow .2s ease;
+
+  @apply text-light-950;
+  width: 100%;
+
+  &:focus {
+    box-shadow: 0 0 0 1px rgb(75, 141, 255);
+  }
+}

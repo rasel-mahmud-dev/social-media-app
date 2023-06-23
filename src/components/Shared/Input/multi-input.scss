@@ -1,0 +1,56 @@
+
+.multiselect {
+
+}
+
+.multiselect select {
+    border: 1px solid rgba(128, 128, 128, 0.18);
+    width: 100%;
+    border-radius: 6px;
+    padding: 6px 10px;
+    outline: none;
+}
+
+.multiselect select:focus {
+    color: #212529;
+    background-color: #fff;
+    border-color: #86b7fe;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, .25);
+}
+
+.multiselect .selected_items {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 2px;
+}
+
+.multiselect .selected_items div {
+    //background: #e8e8e8;
+    //color: #1f1f1f;
+    //border-radius: 6px;
+    //display: flex;
+    //align-items: center;
+    //padding: 1px 10px;
+}
+
+.multiselect .selected_items div .clear-icon {
+    display: none;
+}
+
+.multiselect .selected_items div:hover  .clear-icon {
+    display: block;
+}
+
+.multiselect .selected_items div .clear-icon svg {
+    width: 8px;
+    cursor: pointer;
+    margin-left: 4px;
+    display: flex;
+}
+
+.multiselect .selected_items div .clear-icon:hover svg {
+    fill: #e17474;
+}

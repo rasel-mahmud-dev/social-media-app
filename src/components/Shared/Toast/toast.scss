@@ -1,0 +1,46 @@
+.toast {
+  background: #2d2d2d;
+  position: fixed;
+  z-index: 10001;
+  min-width: 400px;
+  bottom: 20%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  padding: 20px;
+  border-radius: 10px;
+  color: white;
+  box-shadow: 0 3px 10px 2px #050505;
+  animation: scaleTop .5s ease;
+  transform-origin: bottom;
+
+  &--close {
+    animation: scaleBottom .5s ease;
+    transform-origin: bottom;
+    bottom: 0%;
+    left: 50%;
+    transform: translate(-50%, 100%);
+  }
+}
+
+@keyframes scaleTop {
+  0% {
+    transform: translateX(-50%);
+    bottom: 0%;
+
+  }
+  100% {
+    transform: translateX(-50%);
+    bottom: 20%;
+  }
+}
+
+@keyframes scaleBottom {
+  0% {
+    transform: translate(-50%, 0);
+    bottom: 20%;
+  }
+  100% {
+    transform: translate(-50%, 100%);
+    bottom: 0%;
+  }
+}
