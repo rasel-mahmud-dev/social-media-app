@@ -1,0 +1,37 @@
+@import "src/mixin";
+
+.dropdown-panel-list-parent {
+  max-height: calc(100vh - var(--header-height) - 8px);
+  overflow-y: hidden;
+
+  .messenger-quick-chat-footer{
+    background-color: transparent;
+    border-top: 1px solid #343434;
+    text-align: center;
+  }
+
+  .dropdown-panel-list{
+    max-height: calc(100vh - var(--header-height) - 90px);
+    overflow-y: auto;
+    @include scrollbar()
+  }
+}
+
+
+.unread-notification{
+  background: rgb(51, 51, 51);
+}
+
+.notification-item{
+  position: relative;
+  .new-noti{
+    top: 50%;
+    transform: translateY(-50%);
+    position: absolute;
+    width: 13px;
+    height: 13px;
+    background: var(--primary-400);
+    border-radius: 100%;
+    right: 8px;
+  }
+}
