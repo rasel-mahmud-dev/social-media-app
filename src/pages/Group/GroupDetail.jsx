@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {fetchGroupDetailAction} from "src/store/actions/groupAction.js";
+import {addGroupInvitePeopleAction, fetchGroupDetailAction} from "src/store/actions/groupAction.js";
 import useCustomReducer from "src/hooks/useReducer.jsx";
 import staticImage from "src/utils/staticImage.js";
 import AvatarGroup from "components/Shared/Avatar/AvatarGroup.jsx";
@@ -19,7 +19,8 @@ const GroupDetail = () => {
 
     const [state, setState] = useCustomReducer({
         group: null,
-        isOpenInvitationUserModal: false
+        isOpenInvitationUserModal: false,
+        invitationUsers: []
     })
 
     const {peoples} = useSelector(state => state.feedState)
@@ -42,18 +43,46 @@ const GroupDetail = () => {
         }
     }, [state.isOpenInvitationUserModal])
 
-    function handleSendInvitation(){
-        toast.success("Loading...", {
-            delay: 10
+
+    function handleSendInvitation() {
+        console.log(state.invitationUsers)
+
+        dispatch(addGroupInvitePeopleAction({
+            groupId,
+            peoples: state.invitationUsers.map(i => i._id),
+        })).unwrap().then(() => {
+            setState({
+                invitationUsers: [],
+                isOpenInvitationUserModal: false
+            })
         })
 
-        toast.success("asdfasdf", {delay: 1000})
 
+        // toast.success("Loading...", {
+        //     delay: 10
+        // })
+        // toast.success("asdfasdf", {delay: 100})
+    }
+
+    function onSelectPeople(people) {
+        setState(prev => {
+            let updatedState = [...prev.invitationUsers]
+            let index = updatedState.findIndex(i => i._id === people._id)
+            if (index === -1) {
+                updatedState.push(people)
+            } else {
+                updatedState.splice(index, 1)
+            }
+            prev.invitationUsers = updatedState
+            return prev
+        })
     }
 
 
     return (
         <div>
+
+            {/*<button onClick={()=>handleSendInvitation()}>Open</button>*/}
 
             {state.isOpenInvitationUserModal && (
                 <ModalWithBackdrop
@@ -65,18 +94,22 @@ const GroupDetail = () => {
                     <div>
                         <h2 className="color_h2 font-medium mb-2">Select User for Invitation </h2>
                         {peoples.map((people) => (
-                            <div key={people._id} className="flex items-center justify-between color_h2 font-normal py-1">
+                            <div key={people._id}
+                                 className="flex items-center justify-between color_h2 font-normal py-1">
                                 <label htmlFor={people._id} className="flex items-center gap-x-2">
-                                    <Avatar className="!w-8 !h-8 font-normal text-sm " imgClass="font-normal text-sm  !w-8 !h-8 text-xs" src={people.avatar}
+                                    <Avatar className="!w-8 !h-8 font-normal text-sm "
+                                            imgClass="font-normal text-sm  !w-8 !h-8 text-xs" src={people.avatar}
                                             username={people.fullName}/>
                                     <span className="font-normal text-sm ">{people.fullName}</span>
 
                                 </label>
-                                <input id={people._id} type="checkbox" name="user"/>
+                                <input onChange={() => onSelectPeople(people)} id={people._id} type="checkbox"
+                                       name="user"/>
                             </div>
                         ))}
 
-                        <Button onClick={handleSendInvitation} className="btn-primary block mt-4 ml-auto">Send Invitation</Button>
+                        <Button onClick={handleSendInvitation} className="btn-primary block mt-4 ml-auto">Send
+                            Invitation</Button>
                     </div>
 
                 </ModalWithBackdrop>

@@ -1,9 +1,12 @@
 import React, {createContext, useEffect, useReducer, useRef, useState} from 'react';
 import "./toast.scss"
+import {array} from "prop-types";
 
 
 const Toast = () => {
     const timeOutRef = useRef()
+
+    const stateRef = useRef([])
 
     let [state, setState] = useReducer(function (prev, action) {
         return {
@@ -15,6 +18,8 @@ const Toast = () => {
         isOpen: false
     })
 
+    const [queue, setQueue] = useState([])
+
     useEffect(() => {
         document.addEventListener("start", handleShowToast)
         return () => {
@@ -22,16 +27,58 @@ const Toast = () => {
         }
     }, []);
 
+
     function handleShowToast(e) {
+
         let payload = e.detail
 
-        const {options, ...s} = payload
+
+        let queue = []
+        if (stateRef.current && Array.isArray(stateRef.current)) {
+            queue = [
+                ...stateRef.current,
+                payload
+            ]
+        } else {
+            queue = [
+                payload
+            ]
+        }
+
+        stateRef.current = [...queue]
 
 
+        // const {options, ...s} = payload
+        //
+        //
+        // clearTimeout(timeOutRef.current)
+        // timeOutRef.current = setTimeout(() => {
+        //     setState(s)
+        // }, options?.delay ?? 0)
+    }
+
+    useEffect(() => {
+        // if (queue && queue.length > 0) {
+        //     setQueue(prevState => {
+        //         openToast(prevState[0], prevState, function (p) {
+        //             console.log(p)
+        //             // p.splice(1, 1)
+        //             return [...p]
+        //         })
+        //         // return [...prevState]
+        //     })
+        // }
+
+        console.log(stateRef)
+
+    }, [stateRef]);
+
+    function openToast(payload, p, cb) {
         clearTimeout(timeOutRef.current)
         timeOutRef.current = setTimeout(() => {
-            setState(s)
-        }, options?.delay ?? 0)
+            setState(payload)
+            cb(p)
+        }, payload.options?.delay ?? 0)
 
     }
 

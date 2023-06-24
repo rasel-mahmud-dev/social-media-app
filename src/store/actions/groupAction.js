@@ -45,3 +45,18 @@ export const fetchGroupDetailAction = createAsyncThunk("fetch-chat-room", async 
         return thunkAPI.rejectWithValue(errorResponse(ex))
     }
 })
+
+
+
+// fetch group detail  action
+export const addGroupInvitePeopleAction = createAsyncThunk("group-invitation", async (payload, thunkAPI) => {
+    try {
+        let {status, data} = await apis.post("groups/invitation", payload)
+        if (status === 201) {
+            return data
+        }
+    } catch (ex) {
+        // send error message with reject type in reducer
+        return thunkAPI.rejectWithValue(errorResponse(ex))
+    }
+})

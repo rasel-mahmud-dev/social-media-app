@@ -16,6 +16,8 @@ import {fetchRoomsAction} from "src/store/actions/chatAction.js";
 import ChatWithFriend from "components/ChatWithFriend/ChatWithFriend.jsx";
 import {fetchAuthFriendsAction} from "src/store/actions/userAction.js";
 import Toast from "components/Shared/Toast/Toast.jsx";
+import {receivedNewNotification} from "src/store/slices/notificationSlice.js";
+import {getAllNotificationAction} from "src/store/actions/notificationAction.js";
 
 
 const pusher = new Pusher('aa79087d5d1bd3848813', {
@@ -40,10 +42,24 @@ const Main = () => {
 
 
     useEffect(() => {
+        if (auth && auth._id) {
+            dispatch(getAllNotificationAction())
+        }
+    }, [auth])
+
+
+    useEffect(() => {
         if (!auth) return
 
         const channel = pusher.subscribe('public-channel');
 
+        // personal event to get notification like message notification, invitation noti
+        channel.bind(auth._id, function (data) {
+            playSound()
+            if (data.notification) {
+                dispatch(receivedNewNotification(data.notification))
+            }
+        });
 
         channel.bind('new-feed', function (data) {
             if (data.feed && data.feed.userId !== auth._id) {
@@ -52,6 +68,7 @@ const Main = () => {
                 dispatch(addLocalFeedAction(data.feed))
             }
         });
+
         channel.bind('remove-feed', function (data) {
 
             if (data.feed && data.feed.userId !== auth._id) {
@@ -125,11 +142,10 @@ const Main = () => {
                 }
 
 
-
             </Suspense>
 
 
-            <Toast />
+            <Toast/>
 
         </div>
     );
