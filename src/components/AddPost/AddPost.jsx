@@ -10,12 +10,15 @@ import "./add-feed.scss"
 import Loading from "components/Shared/Loading/Loading.jsx";
 import {BiChevronLeft, BiPlus} from "react-icons/bi";
 import resizeImageByMaxWidth from "src/utils/resizeImage.js";
+import {useParams} from "react-router-dom";
 
 const AddPost = ({onClose}) => {
 
     const dispatch = useDispatch()
 
     const {auth} = useSelector(state => state.authState)
+
+    const {groupSlug} =  useParams()
 
     const [state, setState] = useCustomReducer({
         images: [],
@@ -35,23 +38,34 @@ const AddPost = ({onClose}) => {
                 payload.append("image", image.blob, image.blob.name)
             })
         }
-        setState({
-            addFeedLoading: true
-        })
 
-        dispatch(createFeedAction(payload)).unwrap().then(() => {
-            onClose()
-            e.target.content.value = ""
-            setState({
-                images: []
+        // setState({
+        //     addFeedLoading: true
+        // })
+
+
+        if(groupSlug){
+            // add group post
+            payload.append("groupSlug", groupSlug)
+
+        }
+
+            dispatch(createFeedAction(payload)).unwrap().then(() => {
+                onClose()
+                e.target.content.value = ""
+                setState({
+                    images: []
+                })
+            }).catch((message) => {
+                alert(message)
+            }).finally(() => {
+                setState({
+                    addFeedLoading: false
+                })
             })
-        }).catch((message) => {
-            alert(message)
-        }).finally(() => {
-            setState({
-                addFeedLoading: false
-            })
-        })
+
+
+
     }
 
     async function handleChoosePhoto() {
