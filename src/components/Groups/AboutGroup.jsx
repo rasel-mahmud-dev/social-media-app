@@ -1,11 +1,23 @@
-import React from 'react';
+import React, {useState} from 'react';
+import useTextSlice from "src/hooks/useTextSlice.jsx";
 
-const AboutGroup = ({group}) => {
+
+
+const AboutGroup = ({group, className = ""}) => {
+
+    const {render} = useTextSlice(group?.description, {
+        1: 500,
+        2: 900,
+        3: undefined
+    })
+
     return (
         <div>
-            <div className="card">
+            <div className={`card ${className}`}>
                 <h4 className="card-border-b-title ">About This Group</h4>
-                <p className="whitespace-pre-line color_p text-sm">{group.description}</p>
+                <p className="whitespace-pre-line color_p text-sm">
+                    {render()}
+                </p>
 
                 <div className="color_p text-sm mt-4">
 
@@ -23,7 +35,7 @@ const AboutGroup = ({group}) => {
                     </li>
                     <li className="mt-3">
                         <h1 className="text-base font-medium color_h2">History</h1>
-                        <p>Group created on {new Date(group.createdAt).toLocaleDateString()}
+                        <p>Group created on {new Date(group?.createdAt).toLocaleDateString()}
                         </p>
                     </li>
                 </div>
@@ -31,7 +43,7 @@ const AboutGroup = ({group}) => {
 
 
             <div className="card mt-5">
-                <h4 className="card-border-b-title">Members {group.members.length}</h4>
+                <h4 className="card-border-b-title">Members {group?.members?.length}</h4>
                 <div className="color_p text-sm mt-4">
 
                 </div>

@@ -1,14 +1,15 @@
 import React, {useEffect} from 'react';
-import AddGroupPost from "components/Groups/AddGroupPost.jsx";
 import AddPostDemo from "components/AddPost/AddPostDemo.jsx";
 import FeedCard from "components/FeedCard/FeedCard.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import useCustomReducer from "src/hooks/useReducer.jsx";
 import {fetchGroupFeedAction} from "src/store/actions/groupAction.js";
+import AboutGroup from "components/Groups/AboutGroup.jsx";
 
 const Discussion = ({group}) => {
 
-    const {feeds} = useSelector(state => state.feedState)
+
+    const {auth} = useSelector(state => state.authState)
 
     const dispatch = useDispatch()
 
@@ -55,7 +56,7 @@ const Discussion = ({group}) => {
 
                     <div className="gap-y-4">
                         {state?.feeds?.map(feed => (
-                            <FeedCard key={feed} feed={feed}/>
+                            <FeedCard dispatch={dispatch} authId={auth._id} key={feed} feed={feed}/>
                         ))}
                     </div>
                 </div>
@@ -64,7 +65,7 @@ const Discussion = ({group}) => {
                 <div className="col-span-5 sticky top-20">
                     <div className="card h-max mt-4">
                         <h3 className="color_h2">Continue setting up your group</h3>
-                        <span className="text-accent text-sm">3 of 4</span> <span
+                        <span className="text-accent text-sm font-semibold">3 of 4</span> <span
                         className="color_p text-sm">steps completed</span>
                         <p className="color_p text-sm">Customize your group and attract new members in a few steps</p>
 
@@ -113,47 +114,21 @@ const Discussion = ({group}) => {
                     </div>
 
 
-                    <div className="card h-max mt-4">
+                    <AboutGroup group={group}/>
 
 
-                        <h4 className="card-border-b-title ">About This Group</h4>
-                        <p className="whitespace-pre-line color_p text-sm">{group.description}</p>
+                    {/*<div className="card mt-4">*/}
+                    {/*    <h4 className="card-border-b-title">Members {group.members.length}</h4>*/}
+                    {/*    <div className="color_p text-sm mt-4">*/}
 
-                        <div className="color_p text-sm mt-4">
+                    {/*    </div>*/}
+                    {/*</div>*/}
 
-                            <li className="">
-                                <h1 className="text-base font-medium color_h2">Private</h1>
-                                <p>
-                                    Only members can see who's in the group and what they post.
-                                </p>
-                            </li>
-                            <li className="mt-3">
-                                <h1 className="text-base font-medium color_h2">Visible</h1>
-                                <p>
-                                    Anyone can find this group.
-                                </p>
-                            </li>
-                            <li className="mt-3">
-                                <h1 className="text-base font-medium color_h2">History</h1>
-                                <p>Group created on {new Date(group.createdAt).toLocaleDateString()}
-                                </p>
-                            </li>
-                        </div>
-                    </div>
-
-
-                    <div className="card mt-4">
-                        <h4 className="card-border-b-title">Members {group.members.length}</h4>
-                        <div className="color_p text-sm mt-4">
-
-                        </div>
-                    </div>
-
-                    <div className="card mt-5">
-                        <h4 className="card-border-b-title">Activity</h4>
-                        <div className="color_p text-sm mt-4">
-                        </div>
-                    </div>
+                    {/*<div className="card mt-5">*/}
+                    {/*    <h4 className="card-border-b-title">Activity</h4>*/}
+                    {/*    <div className="color_p text-sm mt-4">*/}
+                    {/*    </div>*/}
+                    {/*</div>*/}
                 </div>
 
             </div>

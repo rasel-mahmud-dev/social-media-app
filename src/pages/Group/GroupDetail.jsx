@@ -19,6 +19,8 @@ import "./group-detail.scss"
 import Checkbox from "components/Shared/Input/Checkbox.jsx";
 import Discussion from "components/Groups/Discussion.jsx";
 import AboutGroup from "components/Groups/AboutGroup.jsx";
+import Rooms from "components/Groups/Rooms.jsx";
+import Members from "components/Groups/Members.jsx";
 
 
 const GroupDetail = () => {
@@ -28,19 +30,20 @@ const GroupDetail = () => {
 
     const [state, setState] = useCustomReducer({
         group: null,
+        isYouMember: false,
         isOpenInvitationUserModal: false,
         invitationUsers: [],
         activeTab: "Discussion"
     })
 
-
     const navs = [
-        {label: "Discussion", to: '/'},
-        {label: "Rooms", to: '/'},
-        {label: "Members", to: '/'},
-        {label: "Events", to: '/'},
-        {label: "Media", to: '/'},
-        {label: "Files", to: '/'},
+        {label: "Discussion"},
+        {label: "About", notForMember: true},
+        {label: "Rooms"},
+        {label: "Members"},
+        {label: "Events"},
+        {label: "Media"},
+        {label: "Files"},
     ]
 
     const {peoples} = useSelector(state => state.feedState)
@@ -51,8 +54,16 @@ const GroupDetail = () => {
         dispatch(fetchGroupDetailAction(groupSlug)).unwrap().then(data => {
             if (data) {
                 setState({
-                    group: data
+                    group: data.group,
+                    isYouMember: data.isYouMember,
+                    activeTab: data.isYouMember ? "Discussion" : "About"
                 })
+
+                if(data.group?.meta){
+                    const root = document.documentElement
+                    root.style.setProperty("--accent", data.group?.meta.accentColor)
+                }
+
             }
         })
     }, [groupSlug])
@@ -62,7 +73,6 @@ const GroupDetail = () => {
             dispatch(fetchPeoplesAction())
         }
     }, [state.isOpenInvitationUserModal])
-
 
 
     function handleSendInvitation() {
@@ -124,6 +134,14 @@ const GroupDetail = () => {
         dispatch(acceptJoinGroupInvitationAction({
             groupId: group._id
         }))
+    }
+
+    function filterNavItem(navs) {
+        if (state.isYouMember) {
+            return navs
+        } else {
+            return navs.filter((_, index) => index === 1 || index === 3)
+        }
     }
 
     return (
@@ -197,20 +215,18 @@ const GroupDetail = () => {
                                                 <div>
                                                     <Button
                                                         onClick={() => handleAcceptInvitationAndJoinGroup(state.group)}
-                                                        className="btn-primary">
+                                                        className="btn-dark2">
                                                         Accept Invitation and Join Group
                                                     </Button>
 
                                                     <Button
                                                         onClick={() => setState({isOpenInvitationUserModal: true})}
-                                                        className="btn-primary py-3 ml-2">
+                                                        className="btn-dark2 py-3 ml-2">
                                                         <BiChevronDown/>
                                                     </Button>
                                                 </div>
 
                                             )}
-
-
                                     </div>
                                 </div>
                             </div>
@@ -220,7 +236,7 @@ const GroupDetail = () => {
                         <div className="group-container">
                             <div className="group-container-content">
                                 <div className="flex items-center color_p text-sm">
-                                    {navs.map((navItem, index) => (
+                                    {filterNavItem(navs).map((navItem, index) => (
                                         <div key={index} onClick={() => handleSwitchTab(navItem.label)}
                                              className={`cursor-pointer px-4 pb-2 ${state.activeTab === navItem.label ? "border-accent text-accent border-b-2" : ""}`}>
                                             {navItem.label}
@@ -237,7 +253,14 @@ const GroupDetail = () => {
                             {
                                 state.activeTab === "Discussion"
                                     ? <Discussion group={state.group}/>
-                                    : <AboutGroup group={state.group}/>}
+                                    : state.activeTab === "About"
+                                        ? <AboutGroup group={state.group}/>
+                                        : state.activeTab === "Rooms"
+                                            ? <Rooms group={state.group} />
+                                            : state.activeTab === "Members"
+                                                ? <Members group={state.group} />
+                                                : ""
+                            }
 
                         </div>
                     </div>
