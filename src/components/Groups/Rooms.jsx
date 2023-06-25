@@ -3,7 +3,7 @@ import React from 'react';
 import a from "src/assets/icon/rDn9lunE0kk.png"
 import Button from "components/Shared/Button/Button.jsx";
 
-const Rooms = () => {
+const Rooms = ({group}) => {
     return (
         <div className="card">
             <div className="flex items-center justify-between">

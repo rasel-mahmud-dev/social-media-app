@@ -36,6 +36,9 @@ const GroupDetail = () => {
         activeTab: "Discussion"
     })
 
+
+
+
     const navs = [
         {label: "Discussion"},
         {label: "About", notForMember: true},

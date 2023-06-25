@@ -2,13 +2,12 @@ import { configureStore } from '@reduxjs/toolkit'
 // Or from '@reduxjs/toolkit/query/react'
 import { setupListeners } from '@reduxjs/toolkit/query'
 
-
-import {usersApi} from "./services/usersApi";
 import authReducer from "./slices/authSlice";
 import appReducer from "./slices/appSlice";
 import feedReduce from "./slices/feedSlice";
 import chatReducer from "./slices/chatSlice";
 import {notificationSlice} from "src/store/slices/notificationSlice.js";
+import {groupMembersApi} from "src/store/features/groupMembersApi.js";
 
 
 
@@ -20,13 +19,13 @@ export const store = configureStore({
         feedState: feedReduce,
         notificationState: notificationSlice.reducer,
         // Add the generated reducer as a specific top-level slice
-        [usersApi.reducerPath]: usersApi.reducer,
+        [groupMembersApi.reducerPath]: groupMembersApi.reducer,
 
     },
     // Adding the api middleware enables caching, invalidation, polling,
     // and other useful features of `rtk-query`.
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat([usersApi.middleware]),
+        getDefaultMiddleware().concat([groupMembersApi.middleware]),
 })
 
 // optional, but required for refetchOnFocus/refetchOnReconnect behaviors
