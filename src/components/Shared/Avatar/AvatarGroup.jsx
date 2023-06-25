@@ -11,8 +11,8 @@ const AvatarGroup = ({data = [], imgClass = "", className = ""}) => {
                 className="flex flex-wrap items-center gap-x-0 users-avatar-list mt-1">
                 {data && data.map((item, i) => (
                     <Avatar
-                        key={i} src={staticImage(item.avatar)}
-                        username={item.fullName}
+                        key={i} src={staticImage(item?.avatar)}
+                        username={item?.fullName}
                         className={className}
                         imgClass={imgClass}/>
                 ))}

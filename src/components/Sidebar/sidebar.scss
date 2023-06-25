@@ -82,14 +82,12 @@
   }
 
   &.group-sidebar{
-    background: #282828 !important;
+    //background: #282828 !important;
     height: calc(100vh - var(--header-height));
     overflow-y: auto;
   }
 
-
-
-  &.chats-sidebar{
+  &.chats-sidebar, &.group-sidebar{
     @apply bg-white dark:bg-dark-700;
     height: calc(100vh - var(--header-height));
   }

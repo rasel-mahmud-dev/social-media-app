@@ -19,9 +19,14 @@
 
 
 .unread-notification{
-  background: rgb(51, 51, 51);
+  @apply bg-light-850
 }
 
+@include dark(){
+  .unread-notification{
+    background: rgb(51, 51, 51);
+  }
+}
 .notification-item{
   position: relative;
   .new-noti{

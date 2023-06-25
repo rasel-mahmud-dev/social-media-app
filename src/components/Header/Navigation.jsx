@@ -161,7 +161,7 @@ const Navigation = (props) => {
             </svg>,
             icon2: "",
 
-            to: "/",
+            to: "/markets",
 
         },
         {

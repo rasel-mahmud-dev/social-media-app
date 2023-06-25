@@ -250,9 +250,50 @@
   height: 20px;
 }
 
+.icon_feed, .icon_discover, .icon_group2{
+  background-image: url("src/assets/icon/47R6FPZVikW.png");
+  background-position: 0px -897px;
+  background-size: auto;
+  width: 20px;
+  height: 20px;
+  background-repeat: no-repeat;
+  display: inline-block;
+}
+
+.icon_discover {
+  background-image: url("src/assets/icon/pK4bB6p7OS2.png");
+  background-position: 0px -33px;
+}
+
+.icon_group2 {
+    background-image: url("src/assets/icon/pK4bB6p7OS2.png");
+    background-position: 0px -54px;
+}
+
+.icon_plus_16{
+  background-image: url("src/assets/icon/47R6FPZVikW.png");
+  background-position: 0px -1332px;
+  background-size: auto;
+  width: 16px;
+  height: 16px;
+  background-repeat: no-repeat;
+  display: inline-block;
+}
+
+
 .png_filter_accent {
   --filter-accent: invert(39%) sepia(57%) saturate(200%) saturate(200%) saturate(200%) saturate(200%) saturate(200%) saturate(147.75%) hue-rotate(202deg) brightness(97%) contrast(96%);
   filter: var(--filter-accent);
+}
+
+.png_filter_white {
+  --filter-always-white: invert(100%) !important;
+  filter: var(--filter-always-white);
+}
+
+.png_filter_primary {
+  --filter-primary: invert(40%) sepia(52%) saturate(200%) saturate(200%) saturate(200%) saturate(189%) hue-rotate(191deg) brightness(103%) contrast(102%) !important;
+  filter: var(--filter-primary);
 }
 
 
@@ -265,7 +306,7 @@
 }
 
 
-.dropdown-top-right-animation{
+.dropdown-top-right-animation {
   //transform: translateY(10px) scale(0);
   &-enter {
     opacity: 0;
@@ -273,6 +314,7 @@
     transform-origin: top right;
     transform: translateY(10px) scale(0);
   }
+
   &-enter-active {
     //transition: transform 200ms;
     //transform-origin: top right;
@@ -282,14 +324,14 @@
     opacity: 1;
     transform-origin: top right;
     transition: transform 200ms;
-    transform: translateY(0px)  scale(1);
+    transform: translateY(0px) scale(1);
   }
 
   &-exit {
     opacity: 1;
     transform-origin: top right;
     transition: transform 300ms;
-    transform: translateY(0px)  scale(1);
+    transform: translateY(0px) scale(1);
   }
 
   &-exit-active {
@@ -297,6 +339,7 @@
     transform-origin: top right;
     transform: translateY(10px) scale(0);
   }
+
   &-exit-done {
 
   }

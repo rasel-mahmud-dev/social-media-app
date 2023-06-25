@@ -130,6 +130,7 @@ const Main = () => {
                     <h4 className="text-xs font-semibold mt-2">Page Loading...</h4>
                 </div>
             )}>
+
                 <Outlet/>
 
 

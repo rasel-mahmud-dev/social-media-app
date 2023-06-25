@@ -20,6 +20,33 @@
   //}
 }
 
+.content-full {
+  margin-left: 300px;
+  transition: margin-left .4s ease;
+}
+
+.group-container-full {
+  max-width: 100%;
+  margin: auto;
+  padding-right: 64px;
+  padding-left: 64px;
+}
+
+.group-container {
+  max-width: 1250px;
+  margin: auto;
+}
+
+.group-container-content {
+  max-width: 700px;
+  margin: auto;
+}
+
+@media screen and (max-width: 900px) {
+  .content-full {
+    margin-left: 0;
+  }
+}
 
 @media screen and (min-width: 900px) {
   .content {
@@ -45,8 +72,12 @@
 }
 
 
-.card{
+.card {
   @apply shadow-y_xx mx-3 bg-white dark:bg-dark-750 p-3 md:px-5 rounded-lg
+}
+
+.card-border-b-title {
+  @apply color_h2 border-b border-dark-500 pb-2 mb-2;
 }
 
 
@@ -75,11 +106,21 @@
   }
 }
 
+.card-link {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 0, 0, 0);
+  z-index: 10;
+}
+
 .btn {
   outline: none;
   border: none;
   padding: 8px 20px;
-  border-radius: 100px;
+  border-radius: 6px;
   font-size: 14px;
   background: #ececec;
 }
@@ -87,6 +128,21 @@
 .btn-primary {
   color: white !important;
   background-image: linear-gradient(to right, #4144ff, #4570d3) !important;
+}
+
+.btn-accent {
+  color: white !important;
+  background: var(--accent) !important;
+}
+
+.btn-dark2 {
+  color: #ffffff;
+  background: rgba(255, 255, 255, .1) !important;
+}
+
+.btn-primary2 {
+  color: var(--primary-400);
+  background: rgba(44, 101, 236, 0.23) !important;
 }
 
 .btn-light {
@@ -119,6 +175,18 @@
     animation-play-state: running;
     background: #ff2222;
   }
+}
+
+.border-accent {
+  border-color: var(--accent);
+}
+
+.bg-accent {
+  background: var(--accent);
+}
+
+.text-accent {
+  color: var(--accent);
 }
 
 
@@ -360,9 +428,28 @@
   filter: var(--filter-placeholder-icon);
 }
 
-.list-hover-able{
+.list-hover-able {
   @apply rounded-md py-2 px-2 cursor-pointer;
-  &:hover{
+  &:hover {
     @apply dark:bg-dark-600 bg-light-800
   }
+}
+
+.list-item {
+  background: #383838;
+  list-style: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+
+  & > * {
+    color: #e8e8e8;
+    font-size: 14px;
+    font-weight: 500;
+  }
+}
+
+.bg-comment {
+  background: #3A3B3C;
 }

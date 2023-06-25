@@ -34,9 +34,9 @@ export const createGroupAction = createAsyncThunk("create-group", async (payload
 
 
 // fetch group detail  action
-export const fetchGroupDetailAction = createAsyncThunk("fetch-chat-room", async (groupId, thunkAPI) => {
+export const fetchGroupDetailAction = createAsyncThunk("fetch-chat-room", async (groupSlug, thunkAPI) => {
     try {
-        let {status, data} = await apis.get("groups/" + groupId)
+        let {status, data} = await apis.get("groups/" + groupSlug)
         if (status === 200) {
             return data?.group
         }
@@ -52,6 +52,21 @@ export const fetchGroupDetailAction = createAsyncThunk("fetch-chat-room", async 
 export const addGroupInvitePeopleAction = createAsyncThunk("group-invitation", async (payload, thunkAPI) => {
     try {
         let {status, data} = await apis.post("groups/invitation", payload)
+        if (status === 201) {
+            return data
+        }
+    } catch (ex) {
+        // send error message with reject type in reducer
+        return thunkAPI.rejectWithValue(errorResponse(ex))
+    }
+})
+
+
+
+// accept group join group invitation action
+export const acceptJoinGroupInvitationAction = createAsyncThunk("accept-group-invitation", async (payload, thunkAPI) => {
+    try {
+        let {status, data} = await apis.post("groups/invitation-accepted", payload)
         if (status === 201) {
             return data
         }

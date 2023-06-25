@@ -95,7 +95,7 @@ export const authSlice = createSlice({
         // handle add friend request
         builder.addCase(addFriendAction.fulfilled, (state, action) => {
             if (action.payload) {
-                state.pendingFriends = [...state.pendingFriends, action.payload.friend]
+                // state.pendingFriends = [...state.pendingFriends, action.payload.friend]
             }
         })
         // handle accept friend request

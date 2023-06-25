@@ -15,6 +15,7 @@ import {createGroupAction, fetchMyGroupsAction} from "src/store/actions/groupAct
 import staticImage from "src/utils/staticImage.js";
 import InputGroup from "components/Shared/Input/InputGroup.jsx";
 import {fetchPeoplesAction} from "src/store/actions/userAction.js";
+import Search from "components/Shared/Input/Search.jsx";
 
 
 const GroupLayout = ({children}) => {
@@ -194,16 +195,55 @@ const GroupLayout = ({children}) => {
                                     </div>
                                 </div>
 
-                                <div>
-                                    <Input placeholder="Search group"/>
+                                <div className="mt-4">
+                                    <Search placeholder="Search group"/>
                                 </div>
 
-                                <div>
-                                    <Link to="/groups/create">
-                                        <Button className="btn-primary w-full block">Create
-                                            Group</Button>
-                                    </Link>
-                                </div>
+
+                                <Link to="/groups/feed" className="list-item mt-3">
+                                    <div className="flex items-center gap-x-2">
+                                        <div
+                                            className="bg-blue  w-8 h-8 rounded-full relative flex items-center justify-center">
+                                            <i className="png_filter_white icon_feed  absolute z-30"/>
+                                        </div>
+                                        <span>Your feed</span>
+
+                                    </div>
+                                </Link>
+
+
+                                <Link to="/groups/discover" className="list-item mt-3">
+                                    <div className="flex items-center gap-x-2">
+                                        <div
+                                            className="bg-blue  w-8 h-8 rounded-full relative flex items-center justify-center">
+                                            <i className="png_filter_white icon_discover  absolute z-30"/>
+                                        </div>
+                                        <span>Discover</span>
+                                    </div>
+                                </Link>
+
+
+                                <Link to="/groups/joins?ordering=viewer_added" className="list-item mt-3">
+                                    <div className="flex items-center gap-x-2">
+                                        <div
+                                            className="bg-blue  w-8 h-8 rounded-full relative flex items-center justify-center">
+                                            <i className="png_filter_white icon_group2  absolute z-30"/>
+                                        </div>
+                                        <span>Your Groups</span>
+
+                                    </div>
+                                </Link>
+
+
+                                <Button
+                                    className="btn btn-primary2 w-full justify-center flex items-center gap-x-1 font-medium mt-3"
+                                    onClick={() => navigate("/groups/create")}>
+                                    <i className="icon_plus_16 png_filter_primary"></i>
+                                    <span>
+                                     Create Group
+                                    </span>
+                                </Button>
+
 
                                 <div className="flex items-center justify-between mt-4">
                                     <h4 className="font-medium color_h2 text-base">Groups you've joined</h4>
@@ -212,7 +252,7 @@ const GroupLayout = ({children}) => {
 
                                 <div className="mt-6">
                                     {groups.map(group => (
-                                        <Link key={group._id} to={`/groups/${group._id}`}>
+                                        <Link key={group._id} to={`/groups/${group?.slug}`}>
                                             <div className="flex items-center gap-x-2 my-2">
                                                 <Avatar className="!w-12 !h-12"
                                                         imgClass="object-cover !rounded-lg !w-12 !h-12"
@@ -258,7 +298,7 @@ const GroupLayout = ({children}) => {
                 </Sidebar>
 
                 <div className="w-full ">
-                    <div className="content">
+                    <div className="content-full">
                         <Outlet/>
                     </div>
                 </div>

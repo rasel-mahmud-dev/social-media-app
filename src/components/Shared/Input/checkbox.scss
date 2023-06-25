@@ -1,0 +1,40 @@
+
+.checkbox {
+  position: relative;
+  appearance: none;
+  cursor: pointer;
+
+  &::before{
+    position: absolute;
+    content: "";
+    width: 14px;
+    height: 14px;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: transparent;
+    border: 1px solid var(--primary-400);
+    border-radius: 3px;
+  }
+
+  &:checked::before {
+    background: var(--primary-400);
+    border: 1px solid var(--primary-400);
+  }
+
+
+
+
+  &.checkbox-accent{
+    &::before{
+      border: 1px solid var(--accent);
+    }
+
+    &:checked::before {
+      background: var(--accent);
+      border: 1px solid var(--accent);
+    }
+  }
+}
+

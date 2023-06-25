@@ -9,6 +9,8 @@ import GroupLayout from "layout/GroupLayout.jsx";
 import CreateGroup from "pages/Group/CreateGroup.jsx";
 import GroupLayoutProvider from "src/store/GroupLayoutContext.jsx";
 import GroupDetail from "pages/Group/GroupDetail.jsx";
+import DiscoverGroups from "pages/Group/DiscoverGroups.jsx";
+import MyJoinedGroups from "pages/Group/MyJoinedGroups.jsx";
 
 const Homepage = lazy(() => import("pages/Homepage"));
 const PrivateRoute = lazy(() => import("src/middleware/PrivateRoute.jsx"));
@@ -49,11 +51,13 @@ const router = createBrowserRouter([
             {path: "messenger/:groupId", element: <Messenger/>},
             {
                 path: "groups",
-                element: <PrivateRoute>  <GroupLayout/>  </PrivateRoute>,
+                element: <PrivateRoute> <GroupLayout/> </PrivateRoute>,
                 children: [
                     {path: "", element: <PrivateRoute> <GroupHome/> </PrivateRoute>},
-                    {path: ":groupId", element: <PrivateRoute> <GroupDetail/> </PrivateRoute>},
+                    {path: ":groupSlug", element: <PrivateRoute> <GroupDetail/> </PrivateRoute>},
                     {path: "create", element: <PrivateRoute> <CreateGroup/> </PrivateRoute>},
+                    {path: "discover", element: <PrivateRoute> <DiscoverGroups/> </PrivateRoute>},
+                    {path: "joins", element: <PrivateRoute> <MyJoinedGroups/> </PrivateRoute>},
                 ]
             },
         ]

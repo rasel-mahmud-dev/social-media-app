@@ -1,0 +1,19 @@
+
+.group-card{
+  border-radius: 6px;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+
+  .img-cover{
+    height: 180px;
+    overflow-y: hidden;
+    img{
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
+
+  }
+
+}
