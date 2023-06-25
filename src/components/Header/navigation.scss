@@ -250,7 +250,7 @@
   height: 20px;
 }
 
-.icon_feed, .icon_discover, .icon_group2{
+.icon_feed, .icon_discover, .icon_group2, .icon_user, .icon_image, .icon_pen, .icon_edit{
   background-image: url("src/assets/icon/47R6FPZVikW.png");
   background-position: 0px -897px;
   background-size: auto;
@@ -279,6 +279,37 @@
   background-repeat: no-repeat;
   display: inline-block;
 }
+
+.icon_user{
+  background-image: url("src/assets/icon/DDr4AnxwLFW.png");
+  background-position: 0px -302px;
+}
+
+.icon_image{
+  background-image: url("src/assets/icon/47R6FPZVikW.png");
+  background-position: 0px -434px
+}
+
+.icon_pen{
+  background-image: url("src/assets/icon/47R6FPZVikW.png");
+  background-position: -0px -918px;
+}
+.icon_edit{
+  background-position: 0px -540px;
+  background-image: url("src/assets/icon/47R6FPZVikW.png");
+
+}
+
+.icon_check_24{
+  background-image: url("src/assets/icon/Z_p9oYVUuFW.png");
+  background-position: -58px -26px;
+  background-size: auto;
+  width: 24px;
+  height: 24px;
+  background-repeat: no-repeat;
+  display: inline-block;
+}
+
 
 
 .png_filter_accent {

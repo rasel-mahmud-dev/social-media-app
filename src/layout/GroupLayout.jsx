@@ -297,7 +297,7 @@ const GroupLayout = ({children}) => {
 
                 </Sidebar>
 
-                <div className="w-full ">
+                <div className="group-content">
                     <div className="content-full">
                         <Outlet/>
                     </div>

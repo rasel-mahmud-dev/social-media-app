@@ -17,6 +17,8 @@ import {BiChevronDown} from "react-icons/bi";
 
 import "./group-detail.scss"
 import Checkbox from "components/Shared/Input/Checkbox.jsx";
+import Discussion from "components/Groups/Discussion.jsx";
+import AboutGroup from "components/Groups/AboutGroup.jsx";
 
 
 const GroupDetail = () => {
@@ -28,8 +30,18 @@ const GroupDetail = () => {
         group: null,
         isOpenInvitationUserModal: false,
         invitationUsers: [],
-        activeTab: "about"
+        activeTab: "Discussion"
     })
+
+
+    const navs = [
+        {label: "Discussion", to: '/'},
+        {label: "Rooms", to: '/'},
+        {label: "Members", to: '/'},
+        {label: "Events", to: '/'},
+        {label: "Media", to: '/'},
+        {label: "Files", to: '/'},
+    ]
 
     const {peoples} = useSelector(state => state.feedState)
     const {auth} = useSelector(state => state.authState)
@@ -43,7 +55,6 @@ const GroupDetail = () => {
                 })
             }
         })
-
     }, [groupSlug])
 
     useEffect(() => {
@@ -53,8 +64,8 @@ const GroupDetail = () => {
     }, [state.isOpenInvitationUserModal])
 
 
+
     function handleSendInvitation() {
-        console.log(state.invitationUsers)
 
         dispatch(addGroupInvitePeopleAction({
             groupId: state.group._id,
@@ -86,6 +97,7 @@ const GroupDetail = () => {
             return prev
         })
     }
+
 
     function checkAsYouMember(authId, group) {
         if (group.ownerId === authId) {
@@ -157,8 +169,9 @@ const GroupDetail = () => {
                 <>
 
                     <div className="bg-dark-650">
-                        <div className="group-container group-detail py-4">
-                            <div className="group-banner">
+                        <div className="group-container group-detail py-4 px-0 xl:px-4">
+
+                            <div className="group-banner ">
                                 <div className="cover-photo-root">
                                     <img className="cover-photo" src={staticImage(state.group.coverPhoto)} alt=""/>
                                 </div>
@@ -166,94 +179,65 @@ const GroupDetail = () => {
                                     <h2 className="text-sm color_h1 font-semibold">Group by {state.group.name}</h2>
                                 </div>
                             </div>
-                            <div
-                                className="flex items-center justify-between  mt-4 mx-5 border-b border-dark-500  pb-8">
-                                <h2 className="text-2xl  color_h1 mt-3 font-semibold">{state.group.name}</h2>
 
-                                <div>
+                            <div className="group-container-content">
 
-                                    {checkAsYouMember(auth._id, state.group) ? <Button
-                                            onClick={() => setState({isOpenInvitationUserModal: true})}
-                                            className="btn-accent">
-                                            Invite
-                                        </Button>
-                                        : (
-                                            <div>
-                                                <Button
-                                                    onClick={() => handleAcceptInvitationAndJoinGroup(state.group)}
-                                                    className="btn-primary">
-                                                    Accept Invitation and Join Group
-                                                </Button>
+                                <div
+                                    className="flex items-center justify-between mt-4 border-b border-dark-500 pb-8">
+                                    <h2 className="text-2xl  color_h1 mt-3 font-semibold">{state.group.name}</h2>
 
-                                                <Button
-                                                    onClick={() => setState({isOpenInvitationUserModal: true})}
-                                                    className="btn-primary py-3 ml-2">
-                                                    <BiChevronDown/>
-                                                </Button>
-                                            </div>
+                                    <div>
 
-                                        )}
+                                        {checkAsYouMember(auth._id, state.group) ? <Button
+                                                onClick={() => setState({isOpenInvitationUserModal: true})}
+                                                className="btn-accent">
+                                                Invite
+                                            </Button>
+                                            : (
+                                                <div>
+                                                    <Button
+                                                        onClick={() => handleAcceptInvitationAndJoinGroup(state.group)}
+                                                        className="btn-primary">
+                                                        Accept Invitation and Join Group
+                                                    </Button>
+
+                                                    <Button
+                                                        onClick={() => setState({isOpenInvitationUserModal: true})}
+                                                        className="btn-primary py-3 ml-2">
+                                                        <BiChevronDown/>
+                                                    </Button>
+                                                </div>
+
+                                            )}
 
 
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
+
                         <div className="group-container">
-                            <div className="flex items-center gap-x-4 color_p text-sm">
-                                <div onClick={() => handleSwitchTab("about")}
-                                     className={`cursor-pointer px-4 pb-2 ${state.activeTab === "about" ? "border-accent text-accent border-b-2" : ""}`}>About
-                                </div>
-                                <div onClick={() => handleSwitchTab("discussion")}
-                                     className={`cursor-pointer px-4 pb-2 ${state.activeTab !== "about" ? "border-accent text-accent border-b-2" : ""}`}>Discussion
+                            <div className="group-container-content">
+                                <div className="flex items-center color_p text-sm">
+                                    {navs.map((navItem, index) => (
+                                        <div key={index} onClick={() => handleSwitchTab(navItem.label)}
+                                             className={`cursor-pointer px-4 pb-2 ${state.activeTab === navItem.label ? "border-accent text-accent border-b-2" : ""}`}>
+                                            {navItem.label}
+                                        </div>
+                                    ))}
                                 </div>
                             </div>
-
                         </div>
                     </div>
 
-                    <div className="group-container mt-10">
+                    <div className="group-container mt-5">
                         <div className="group-container-content">
 
-                            <div className="card">
-                                <h4 className="card-border-b-title ">About This Group</h4>
-                                <p className="whitespace-pre-line color_p text-sm">{state.group.description}</p>
-
-                                <div className="color_p text-sm mt-4">
-
-                                    <li className="">
-                                        <h1 className="text-base font-medium color_h2">Private</h1>
-                                        <p>
-                                            Only members can see who's in the group and what they post.
-                                        </p>
-                                    </li>
-                                    <li className="mt-3">
-                                        <h1 className="text-base font-medium color_h2">Visible</h1>
-                                        <p>
-                                            Anyone can find this group.
-                                        </p>
-                                    </li>
-                                    <li className="mt-3">
-                                        <h1 className="text-base font-medium color_h2">History</h1>
-                                        <p>Group created on {new Date(state.group.createdAt).toLocaleDateString()}
-                                        </p>
-                                    </li>
-                                </div>
-                            </div>
-
-
-                            <div className="card mt-5">
-                                <h4 className="card-border-b-title">Members {state.group.members.length}</h4>
-                                <div className="color_p text-sm mt-4">
-
-                                </div>
-                            </div>
-
-                            <div className="card mt-5">
-                                <h4 className="card-border-b-title">Activity</h4>
-                                <div className="color_p text-sm mt-4">
-                                </div>
-                            </div>
+                            {
+                                state.activeTab === "Discussion"
+                                    ? <Discussion group={state.group}/>
+                                    : <AboutGroup group={state.group}/>}
 
                         </div>
                     </div>

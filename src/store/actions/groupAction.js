@@ -75,3 +75,19 @@ export const acceptJoinGroupInvitationAction = createAsyncThunk("accept-group-in
         return thunkAPI.rejectWithValue(errorResponse(ex))
     }
 })
+
+
+
+// accept group join group invitation action
+export const fetchGroupFeedAction = createAsyncThunk("accept-group-invitation", async (payload, thunkAPI) => {
+    try {
+        const {query} = payload
+        let {status, data} = await apis.get("/groups/feeds" + query)
+        if (status === 200) {
+            return data
+        }
+    } catch (ex) {
+        // send error message with reject type in reducer
+        return thunkAPI.rejectWithValue(errorResponse(ex))
+    }
+})
