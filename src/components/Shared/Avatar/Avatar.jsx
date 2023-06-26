@@ -21,7 +21,7 @@ const Avatar = ({className = "", imgClass = "", username, src, ...attr}) => {
         let avatarRoot = e.target.parentNode
         if (avatarRoot) {
             let d = document.createElement("div")
-            d.classList = `rounded-full h-full w-full dark:text-light-950 text-dark-850 dark:bg-dark-800 bg-light-700 flex text-sm font-semibold items-center justify-center uppercase ${imgClass}`
+            d.classList = `rounded-full h-full w-full dark:text-light-800 text-dark-850 dark:bg-dark-700 bg-light-700 flex text-sm font-semibold items-center justify-center uppercase ${imgClass}`
             avatarRoot.innerHTML = null
             d.innerText = letter
             avatarRoot.appendChild(d)
@@ -38,7 +38,7 @@ const Avatar = ({className = "", imgClass = "", username, src, ...attr}) => {
                      className={`rounded-full w-full ${imgClass}`}/>
 
                 : <div
-                    className={`rounded-full h-full w-full dark:text-light-950 text-dark-850 dark:bg-dark-800 bg-light-700 flex text-sm font-semibold items-center justify-center uppercase ${imgClass}`}>{letter}</div>
+                    className={`rounded-full h-full w-full dark:text-light-600 text-dark-850 dark:bg-dark-600 bg-light-750 flex text-sm font-semibold items-center justify-center uppercase ${imgClass}`}>{letter}</div>
             }
         </div>
     );

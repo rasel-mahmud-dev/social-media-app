@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom/client'
 import App from './App.jsx'
 import './index.scss'
 
-import 'flowbite';
 import {Provider} from "react-redux";
 import {store} from "src/store/index.js";
 

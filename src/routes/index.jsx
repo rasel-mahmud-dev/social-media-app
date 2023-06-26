@@ -54,6 +54,7 @@ const router = createBrowserRouter([
                 element: <PrivateRoute> <GroupLayout/> </PrivateRoute>,
                 children: [
                     {path: "", element: <PrivateRoute> <GroupHome/> </PrivateRoute>},
+                    {path: "feed", element: <PrivateRoute> <GroupHome/> </PrivateRoute>},
                     {path: ":groupSlug", element: <PrivateRoute> <GroupDetail/> </PrivateRoute>},
                     {path: "create", element: <PrivateRoute> <CreateGroup/> </PrivateRoute>},
                     {path: "discover", element: <PrivateRoute> <DiscoverGroups/> </PrivateRoute>},

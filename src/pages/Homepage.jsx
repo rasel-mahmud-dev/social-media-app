@@ -38,9 +38,9 @@ const Homepage = () => {
         let results = [];
         for (const key in queries) {
             let item = queries[key]
-            if(item.status === "fulfilled"){
-                if(item.data.feeds){
-                   results.push(...item.data.feeds)
+            if (item.status === "fulfilled") {
+                if (item.data.feeds) {
+                    results.push(...item.data.feeds)
                 }
             }
         }
@@ -53,14 +53,11 @@ const Homepage = () => {
     }, [dispatch])
 
 
-
-
     function handleLoadMoreFeed({pageNumber}) {
-        if(feeds.length > 0){
+        if (feeds.length > 0) {
             setFeePageNumber(pageNumber)
         }
     }
-
 
 
     return (
@@ -76,14 +73,12 @@ const Homepage = () => {
 
                         <AddPostDemo className="mb-4"/>
 
-
                         {/**** all feed */}
                         <InfiniteScroll pageNumber={feedPageNumber} onLoadMore={handleLoadMoreFeed}>
                             <Feeds feeds={combinedResults}/>
                         </InfiniteScroll>
 
                     </div>
-
                 </div>
             </HomeLayout>
         </div>

@@ -8,12 +8,7 @@ function GroupLayoutProvider(HOC) {
 
     return function (props) {
         const [state, setState] = useCustomReducer({
-            name: "",
-            description: "",
-            groupCoverPhoto: null,
-            createNewGroup: false,
-            isPublic: true,
-            members: []
+
         })
 
         return (

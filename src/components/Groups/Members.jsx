@@ -4,6 +4,7 @@ import {useDispatch} from "react-redux";
 
 import {useAdminMemberQuery, useQueryObjectQuery} from "src/store/features/groupMembersApi.js";
 import Avatar from "components/Shared/Avatar/Avatar.jsx";
+import getPassTime from "src/utils/time.js";
 
 
 const Members = ({group}) => {
@@ -63,7 +64,7 @@ const Members = ({group}) => {
                         <Avatar src={member.user.avatar} username={member.user.fullName}/>
                         <div className="">
                             <h4 className="color_h2 text-sm ">{member.user.fullName}</h4>
-                            <span className="text-xs font-medium text-primary">User</span>
+                            <span className="text-xs font-medium rounded py-1 color_mute">Joined {getPassTime(member.joinedAt)}</span>
                         </div>
                     </div>
                 ))}
@@ -75,7 +76,7 @@ const Members = ({group}) => {
                         <Avatar src={member.user.avatar} username={member.user.fullName}/>
                         <div className="">
                             <h4 className="color_h2 text-sm ">{member.user.fullName}</h4>
-                            <span className="text-xs font-medium text-primary">User</span>
+                            <span className="text-xs font-medium rounded py-1 color_mute">Joined {getPassTime(member.joinedAt)}</span>
                         </div>
                     </div>
                 ))}
