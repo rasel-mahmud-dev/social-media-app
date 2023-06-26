@@ -1,4 +1,4 @@
-import React, {memo, useEffect, useState} from "react";
+import React, {memo, useEffect, useMemo, useState} from "react";
 
 import {fetchFeedsAction} from "src/store/actions/feedAction.js";
 import {useDispatch, useSelector} from "react-redux";
@@ -8,31 +8,59 @@ import Stories from "src/components/Story/Stories.jsx";
 import AddPostDemo from "components/AddPost/AddPostDemo.jsx";
 import Feeds from "components/Feeds/Feeds.jsx";
 import InfiniteScroll from "components/InfiniteScroll/InfiniteScroll.jsx";
+import {feedsApi, useFeedsQuery} from "src/store/features/feedsApi.js";
 
 const Homepage = () => {
 
     const dispatch = useDispatch()
 
 
-    const {feeds, feedPageNumber} = useSelector(state => state.feedState)
     const {auth} = useSelector(state => state.authState)
+
+    const [feedPageNumber, setFeePageNumber] = useState(1)
+
+
+    let {feeds} = useFeedsQuery({
+        pageNumber: feedPageNumber,
+        query: "?pageNumber=" + feedPageNumber
+    }, {
+        // transform data model
+        selectFromResult: ({data, isLoading, isFetching, isError}) => ({
+            feeds: data?.feeds,
+            isLoadingGoods: isLoading,
+            isFetchingGoods: isFetching,
+        }),
+    })
+
+    const queries = useSelector((state) => state.feedApi.queries);
+
+    const combinedResults = useMemo(() => {
+        let results = [];
+        for (const key in queries) {
+            let item = queries[key]
+            if(item.status === "fulfilled"){
+                if(item.data.feeds){
+                   results.push(...item.data.feeds)
+                }
+            }
+        }
+        return results;
+    }, [queries, feedPageNumber]);
 
 
     useEffect(() => {
-        dispatch(fetchFeedsAction({
-            pageNumber: 1,
-            query: "?pageNumber=" + 1
-        }))
         dispatch(fetchPeoplesAction())
     }, [dispatch])
 
 
+
+
     function handleLoadMoreFeed({pageNumber}) {
-        dispatch(fetchFeedsAction({
-            pageNumber,
-            query: "?pageNumber=" + pageNumber
-        }))
+        if(feeds.length > 0){
+            setFeePageNumber(pageNumber)
+        }
     }
+
 
 
     return (
@@ -51,7 +79,7 @@ const Homepage = () => {
 
                         {/**** all feed */}
                         <InfiniteScroll pageNumber={feedPageNumber} onLoadMore={handleLoadMoreFeed}>
-                            <Feeds feeds={feeds}/>
+                            <Feeds feeds={combinedResults}/>
                         </InfiniteScroll>
 
                     </div>

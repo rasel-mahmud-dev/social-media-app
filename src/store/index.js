@@ -8,6 +8,7 @@ import feedReduce from "./slices/feedSlice";
 import chatReducer from "./slices/chatSlice";
 import {notificationSlice} from "src/store/slices/notificationSlice.js";
 import {groupMembersApi} from "src/store/features/groupMembersApi.js";
+import {feedsApi} from "src/store/features/feedsApi.js";
 
 
 
@@ -20,12 +21,16 @@ export const store = configureStore({
         notificationState: notificationSlice.reducer,
         // Add the generated reducer as a specific top-level slice
         [groupMembersApi.reducerPath]: groupMembersApi.reducer,
+        [feedsApi.reducerPath]: feedsApi.reducer,
 
     },
     // Adding the api middleware enables caching, invalidation, polling,
     // and other useful features of `rtk-query`.
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat([groupMembersApi.middleware]),
+        getDefaultMiddleware().concat([
+            groupMembersApi.middleware,
+            feedsApi.middleware
+        ]),
 })
 
 // optional, but required for refetchOnFocus/refetchOnReconnect behaviors
