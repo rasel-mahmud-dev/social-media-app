@@ -108,9 +108,9 @@ export const feedSlice = createSlice({
         })
 
         // create feed
-        builder.addCase(createFeedAction.fulfilled, (state, action) => {
-            state.feeds = [action.payload.feed, ...state.feeds]
-        })
+        // builder.addCase(createFeedAction.fulfilled, (state, action) => {
+        //     state.feeds = [action.payload.feed, ...state.feeds]
+        // })
 
         // delete feed
         builder.addCase(deleteFeedAction.fulfilled, (state, action) => {

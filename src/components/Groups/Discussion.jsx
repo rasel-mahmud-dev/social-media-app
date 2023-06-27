@@ -1,38 +1,58 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import AddPostDemo from "components/AddPost/AddPostDemo.jsx";
 import FeedCard from "components/FeedCard/FeedCard.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import useCustomReducer from "src/hooks/useReducer.jsx";
-import {fetchGroupFeedAction} from "src/store/actions/groupAction.js";
 import AboutGroup from "components/Groups/AboutGroup.jsx";
+import {useGroupFeedsQuery} from "src/store/features/feedsApi.js";
+import MenuDropdown from "components/Dropdown/MenuDropdown.jsx";
+import Radio from "components/Shared/Input/Radio.jsx";
+import {useInfiniteQuery, useQuery, useQueryClient} from "@tanstack/react-query";
+import apis from "src/apis/index.js";
+import InfiniteScroll from "components/InfiniteScroll/InfiniteScroll.jsx";
+import Feeds from "components/Feeds/Feeds.jsx";
 
 const Discussion = ({group}) => {
+
+    const [feedPageNumber, setFeedPageNumber] = useState(1)
 
 
     const {auth} = useSelector(state => state.authState)
 
     const dispatch = useDispatch()
 
-    const [state, setState] = useCustomReducer({
-        feeds: []
+
+    const {groupFeeds} = useGroupFeedsQuery({
+        pageNumber: feedPageNumber,
+        groupId: group?._id
+    }, {
+        // transform data model
+        selectFromResult: ({data, isLoading, isFetching, isError}) => ({
+            groupFeeds: data?.groupFeeds,
+            isLoadingGoods: isLoading,
+            isFetchingGoods: isFetching,
+        }),
     })
 
+    const queries = useSelector((state) => state.feedApi.queries);
+    const combinedResults = useMemo(() => {
+        let results = [];
+        for (const key in queries) {
+            let item = queries[key]
+            if (item.status === "fulfilled") {
+                if (item.data.groupFeeds) {
+                    results.push(...item.data.groupFeeds)
+                }
+            }
+        }
+        return results;
+    }, [queries, feedPageNumber]);
 
-    useEffect(() => {
-
-            if (!group) return;
-
-            dispatch(fetchGroupFeedAction({
-                groupId: group._id,
-                query: "?groupId=" + group._id
-            })).unwrap().then(data=>{
-                setState({
-                    feeds: data
-                })
-            })
-        }, [group]
-    )
-
+    function handleLoadMoreFeed({pageNumber}) {
+        if (groupFeeds && groupFeeds.length > 0) {
+            setFeedPageNumber(pageNumber)
+        }
+    }
 
     return (
         <div>
@@ -41,10 +61,18 @@ const Discussion = ({group}) => {
                 <div className="col-span-6">
 
                     <AddPostDemo/>
-                    <div className="text-accent px-4 py-2 flex items-center gap-x-2">
-                        <h4 className=""> Most Relevant</h4>
 
-                        <span>
+                    <MenuDropdown contentClass="!bg-dark-700 top-8 !p-2 !shadow-sm" className=" w-max" render={() => (
+                        <div className="">
+                            <li className="list-item text-xs color_h2"><Radio/> Most relevant</li>
+                            <li className="list-item text-xs color_h2"><Radio/> New</li>
+                            <li className="list-item text-xs color_h2"><Radio/> Old</li>
+                        </div>
+                    )}>
+                        <div className="cursor-pointer text-accent w-max px-4 py-2  mt-2 flex items-center gap-x-2">
+                            <h4 className="text-sm">Most Relevant</h4>
+
+                            <span>
                          <svg fill="currentColor" viewBox="0 0 20 20" width="1em" height="1em"
                               className="x1lliihq x1k90msu x2h7rmj x1qfuztq xcza8v6 xlup9mm x1kky2od"
                               title="sort group feed by"><title>sort group feed by</title>
@@ -52,12 +80,19 @@ const Discussion = ({group}) => {
                                 d="M10 14a1 1 0 0 1-.755-.349L5.329 9.182a1.367 1.367 0 0 1-.205-1.46A1.184 1.184 0 0 1 6.2 7h7.6a1.18 1.18 0 0 1 1.074.721 1.357 1.357 0 0 1-.2 1.457l-3.918 4.473A1 1 0 0 1 10 14z"></path>
                             </svg>
                         </span>
-                    </div>
+                        </div>
+                    </MenuDropdown>
 
-                    <div className="gap-y-4">
-                        {state?.feeds?.map(feed => (
-                            <FeedCard dispatch={dispatch} authId={auth._id} key={feed} feed={feed}/>
-                        ))}
+                    <div className="">
+
+                        {/**** all feed */}
+                        <InfiniteScroll pageNumber={feedPageNumber} onLoadMore={handleLoadMoreFeed}>
+                            {combinedResults?.map((feed) => (
+                                <div key={feed._id} className="pt-4">
+                                    <FeedCard dispatch={dispatch} authId={auth._id} feed={feed}/>
+                                </div>
+                            ))}
+                        </InfiniteScroll>
                     </div>
                 </div>
 

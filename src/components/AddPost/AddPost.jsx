@@ -11,6 +11,8 @@ import Loading from "components/Shared/Loading/Loading.jsx";
 import {BiChevronLeft, BiPlus} from "react-icons/bi";
 import resizeImageByMaxWidth from "src/utils/resizeImage.js";
 import {useParams} from "react-router-dom";
+import {feedsApi, useAddFeedMutation} from "src/store/features/feedsApi.js";
+
 
 const AddPost = ({onClose}) => {
 
@@ -18,12 +20,14 @@ const AddPost = ({onClose}) => {
 
     const {auth} = useSelector(state => state.authState)
 
-    const {groupSlug} =  useParams()
+    const {groupSlug} = useParams()
 
     const [state, setState] = useCustomReducer({
         images: [],
         addFeedLoading: false
     })
+
+    const [addFeed, data] = useAddFeedMutation()
 
 
     function handlePost(e) {
@@ -44,26 +48,28 @@ const AddPost = ({onClose}) => {
         // })
 
 
-        if(groupSlug){
+        if (groupSlug) {
             // add group post
             payload.append("groupSlug", groupSlug)
 
         }
 
-            dispatch(createFeedAction(payload)).unwrap().then(() => {
-                onClose()
-                e.target.content.value = ""
-                setState({
-                    images: []
-                })
-            }).catch((message) => {
-                alert(message)
-            }).finally(() => {
-                setState({
-                    addFeedLoading: false
-                })
-            })
+        dispatch(createFeedAction(payload)).unwrap().then((data) => {
+            // onClose()
+            // e.target.content.value = ""
+            // setState({
+            //     images: []
+            // })
 
+            console.log(data)
+
+        }).catch((message) => {
+            alert(message)
+        }).finally(() => {
+            setState({
+                addFeedLoading: false
+            })
+        })
 
 
     }
@@ -71,12 +77,12 @@ const AddPost = ({onClose}) => {
     async function handleChoosePhoto() {
         let file = await chooseImage()
         if (file && file.base64) {
-            const newFile =  await resizeImageByMaxWidth(file.base64, 1000, 0.6)
+            const newFile = await resizeImageByMaxWidth(file.base64, 1000, 0.6)
 
 
             console.log(newFile)
 
-            if(newFile && newFile.blob && newFile.base64){
+            if (newFile && newFile.blob && newFile.base64) {
                 setState(prevState => {
                     return {
                         ...prevState,
@@ -103,7 +109,8 @@ const AddPost = ({onClose}) => {
             <form onSubmit={handlePost}>
 
                 <div className="flex items-center gap-x-2">
-                    <div onClick={onClose} className="flex md:hidden icon-box !w-8 !h-8 rounded-full"><BiChevronLeft /></div>
+                    <div onClick={onClose} className="flex md:hidden icon-box !w-8 !h-8 rounded-full"><BiChevronLeft/>
+                    </div>
                     <label className="font-semibold color_h1">Create post</label>
                 </div>
 
@@ -149,7 +156,7 @@ const AddPost = ({onClose}) => {
                             <div onClick={handleChoosePhoto}
                                  className="relative group !bg-transparent hover:!bg-primary !w-max px-4 py-3 !h-max flex items-center justify-center mt-2 border dark:border-neutral-700 border-neutral-600/10 rounded-lg">
                                 <span className=" color_h3 font-medium text-sm">
-                                    <BiPlus />
+                                    <BiPlus/>
                                 </span>
                             </div>
                         </div>}

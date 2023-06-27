@@ -7,10 +7,10 @@ import AuthExcludeRoute from "src/middleware/AuthExcludeRoute.jsx";
 import GroupLayout from "layout/GroupLayout.jsx";
 
 import CreateGroup from "pages/Group/CreateGroup.jsx";
-import GroupLayoutProvider from "src/store/GroupLayoutContext.jsx";
 import GroupDetail from "pages/Group/GroupDetail.jsx";
 import DiscoverGroups from "pages/Group/DiscoverGroups.jsx";
 import MyJoinedGroups from "pages/Group/MyJoinedGroups.jsx";
+
 
 const Homepage = lazy(() => import("pages/Homepage"));
 const PrivateRoute = lazy(() => import("src/middleware/PrivateRoute.jsx"));
@@ -60,7 +60,7 @@ const router = createBrowserRouter([
                     {path: "discover", element: <PrivateRoute> <DiscoverGroups/> </PrivateRoute>},
                     {path: "joins", element: <PrivateRoute> <MyJoinedGroups/> </PrivateRoute>},
                 ]
-            },
+            }
         ]
     }
 ])

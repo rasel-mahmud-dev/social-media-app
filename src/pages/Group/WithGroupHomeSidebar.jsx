@@ -32,9 +32,11 @@ const WithGroupHomeSidebar = ({children}) => {
 
     const navigate = useNavigate()
 
+
     useEffect(() => {
         dispatch(fetchMyGroupsAction())
     }, [])
+
 
     useEffect(() => {
         if (location.pathname === "/groups/create") {
@@ -47,8 +49,6 @@ const WithGroupHomeSidebar = ({children}) => {
                 createNewGroup: false
             })
         }
-
-
     }, [location.pathname])
 
 

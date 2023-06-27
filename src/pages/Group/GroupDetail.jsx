@@ -38,8 +38,6 @@ import {GoGear} from "react-icons/go";
 import {BsClock} from "react-icons/bs";
 
 
-
-
 const categories = [
     {
         label: "Admin tools",
@@ -47,11 +45,11 @@ const categories = [
             {
                 label: "Community chats",
                 subLabel: "4 chat suggestions for your group",
-                icon: <BiHeart className="text-2xl color_p" />
+                icon: <BiHeart className="text-2xl color_p"/>
             }, {
                 label: "Pending approvals",
                 subLabel: "4 new today",
-                icon: <BsClock className="text-2xl color_p" />
+                icon: <BsClock className="text-2xl color_p"/>
             }
         ]
     },
@@ -61,12 +59,12 @@ const categories = [
             {
                 label: "Group Settings",
                 subLabel: "Manage discussions, permissions and roles",
-                icon: <GoGear className="text-2xl color_p" />,
+                icon: <GoGear className="text-2xl color_p"/>,
             },
             {
                 label: "Add features",
                 subLabel: "Choose post formats, badges and other features",
-                icon: <GoGear className="text-2xl color_p" />,
+                icon: <GoGear className="text-2xl color_p"/>,
             },
         ]
     },
@@ -80,6 +78,7 @@ const GroupDetail = () => {
     const [state, setState] = useCustomReducer({
         group: null,
         isYouMember: false,
+        role: "user",
         isOpenInvitationUserModal: false,
         invitationUsers: [],
         activeTab: "Discussion"
@@ -105,6 +104,7 @@ const GroupDetail = () => {
             if (data) {
                 setState({
                     group: data.group,
+                    role: data.role,
                     isYouMember: data.isYouMember,
                     activeTab: data.isYouMember ? "Discussion" : "About"
                 })
@@ -164,17 +164,6 @@ const GroupDetail = () => {
             prev.invitationUsers = updatedState
             return prev
         })
-    }
-
-
-    function checkAsYouMember(authId, group) {
-        if (group.ownerId === authId) {
-            return true
-        }
-        if (group && group.members) {
-            let index = group.members.findIndex(member => member.userId === group)
-            return index !== -1
-        }
     }
 
 
@@ -291,47 +280,51 @@ const GroupDetail = () => {
 
                             {/* admin group options */}
 
-                            <Collapse initialExpand={[1]} className="mt-4">
-                                {categories.map((item)=>(
-                                    <Collapse.Item
-                                        key={item.label}
-                                        className="list-item text-sm py-3 px-2 mt-2"
-                                        label={item.label}
-                                        prefixIcon={item.prefixIcon}
-                                        icon={(isActive)=> !isActive ? <BiChevronDown /> : <BiChevronUp /> }
-                                    >
-                                        { item.children  &&  (
-                                            <div className="text-sm ">
-                                                {
-                                                    item.children.map(item2=>(
-                                                        item2.to
-                                                            ? (
-                                                                <Link to={`${item2.to}`}>
-                                                                    <h5 className="collapse-item-h5 mx-2 rounded-md text-dark-200">
-                                                                        {item2.label}
-                                                                        {item2.subLabel}
-                                                                    </h5>
-                                                                </Link>
 
-                                                            )
-                                                            : (
-                                                            <h5 className="flex items-center gap-x-4 py-2  rounded-md color_h1">
-                                                                {item2.icon && item2.icon}
-                                                                <div className="text-sm">
-                                                                    {item2.label}
-                                                                    <div className="color_p text-xs">
-                                                                        {item2.subLabel}
-                                                                    </div>
-                                                                </div>
-                                                            </h5>
-                                                        )
-                                                    ))
-                                                }
-                                            </div>
-                                        )}
-                                    </Collapse.Item>
-                                ))}
-                            </Collapse>
+                            {state.isYouMember && state.role === "admin" && (
+                                <Collapse initialExpand={[1]} className="mt-4">
+                                    {categories.map((item) => (
+                                        <Collapse.Item
+                                            key={item.label}
+                                            className="list-item text-sm py-3 px-2 mt-2"
+                                            label={item.label}
+                                            prefixIcon={item.prefixIcon}
+                                            icon={(isActive) => !isActive ? <BiChevronDown/> : <BiChevronUp/>}
+                                        >
+                                            {item.children && (
+                                                <div className="text-sm ">
+                                                    {
+                                                        item.children.map(item2 => (
+                                                            item2.to
+                                                                ? (
+                                                                    <Link to={`${item2.to}`}>
+                                                                        <h5 className="collapse-item-h5 mx-2 rounded-md text-dark-200">
+                                                                            {item2.label}
+                                                                            {item2.subLabel}
+                                                                        </h5>
+                                                                    </Link>
+
+                                                                )
+                                                                : (
+                                                                    <h5 className="flex items-center gap-x-4 py-2  rounded-md color_h1">
+                                                                        {item2.icon && item2.icon}
+                                                                        <div className="text-sm">
+                                                                            {item2.label}
+                                                                            <div className="color_p text-xs">
+                                                                                {item2.subLabel}
+                                                                            </div>
+                                                                        </div>
+                                                                    </h5>
+                                                                )
+                                                        ))
+                                                    }
+                                                </div>
+                                            )}
+                                        </Collapse.Item>
+                                    ))}
+                                </Collapse>
+                            )}
+
                         </div>
                     )}
 
@@ -392,7 +385,7 @@ const GroupDetail = () => {
 
                                                     <div>
 
-                                                        {checkAsYouMember(auth._id, state.group) ? <Button
+                                                        {state.isYouMember ? <Button
                                                                 onClick={() => setState({isOpenInvitationUserModal: true})}
                                                                 className="btn-accent">
                                                                 Invite

@@ -11,7 +11,6 @@ import {groupMembersApi} from "src/store/features/groupMembersApi.js";
 import {feedsApi} from "src/store/features/feedsApi.js";
 
 
-
 export const store = configureStore({
     reducer: {
         authState: authReducer,
@@ -21,7 +20,7 @@ export const store = configureStore({
         notificationState: notificationSlice.reducer,
         // Add the generated reducer as a specific top-level slice
         [groupMembersApi.reducerPath]: groupMembersApi.reducer,
-        [feedsApi.reducerPath]: feedsApi.reducer,
+        [feedsApi.reducerPath]: feedsApi.reducer
 
     },
     // Adding the api middleware enables caching, invalidation, polling,

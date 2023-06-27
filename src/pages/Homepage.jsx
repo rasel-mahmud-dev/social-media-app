@@ -9,6 +9,8 @@ import AddPostDemo from "components/AddPost/AddPostDemo.jsx";
 import Feeds from "components/Feeds/Feeds.jsx";
 import InfiniteScroll from "components/InfiniteScroll/InfiniteScroll.jsx";
 import {feedsApi, useFeedsQuery} from "src/store/features/feedsApi.js";
+import apis from "src/apis/index.js";
+import {useInfiniteQuery, useQuery} from "@tanstack/react-query";
 
 const Homepage = () => {
 
@@ -17,7 +19,7 @@ const Homepage = () => {
 
     const {auth} = useSelector(state => state.authState)
 
-    const [feedPageNumber, setFeePageNumber] = useState(1)
+    const [feedPageNumber, setFeedPageNumber] = useState(1)
 
 
     let {feeds} = useFeedsQuery({
@@ -52,10 +54,9 @@ const Homepage = () => {
         dispatch(fetchPeoplesAction())
     }, [dispatch])
 
-
     function handleLoadMoreFeed({pageNumber}) {
         if (feeds.length > 0) {
-            setFeePageNumber(pageNumber)
+            setFeedPageNumber(pageNumber)
         }
     }
 
@@ -75,7 +76,7 @@ const Homepage = () => {
 
                         {/**** all feed */}
                         <InfiniteScroll pageNumber={feedPageNumber} onLoadMore={handleLoadMoreFeed}>
-                            <Feeds feeds={combinedResults}/>
+                            <Feeds feeds={combinedResults || []} />
                         </InfiniteScroll>
 
                     </div>
