@@ -36,8 +36,8 @@ const WithPageSidebar = ({children}) => {
     const [myPages, setMyPages] = useState([])
 
     useEffect(() => {
-        apis.get("/page/my-pages").then(({status, data})=>{
-            if(status === 200){
+        apis.get("/page/my-pages").then(({status, data}) => {
+            if (status === 200) {
                 setMyPages(data.pages)
             }
         })
@@ -107,7 +107,7 @@ const WithPageSidebar = ({children}) => {
                         </div>
 
 
-                        <Link to="/pages" className="list-item mt-3">
+                        <Link to="/pages" className="list-item mt-3 px-2">
                             <div className="flex items-center gap-x-2">
                                 <div
                                     className="bg-blue  w-8 h-8 rounded-full relative flex items-center justify-center">
@@ -118,10 +118,13 @@ const WithPageSidebar = ({children}) => {
                         </Link>
 
                         <div>
-                            {myPages.map(page=>(
-                                <div>
-                                    <h4>{page.name}</h4>
-                                </div>
+                            {myPages.map(page => (
+                                <Link key={page._id} to={`/pages/${page.name}`} className="">
+                                    <div className="flex list-item gap-x-1 px-2">
+                                        <Avatar src={page.logo} className="!w-7 !h-7"/>
+                                        <h2 className="color_h2 font-semibold text-base">{page.name}</h2>
+                                    </div>
+                                </Link>
                             ))}
                         </div>
 
@@ -134,7 +137,7 @@ const WithPageSidebar = ({children}) => {
                         </Button>
 
 
-                        <Link to="/pages?type=discover" className="list-item mt-3">
+                        <Link to="/pages?type=discover" className="list-item mt-3 px-2">
                             <div className="flex items-center gap-x-2">
                                 <div
                                     className="bg-blue  w-8 h-8 rounded-full relative flex items-center justify-center">
@@ -145,7 +148,7 @@ const WithPageSidebar = ({children}) => {
                         </Link>
 
 
-                        <Link to="/pages?type=liked" className="list-item mt-3">
+                        <Link to="/pages?type=liked" className="list-item mt-3 px-2">
                             <div className="flex items-center gap-x-2">
                                 <div
                                     className="bg-blue  w-8 h-8 rounded-full relative flex items-center justify-center">
@@ -156,7 +159,7 @@ const WithPageSidebar = ({children}) => {
                             </div>
                         </Link>
 
-                        <Link to="/pages?type=invited" className="list-item mt-3">
+                        <Link to="/pages?type=invited" className="list-item mt-3 px-2">
                             <div className="flex items-center gap-x-2">
                                 <div
                                     className="bg-blue  w-8 h-8 rounded-full relative flex items-center justify-center">

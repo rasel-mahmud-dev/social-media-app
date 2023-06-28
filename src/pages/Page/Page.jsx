@@ -1,11 +1,12 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import RenderProfile from "pages/Profile/RenderProfile.jsx";
 import Avatar from "components/Shared/Avatar/Avatar.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import useCustomReducer from "src/hooks/useReducer.jsx";
 import apis from "src/apis/index.js";
-import {useNavigate, useParams} from "react-router-dom";
-import WithPageSidebar from "pages/Page/WithPageSidebar.jsx";
+import {useNavigate, useParams, useSearchParams} from "react-router-dom";
+import WithPageSidebar from "components/Pages/WithPageSidebar.jsx";
+import DiscoverPages from "pages/Page/DiscoverPages.jsx";
 
 const Page = () => {
 
@@ -13,12 +14,16 @@ const Page = () => {
 
     const {pageSlug} = useParams()
 
+
+    const [getSearchParams] = useSearchParams()
+
     const {auth} = useSelector(state => state.authState)
 
     const [state, setState] = useCustomReducer({
         profile: {},
-
     })
+
+    const [path, setPath] = useState( "")
 
     function fetchFollowerInfo(userId) {
         apis.get("/follow/status/?userId=" + userId).then(({status, data}) => {
@@ -54,6 +59,13 @@ const Page = () => {
         fetchProfile(pageSlug)
     }, [pageSlug]);
 
+    const type = getSearchParams.get("type") || ""
+
+    useEffect(() => {
+        setPath(type)
+    }, [type]);
+
+    console.log(path)
 
 
     return (
@@ -61,23 +73,15 @@ const Page = () => {
 
             <WithPageSidebar>
 
-                <div className="group-content">
-                    <div className="card">
-                        sdasd
-                        <div className="card-meta">
-                            <h4>My Page</h4>
-                        </div>
+                <div className=" w-full">
 
-                        <div className="mt-6">
-                            <p>This features will be implemented soon</p>
+                    {
+                        path === "discover"
+                            ? <DiscoverPages />
+                            : ""
+                    }
 
 
-                            Groups you've joined
-                            Recent activity
-
-                        </div>
-
-                    </div>
                 </div>
 
             </WithPageSidebar>

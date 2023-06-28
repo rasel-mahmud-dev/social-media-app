@@ -10,6 +10,9 @@ import {useSelector} from "react-redux";
 import apis from "src/apis/index.js";
 import Button from "components/Shared/Button/Button.jsx";
 
+import "../Profile/profile.scss"
+import Intro from "components/Pages/Intro.jsx";
+
 const PageDetail = (props) => {
 
 
@@ -38,11 +41,12 @@ const PageDetail = (props) => {
     // })
 
     const sectionNavs = {
-        Posts: (params) => <PostSection {...params} />,
-        Friends: (params) => "Working",
-        Timeline: (params) => "Working",
+        Posts: (params) => <Intro {...params} />,
+        About: (params) => <Intro  {...params} />,
         Photos: (params) => <MediaSection  {...params} />,
-        Follower: (params) => "Working"
+        Videos: (params) => <MediaSection  {...params} />,
+        Followers: (params) => "Working",
+        Likes: (params) => "Working"
     }
 
     useEffect(() => {
@@ -66,6 +70,8 @@ const PageDetail = (props) => {
         })
     }
 
+    function handleUploadAvatar(){}
+
 
     return (
         <div>
@@ -87,21 +93,21 @@ const PageDetail = (props) => {
                                     )}
                                 </div>
 
-                                {/*{state.user._id === auth._id && (*/}
-                                {/*    <div className="mt-2">*/}
-                                {/*        <Button onClick={handleUploadAvatar} className="btn text-xs font-medium">Change Photo*/}
-                                {/*        </Button>*/}
-                                {/*    </div>*/}
-                                {/*)}*/}
+                                {state.pageDetail.ownerId === auth._id && (
+                                    <div className="mt-2">
+                                        <Button onClick={handleUploadAvatar} className="btn text-xs font-medium">Change Photo
+                                        </Button>
+                                    </div>
+                                )}
 
                                 <div className="profile-content">
 
-                                    <div className="flex items-center relative">
+                                    <div className="flex items-end relative   ">
                                         <div>
                                             <Avatar
-                                                className="!h-40 !w-40 profile-image"
+                                                className=" profile-image"
                                                 src={state.pageDetail?.logo}
-                                                imgClass="!h-40 !w-40 !text-xs"
+                                                imgClass=" !text-xs"
                                                 username={state.pageDetail.name}
                                             />
                                         </div>
@@ -135,8 +141,10 @@ const PageDetail = (props) => {
                                         </div>
                                     </div>
 
+                                    <div className="border-b border-dark-600 mt-7 mb-4"></div>
+
                                     <div
-                                        className="flex items-enter justify-between border-t border-dark-600 py-4 mt-6">
+                                        className="flex items-enter justify-between ">
                                         <div className="profile-section-nav flex mt-2">
                                             {Object.keys(sectionNavs).map((name) => (
                                                 <li key={name} onClick={() => handleSelectSection(name)}
@@ -154,7 +162,9 @@ const PageDetail = (props) => {
 
                             <div className="">
                                 {sectionNavs[state.showSectionName] && sectionNavs[state.showSectionName]({
-                                    authId: auth._id, userId: state.pageDetail._id
+                                    authId: auth._id,
+                                    page: state.pageDetail,
+
                                 })}
                             </div>
                         </div>

@@ -21,9 +21,9 @@ import {Link} from "react-router-dom";
 import "./feed-card.scss"
 import staticImage from "src/utils/staticImage.js";
 
-const FeedCard = ({feed, authId, dispatch}) => {
+const FeedCard = ({feed, authId, dispatch, type = "user"}) => {
 
-    const [state, setState] = useReducer((prev, action)=>({
+    const [state, setState] = useReducer((prev, action) => ({
         ...prev,
         ...action
     }), {
@@ -40,8 +40,8 @@ const FeedCard = ({feed, authId, dispatch}) => {
     function toggleLikeHandler(feedId) {
         setState({isLikeActionLoading: true})
 
-        dispatch(toggleLikeAction({feedId})).unwrap().then((data)=>{
-            if(!data) return;
+        dispatch(toggleLikeAction({feedId})).unwrap().then((data) => {
+            if (!data) return;
 
             dispatch(localToggleFeedReactionAction(data.like))
 
@@ -50,35 +50,52 @@ const FeedCard = ({feed, authId, dispatch}) => {
         })
     }
 
-    function handleShowComment(){
+    function handleShowComment() {
         setState({isShowComment: true})
-        if(feed._id){
-            dispatch(getAllCommentsAction(feed._id)).unwrap().then(data=>{
+        if (feed._id) {
+            dispatch(getAllCommentsAction(feed._id)).unwrap().then(data => {
                 setState({comments: data.comments})
             })
         }
     }
 
-    function handleDeleteComment(commentId){
-        dispatch(deleteCommentAction(commentId)).unwrap().then(data=>{
-            setState({comments: state.comments.filter(c=>c._id !== commentId)})
+    function handleDeleteComment(commentId) {
+        dispatch(deleteCommentAction(commentId)).unwrap().then(data => {
+            setState({comments: state.comments.filter(c => c._id !== commentId)})
         })
     }
 
-    function handleAddComment(newComment){
+    function handleAddComment(newComment) {
         setState({comments: [newComment, ...state.comments]})
     }
 
-    function handelDeleteFeed(feedId){
+    function handelDeleteFeed(feedId) {
         dispatch(deleteFeedAction(feedId))
     }
-    function handleSaveItem(feedId){
+
+    function handleSaveItem(feedId) {
         dispatch(addInToSaveAction({feedId}))
     }
 
     function isLiked(likes) {
-        if(likes && authId){
-            return likes.findIndex(l=>l.userId === authId) !== -1
+        if (likes && authId) {
+            return likes.findIndex(l => l.userId === authId) !== -1
+        }
+    }
+
+    function fullName(feed) {
+        if (type === "user") {
+            return feed?.author?.fullName
+        } else {
+            return feed?.page?.name
+        }
+    }
+
+    function avatar(feed) {
+        if (type === "user") {
+            return feed?.author?.avatar
+        } else {
+            return feed?.page?.logo
         }
     }
 
@@ -89,26 +106,32 @@ const FeedCard = ({feed, authId, dispatch}) => {
 
                     <div className="flex justify-between p-4">
                         <div className="flex items-center">
-                            <Avatar className="!w-9 !h-9" imgClass="!w-9 !h-9" username={feed?.author?.fullName} src={feed?.author?.avatar}/>
+                            <Avatar className="!w-9 !h-9" imgClass="!w-9 !h-9" username={fullName(feed)}
+                                    src={avatar(feed)}/>
                             <div className="ml-3">
-                                <Link to={`/profile/${feed?.userId}`}><h3 className="dark:text-light-950 text-dark-850 text-lg font-bold">{feed?.author?.fullName}</h3></Link>
+                                <Link to={`/profile/${feed?.userId}`}><h3
+                                    className="dark:text-light-950 text-dark-850 text-lg font-bold">{fullName(feed)}</h3>
+                                </Link>
                                 <p className="dark:text-dark-100 text-gray-600 text-xs">{getPassTime(feed.createdAt)}</p>
                             </div>
                         </div>
-                        <MenuDropdown contentClass="right-0 w-40" render={()=>(
+                        <MenuDropdown contentClass="right-0 w-40" render={() => (
                             <div className="">
-                               <li onClick={()=>handelDeleteFeed(feed._id)} className={`cursor-pointer flex items-center gap-x-1 list-none
+                                <li onClick={() => handelDeleteFeed(feed._id)} className={`cursor-pointer flex items-center gap-x-1 list-none
                                 ${feed.userId === authId ? "" : "disable-delete-feed"}`}>
-                                   <BsFillTrash2Fill />
-                                   <span className="text-xs font-medium text-gray-500">Delete</span>
-                               </li>
-                                <li onClick={()=>handleSaveItem(feed._id)} className="cursor-pointer flex items-center gap-x-1 list-none mt-2">
-                                    <BsFillBookmarkFill />
+                                    <BsFillTrash2Fill/>
+                                    <span className="text-xs font-medium text-gray-500">Delete</span>
+                                </li>
+                                <li onClick={() => handleSaveItem(feed._id)}
+                                    className="cursor-pointer flex items-center gap-x-1 list-none mt-2">
+                                    <BsFillBookmarkFill/>
                                     <span className="text-xs font-medium text-gray-500">Save </span>
                                 </li>
                             </div>
                         )}>
-                            <span className="w-7 h-7 cursor-pointer flex rounded-full justify-center items-center hover:bg-neutral-200"><FaEllipsisV className="text-xs text-neutral-700" /></span>
+                            <span
+                                className="w-7 h-7 cursor-pointer flex rounded-full justify-center items-center hover:bg-neutral-200"><FaEllipsisV
+                                className="text-xs text-neutral-700"/></span>
                         </MenuDropdown>
                     </div>
 
@@ -118,29 +141,29 @@ const FeedCard = ({feed, authId, dispatch}) => {
                         <div className="mb-3">
                             <p className="dark:text-light-950 text-gray-800 whitespace-pre-line">{feed?.content?.slice(0, state.isExpand ? undefined : 300)}</p>
 
-                            { feed?.content?.length > 300 ?
+                            {feed?.content?.length > 300 ?
                                 state.isExpand
                                     ? <span className="text-xs font-medium color_p" onClick={() => handleExpand(false)}>Show less</span>
                                     : <span className="text-xs font-medium color_p" onClick={() => handleExpand(true)}>Show more</span>
                                 : ""}
                         </div>
 
-                        { feed.images.length > 0 && (
+                        {feed.images.length > 0 && (
                             <div className={`feed-media image-${feed.images.length > 4 ? 4 : feed.images.length}`}>
-                                {feed?.images.slice(0, feed?.images.length >= 4 ? 4 : undefined).map((image, index)=>(
+                                {feed?.images.slice(0, feed?.images.length >= 4 ? 4 : undefined).map((image, index) => (
                                     <div key={index} className="relative">
                                         <img src={staticImage(image)} alt=""/>
 
-                                        { feed?.images.length >= 4  && index === 3 && (
+                                        {feed?.images.length >= 4 && index === 3 && (
                                             <div className={`position-center text-white font-semibold`}>
                                                 {feed?.images.length} More items
                                             </div>
-                                        ) }
+                                        )}
 
                                     </div>
                                 ))}
                             </div>
-                        ) }
+                        )}
                     </div>
 
 
@@ -148,7 +171,7 @@ const FeedCard = ({feed, authId, dispatch}) => {
                         <div className="flex items-center justify-between mt-4 dark:text-dark-50 text-dark-850">
                             <li className="list-none flex items-center gap-x-1">
                                 <img src="/icons/like.svg" className="w-5" alt=""/>
-                                <span>{feed?.likes?.length > 0 ? feed?.likes?.length: "" }</span>
+                                <span>{feed?.likes?.length > 0 ? feed?.likes?.length : ""}</span>
                             </li>
                             <li className="list-none flex items-center gap-x-1">
                                 <BiComment/>
@@ -156,17 +179,19 @@ const FeedCard = ({feed, authId, dispatch}) => {
                             </li>
                         </div>
 
-                        <div className="flex items-center justify-between border-y dark:border-y-dark-500 border-y-light-700 mt-4 py-1 text-sm font-medium dark:text-dark-50 text-dark-850">
+                        <div
+                            className="flex items-center justify-between border-y dark:border-y-dark-500 border-y-light-700 mt-4 py-1 text-sm font-medium dark:text-dark-50 text-dark-850">
                             {state.isLikeActionLoading ? (
                                 <li className="flex items-center gap-x-1   dark:hover:bg-dark-600 hover:bg-neutral-100 rounded-md cursor-pointer px-4 py-2 w-full justify-center">
-                                    <Loading />
+                                    <Loading/>
                                 </li>
                             ) : <li onClick={() => toggleLikeHandler(feed._id)}
                                     className={`${isLiked(feed.likes) ? "feed-liked" : ""} flex items-center gap-x-1 dark:hover:bg-dark-600 hover:bg-neutral-100 rounded-md cursor-pointer px-4 py-2 w-full justify-center`}>
                                 <BiLike/>
                                 <span>Like</span>
                             </li>}
-                            <li onClick={handleShowComment} className="flex items-center gap-x-1  dark:hover:bg-dark-600 hover:bg-neutral-100 rounded-md cursor-pointer px-4 py-2 w-full justify-center">
+                            <li onClick={handleShowComment}
+                                className="flex items-center gap-x-1  dark:hover:bg-dark-600 hover:bg-neutral-100 rounded-md cursor-pointer px-4 py-2 w-full justify-center">
                                 <BiComment/>
                                 <span>Comment</span>
                             </li>
@@ -176,16 +201,17 @@ const FeedCard = ({feed, authId, dispatch}) => {
                             </li>
                         </div>
 
-                        {  !state.isShowComment && feed.comments &&  <div>
-                            <h4 className="cursor-pointer text-xs mt-4 color_p" onClick={handleShowComment}>View All Comments</h4>
-                            <Comments handleDeleteComment={handleDeleteComment} comments={[feed.comments]} />
+                        {!state.isShowComment && feed.comments && <div>
+                            <h4 className="cursor-pointer text-xs mt-4 color_p" onClick={handleShowComment}>View All
+                                Comments</h4>
+                            <Comments handleDeleteComment={handleDeleteComment} comments={[feed.comments]}/>
                         </div>}
 
                         {
                             state.isShowComment && (
                                 <div>
                                     <h4 className="mt-4 color_p text-xs">Comments</h4>
-                                    <Comments handleDeleteComment={handleDeleteComment} comments={state.comments} />
+                                    <Comments handleDeleteComment={handleDeleteComment} comments={state.comments}/>
                                     <AddComment handleAddComment={handleAddComment} feedId={feed._id}/>
                                 </div>
                             )

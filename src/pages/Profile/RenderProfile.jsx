@@ -70,11 +70,11 @@ function RenderProfile(props) {
 
                             <div className="profile-content">
 
-                                <div className="flex items-center relative">
+                                <div className="flex items-end relative">
                                     <Avatar
-                                        className="!h-40 !w-40 profile-image"
+                                        className="profile-image"
                                         src={user?.avatar}
-                                        imgClass="!h-40 !w-40 !text-xs"
+                                        imgClass=" !text-xs"
                                         username={user.fullName}
                                     />
 

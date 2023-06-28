@@ -12,6 +12,7 @@ import {BiChevronLeft, BiPlus} from "react-icons/bi";
 import resizeImageByMaxWidth from "src/utils/resizeImage.js";
 import {useParams} from "react-router-dom";
 import {feedsApi, useAddFeedMutation} from "src/store/features/feedsApi.js";
+import page from "pages/Page/Page.jsx";
 
 
 const AddPost = ({onClose}) => {
@@ -20,7 +21,7 @@ const AddPost = ({onClose}) => {
 
     const {auth} = useSelector(state => state.authState)
 
-    const {groupSlug} = useParams()
+    const {groupSlug, pageName} = useParams()
 
     const [state, setState] = useCustomReducer({
         images: [],
@@ -52,7 +53,11 @@ const AddPost = ({onClose}) => {
             // add group post
             payload.append("groupSlug", groupSlug)
 
+        } else if (pageName) {
+            payload.append("pageName", pageName)
         }
+
+
 
         dispatch(createFeedAction(payload)).unwrap().then((data) => {
             // onClose()
