@@ -21,21 +21,23 @@ import clockIcon from "src/assets/icon/time.png"
 import messengerIcon from "src/assets/icon/messenger.png"
 import { getChatRoomMessagesAction} from "src/store/actions/chatAction.js";
 import handleStartChat from "src/store/utils/handleStartChat.js";
+import {useFetchFriendsQuery} from "src/store/features/friendsApi.js";
 
 const HomeLayout = ({children}) => {
 
     const dispatch = useDispatch()
 
+    const {data} = useFetchFriendsQuery({pageNumber: 1})
+
     useEffect(() => {
         dispatch(fetchFeedsAction())
         dispatch(fetchPeoplesAction())
-        dispatch(fetchAuthFriendsAction())
+        // dispatch(fetchAuthFriendsAction())
     }, [])
 
     const {friends, pendingFriends, auth} = useSelector(state => state.authState)
     const {rooms, openHomeChatsSidebar, openChatUser} = useSelector(state => state.chatState)
     const {openSidebar} = useSelector(state => state.appState)
-
 
     const nav = [
         {label: "Friends", img: friendIcon, to: "/friends",},

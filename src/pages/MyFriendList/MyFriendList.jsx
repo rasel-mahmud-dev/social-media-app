@@ -6,14 +6,17 @@ import Avatar from "src/components/Shared/Avatar/Avatar.jsx";
 import HomeLayout from "layout/HomeLayout.jsx";
 
 import HomeLayoutLink from "pages/HomeLayoutLink/HomeLayoutLink.jsx";
+import {useFetchFriendsQuery} from "src/store/features/friendsApi.js";
 
 const MyFriendList = () => {
     const dispatch = useDispatch()
 
-    const {friends, auth} = useSelector(state => state.authState)
+    const {data} = useFetchFriendsQuery({pageNumber: 1})
+
+    const { auth} = useSelector(state => state.authState)
 
     useEffect(() => {
-        dispatch(fetchAuthFriendsAction())
+        // dispatch(fetchAuthFriendsAction())
     }, [])
 
 
@@ -51,11 +54,11 @@ const MyFriendList = () => {
 
             <div className="card">
                 <div className="card-meta">
-                    <h4>My Friends ({friends.length})</h4>
+                    <h4>My Friends ({data && data?.friends.length})</h4>
                 </div>
 
                 <div className="mt-6">{
-                    friends.map((friend) => (
+                    data && data?.friends.map((friend) => friend.status === "accepted" && (
                         <div className="mb-5" key={friend._id}>
                             {renderItem((friend.receiverId === auth._id) ? friend.sender : friend.receiver, friend)}
                         </div>

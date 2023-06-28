@@ -1,6 +1,6 @@
-import { configureStore } from '@reduxjs/toolkit'
+import {configureStore} from '@reduxjs/toolkit'
 // Or from '@reduxjs/toolkit/query/react'
-import { setupListeners } from '@reduxjs/toolkit/query'
+import {setupListeners} from '@reduxjs/toolkit/query'
 
 import authReducer from "./slices/authSlice";
 import appReducer from "./slices/appSlice";
@@ -9,6 +9,8 @@ import chatReducer from "./slices/chatSlice";
 import {notificationSlice} from "src/store/slices/notificationSlice.js";
 import {groupMembersApi} from "src/store/features/groupMembersApi.js";
 import {feedsApi} from "src/store/features/feedsApi.js";
+import {friendsApi} from "src/store/features/friendsApi.js";
+import {peoplesApi} from "src/store/features/peoplesApi.js";
 
 
 export const store = configureStore({
@@ -20,7 +22,9 @@ export const store = configureStore({
         notificationState: notificationSlice.reducer,
         // Add the generated reducer as a specific top-level slice
         [groupMembersApi.reducerPath]: groupMembersApi.reducer,
-        [feedsApi.reducerPath]: feedsApi.reducer
+        [feedsApi.reducerPath]: feedsApi.reducer,
+        [friendsApi.reducerPath]: friendsApi.reducer,
+        [peoplesApi.reducerPath]: peoplesApi.reducer
 
     },
     // Adding the api middleware enables caching, invalidation, polling,
@@ -28,10 +32,12 @@ export const store = configureStore({
     middleware: (getDefaultMiddleware) =>
         getDefaultMiddleware().concat([
             groupMembersApi.middleware,
-            feedsApi.middleware
+            feedsApi.middleware,
+            friendsApi.middleware,
+            peoplesApi.middleware
         ]),
 })
 
-// optional, but required for refetchOnFocus/refetchOnReconnect behaviors
+// optionally, but required for refetchOnFocus/refetchOnReconnect behaviors
 // see `setupListeners` docs - takes an optional callback as the 2nd arg for customization
 setupListeners(store.dispatch)

@@ -10,11 +10,15 @@ import CreateGroup from "pages/Group/CreateGroup.jsx";
 import GroupDetail from "pages/Group/GroupDetail.jsx";
 import DiscoverGroups from "pages/Group/DiscoverGroups.jsx";
 import MyJoinedGroups from "pages/Group/MyJoinedGroups.jsx";
+import Friends from "pages/Friends/Friends.jsx";
+import FriendsRequests from "pages/Friends/FriendsRequests.jsx";
+import FriendsSuggestions from "pages/Friends/FriendsSuggestions.jsx";
+import FriendLayout from "layout/FriendLayout.jsx";
 
 
 const Homepage = lazy(() => import("pages/Homepage"));
 const PrivateRoute = lazy(() => import("src/middleware/PrivateRoute.jsx"));
-const FindPeoples = lazy(() => import("pages/FindPeoples/FindPeoples.jsx"));
+const FindPeoples = lazy(() => import("pages/Friends/FindPeoples.jsx"));
 const MyFriendList = lazy(() => import("pages/MyFriendList/MyFriendList.jsx"));
 const RequestForYou = lazy(() => import("pages/RequestForYou/RequestForYou.jsx"));
 const WatchVideos = lazy(() => import("pages/WatchVideos/WatchVideos.jsx"));
@@ -39,10 +43,23 @@ const router = createBrowserRouter([
             {path: "/feed/:feedId", element: <PrivateRoute> <FeedDetail/> </PrivateRoute>},
             {path: "/stories", element: <PrivateRoute> <Stories/> </PrivateRoute>},
             {path: "/stories/:storyId", element: <PrivateRoute> <Stories/> </PrivateRoute>},
-            {path: "find-peoples", element: <PrivateRoute> <FindPeoples/> </PrivateRoute>},
-            {path: "friends", element: <PrivateRoute> <MyFriendList/> </PrivateRoute>},
-            {path: "friend-request-received", element: <PrivateRoute> <RequestForYou/> </PrivateRoute>},
-            {path: "friend-request-send", element: <PrivateRoute> <RequestSend/> </PrivateRoute>},
+            // {path: "find-peoples", element: <PrivateRoute> <FindPeoples/> </PrivateRoute>},
+
+            {
+                path: "friends",
+                element: <PrivateRoute> <FriendLayout/> </PrivateRoute>,
+                children: [
+                    {
+                        path: "",
+                        element: <PrivateRoute> <Friends/> </PrivateRoute>,
+                    },
+                    {path: "requests", element: <PrivateRoute> <FriendsRequests/> </PrivateRoute>},
+                    {path: "list", element: <PrivateRoute> <Friends/> </PrivateRoute>},
+                    {path: "suggestions", element: <PrivateRoute> <FriendsSuggestions/> </PrivateRoute>},
+                ]
+            },
+
+            // {path: "friend-request-send", element: <PrivateRoute> <RequestSend/> </PrivateRoute>},
             {path: "online-friend", element: <PrivateRoute> <OnlineFriends/> </PrivateRoute>},
             {path: "watch", element: <PrivateRoute> <WatchVideos/> </PrivateRoute>},
             {path: "saved", element: <PrivateRoute> <Saved/> </PrivateRoute>},

@@ -250,7 +250,8 @@
   height: 20px;
 }
 
-.icon_feed, .icon_discover, .icon_group2, .icon_user, .icon_image, .icon_pen, .icon_edit{
+.icon_feed, .icon_discover, .icon_group2, .icon_user, .icon_image, .icon_pen, .icon_edit, .icon_friends, .icon_friends_request, .icon_friends_suggestion,
+.icon_arrow-left, .icon_friends_all{
   background-image: url("src/assets/icon/47R6FPZVikW.png");
   background-position: 0px -897px;
   background-size: auto;
@@ -259,7 +260,25 @@
   background-repeat: no-repeat;
   display: inline-block;
 }
-
+.icon_friends{
+  background-image: url("src/assets/icon/FYbzbEn5foK.png");
+  background-position: 0px -218px;
+}.icon_arrow-left{
+   background-image: url("src/assets/icon/Z_p9oYVUuFW.png");
+   background-position: -50px -59px;
+}
+.icon_friends_request{
+  background-image: url("src/assets/icon/TI5rPo2AqMN.png");
+  background-position: 0px -105px;
+}
+.icon_friends_suggestion{
+   background-image: url("src/assets/icon/TI5rPo2AqMN.png");
+   background-position: 0px -42px;
+}
+.icon_friends_all{
+   background-image: url("src/assets/icon/Fc1VqfS43xb.png");
+   background-position: 0px -155px;
+}
 .icon_discover {
   background-image: url("src/assets/icon/pK4bB6p7OS2.png");
   background-position: 0px -33px;
