@@ -14,11 +14,13 @@ import Friends from "pages/Friends/Friends.jsx";
 import FriendsRequests from "pages/Friends/FriendsRequests.jsx";
 import FriendsSuggestions from "pages/Friends/FriendsSuggestions.jsx";
 import FriendLayout from "layout/FriendLayout.jsx";
+import AllFriends from "pages/Friends/AllFriends.jsx";
+import PageLayout from "layout/PageLayout.jsx";
+import Page from "pages/Page/Page.jsx";
 
 
 const Homepage = lazy(() => import("pages/Homepage"));
 const PrivateRoute = lazy(() => import("src/middleware/PrivateRoute.jsx"));
-const FindPeoples = lazy(() => import("pages/Friends/FindPeoples.jsx"));
 const MyFriendList = lazy(() => import("pages/MyFriendList/MyFriendList.jsx"));
 const RequestForYou = lazy(() => import("pages/RequestForYou/RequestForYou.jsx"));
 const WatchVideos = lazy(() => import("pages/WatchVideos/WatchVideos.jsx"));
@@ -43,8 +45,6 @@ const router = createBrowserRouter([
             {path: "/feed/:feedId", element: <PrivateRoute> <FeedDetail/> </PrivateRoute>},
             {path: "/stories", element: <PrivateRoute> <Stories/> </PrivateRoute>},
             {path: "/stories/:storyId", element: <PrivateRoute> <Stories/> </PrivateRoute>},
-            // {path: "find-peoples", element: <PrivateRoute> <FindPeoples/> </PrivateRoute>},
-
             {
                 path: "friends",
                 element: <PrivateRoute> <FriendLayout/> </PrivateRoute>,
@@ -54,7 +54,7 @@ const router = createBrowserRouter([
                         element: <PrivateRoute> <Friends/> </PrivateRoute>,
                     },
                     {path: "requests", element: <PrivateRoute> <FriendsRequests/> </PrivateRoute>},
-                    {path: "list", element: <PrivateRoute> <Friends/> </PrivateRoute>},
+                    {path: "list", element: <PrivateRoute> <AllFriends/> </PrivateRoute>},
                     {path: "suggestions", element: <PrivateRoute> <FriendsSuggestions/> </PrivateRoute>},
                 ]
             },
@@ -76,6 +76,13 @@ const router = createBrowserRouter([
                     {path: "create", element: <PrivateRoute> <CreateGroup/> </PrivateRoute>},
                     {path: "discover", element: <PrivateRoute> <DiscoverGroups/> </PrivateRoute>},
                     {path: "joins", element: <PrivateRoute> <MyJoinedGroups/> </PrivateRoute>},
+                ]
+            },
+            {
+                path: "pages",
+                element: <PrivateRoute> <PageLayout/> </PrivateRoute>,
+                children: [
+                    {path: "", element: <PrivateRoute> <Page/> </PrivateRoute>}
                 ]
             }
         ]

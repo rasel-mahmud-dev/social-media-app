@@ -48,7 +48,7 @@ const Friends = () => {
     const items = [
         {path: "/friends", label: "Home", icon: "icon_friends"},
         {path: "/friends/requests", label: "Friends Request", icon: "icon_friends_request"},
-        {path: "/friends/suggestion", label: "Friends Suggestion", icon: "icon_friends_suggestion"},
+        {path: "/friends/suggestions", label: "Friends Suggestion", icon: "icon_friends_suggestion"},
         {path: "/friends/list", label: "All Friends", icon: "icon_friends_all"}
     ]
 
@@ -72,7 +72,7 @@ const Friends = () => {
                 </div>
 
                 {items.map(navItem => (
-                    <Link to={navItem.path} className={`list-item mt-3 ${isActive(navItem.path) ? "active" : ""}`}
+                    <Link to={navItem.path} className={`list-item mt-1 ${isActive(navItem.path) ? "active" : ""}`}
                           key={navItem.label}>
                         <div className="flex items-center gap-x-2">
                             <div

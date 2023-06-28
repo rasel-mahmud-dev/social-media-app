@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 import apis from "src/apis/index.js";
@@ -20,6 +20,8 @@ import Button from "components/Shared/Button/Button.jsx";
 import findUserRoom from "src/store/utils/findUserRoom.js";
 import handleStartChat from "src/store/utils/handleStartChat.js";
 import {createRoomAction} from "src/store/actions/chatAction.js";
+import RenderProfile from "pages/Profile/RenderProfile.jsx";
+
 
 
 const Profile = () => {
@@ -74,19 +76,6 @@ const Profile = () => {
     const [isLoading, setLoading] = useState(false)
 
 
-    const sectionNavs = {
-        Posts: (params) => <PostSection {...params} />,
-        Friends: (params) => "Working",
-        Timeline: (params) => "Working",
-        Photos: (params) => <MediaSection  {...params} />,
-        Follower: (params) => "Working"
-    }
-
-    function handleSelectSection(sectionName) {
-        setState({
-            showSectionName: sectionName
-        })
-    }
 
     async function handleSelectImageChooser(which) {
         let file = await chooseImage()
@@ -231,8 +220,8 @@ const Profile = () => {
 
     console.log(state?.currentUserFollowing)
 
-    return (<>
-
+    return (
+        <>
         {auth?._id === userId && <ModalWithBackdrop
             modalClass={`${updateProfile.openImageChooserModal === "cover" ? "profile-cover-picker" : "profile-avatar-picker"} card`}
             onClose={handleCloseImageChoose}
@@ -264,104 +253,13 @@ const Profile = () => {
         </ModalWithBackdrop>
 
         }
-        <div className="profile-page">
-            {state.user && (<>
-                <div className="profile-header-bg">
 
-                    <div className="container-1200">
+        {state?.user && (
+            <RenderProfile onSelectImageChooser={handleSelectImageChooser} auth={auth} user={state.user} />
+        )}
 
-                        <div className="cover-image relative"
-                             style={{backgroundImage: `url(${state.user.cover})`}}>
-
-                            {auth?._id === userId && <div className="circle rounded_circle choose-cover-btn"
-                                                          onClick={() => handleSelectImageChooser("cover")}>
-                                <BiCamera className="color_p"/>
-                            </div>}
-                        </div>
-
-                        {/*{state.user._id === auth._id && (*/}
-                        {/*    <div className="mt-2">*/}
-                        {/*        <Button onClick={handleUploadAvatar} className="btn text-xs font-medium">Change Photo*/}
-                        {/*        </Button>*/}
-                        {/*    </div>*/}
-                        {/*)}*/}
-
-                        <div className="profile-content">
-
-                            <div className="flex items-center relative">
-                                <Avatar
-                                    className="!h-40 !w-40 profile-image"
-                                    src={state.user?.avatar}
-                                    imgClass="!h-40 !w-40 !text-xs"
-                                    username={state.user.fullName}
-                                />
-
-                                {auth?._id === userId && <div onClick={() => handleSelectImageChooser("avatar")}
-                                                              className="circle rounded_circle choose-avatar-btn">
-                                    <BiCamera className="color_p"/>
-                                </div>}
-
-                                <div className="ml-2 md:ml-4">
-                                    <h4 className="text-2xl font-semibold color_h1">{state.user.fullName}</h4>
-                                    <span className="text-md font-medium color_h3">123 Friends</span>
-                                    <AvatarGroup imgClass="!w-10 !h-10" className="!w-10 !h-10" data={[{
-                                        avatar: auth.avatar,
-                                        fullName: "Rasel mahmud"
-                                    }, {avatar: auth.avatar, fullName: "Rasel mahmud"}, {
-                                        avatar: auth.avatar,
-                                        fullName: "Rasel mahmud"
-                                    }, {avatar: auth.avatar, fullName: "Rasel mahmud"}, {
-                                        avatar: auth.avatar,
-                                        fullName: "Rasel mahmud"
-                                    }, {avatar: auth.avatar, fullName: "Rasel mahmud"}, {
-                                        avatar: auth.avatar,
-                                        fullName: "Rasel mahmud"
-                                    }, {avatar: auth.avatar, fullName: "Rasel mahmud"}, {
-                                        avatar: auth.avatar,
-                                        fullName: "Rasel mahmud"
-                                    },]}/>
-                                </div>
-                            </div>
-
-                            <div className="flex items-enter justify-between ">
-                                <div className="profile-section-nav flex mt-2">
-                                    {Object.keys(sectionNavs).map((name) => (
-                                        <li key={name} onClick={() => handleSelectSection(name)}
-                                            className={["profile-section-item color_p", state.showSectionName === name ? "active" : ""].join(" ")}
-                                        >{name}</li>))}
-                                </div>
-                                <div className="flex items-center justify-between gap-x-2">
-                                    {isFriend(friends, state.user._id) ?
-                                        <Button onClick={() => handleToggleFriend()}
-                                                className="btn-primary">Unfriend</Button> :
-                                        <Button onClick={() => handleToggleFriend(true)}
-                                                className="btn-primary">Add Friend</Button>}
-                                    <Button onClick={handleOpenChatForSendMessage}
-                                            className="btn-primary">Message</Button>
-
-
-                                    <Button onClick={() => toggleFollowFriend(state.user._id)}
-                                            className="btn-primary">{state?.currentUserFollowing?.following ? "UnFollow" : "Follow"}</Button>
-
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-
-                <div className="container-1200">
-
-                    <div className="">
-                        {sectionNavs[state.showSectionName] && sectionNavs[state.showSectionName]({
-                            authId: auth._id, userId: state.user._id
-                        })}
-                    </div>
-                </div>
-
-            </>)}
-        </div>
     </>);
 };
 
 export default Profile;
+

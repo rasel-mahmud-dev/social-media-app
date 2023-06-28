@@ -2,16 +2,28 @@ import React from "react";
 
 import "./styles.scss"
 import {createPortal} from "react-dom";
+import {TiTimes} from "react-icons/ti";
 
 
 const ModalWithBackdrop = (props) => {
-    const {isOpen, root, className = "", backdropClass, modalClass, onClose} = props
+    const {isOpen, root, className = "", title = "", backdropClass, modalClass, onClose} = props
 
     function handleCloseModal(e) {
         let el = e.target
         if (el.classList.contains('modal-backdrop')) {
             onClose()
         }
+    }
+
+    function renderTitle(){
+        return typeof title === "string" ? (
+            <div className="flex items-center justify-center relative" >
+                <h2 className="color_h1 text-lg font-semibold mb-2 text-center">{title}</h2>
+                <div className="absolute right-4 circle-hover-btn text-white" onClick={onClose}>
+                    <TiTimes />
+                </div>
+            </div>
+        ) : title
     }
 
     return root ? <ReactPortal>
@@ -21,7 +33,9 @@ const ModalWithBackdrop = (props) => {
                 onClick={handleCloseModal}
             >
                 <div className={`${modalClass} modal`}>
-                    {props.children}</div>
+                    {title && renderTitle()}
+                    {props.children}
+                </div>
             </div>
         </div>
     </ReactPortal> : (
@@ -31,7 +45,9 @@ const ModalWithBackdrop = (props) => {
                 onClick={handleCloseModal}
             >
                 <div className={`${modalClass} modal`}>
-                    {props.children}</div>
+                    {title && renderTitle()}
+                    {props.children}
+                </div>
             </div>
         </div>
 

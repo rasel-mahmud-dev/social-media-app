@@ -3,7 +3,6 @@ import "./navigation.scss"
 import "./style.scss";
 import React, {useEffect, useRef, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
-// import PreloadLink from "../preloadLink/PreloadLink";
 import MoreDropdown from "src/components/header/MoreDropdown";
 import {HiBars3} from "react-icons/hi2";
 import staticImage from "src/utils/staticImage.js";
@@ -15,7 +14,6 @@ import Avatar from "components/Shared/Avatar/Avatar.jsx";
 import {toggleOpenHomeChatsSidebar} from "src/store/slices/chatSlice.js";
 import MessengerQuickChat from "components/Header/MessengerQuickChat.jsx";
 import {CSSTransition} from "react-transition-group";
-import {notificationSlice} from "src/store/slices/notificationSlice.js";
 import Badge from "components/Shared/Badge/Badge.jsx";
 import NotificationDropdown from "components/NotificationDropdown/NotificationDropdown.jsx";
 
@@ -97,6 +95,9 @@ const Navigation = (props) => {
                             </li>
                             <li onClick={handleLogout}
                                 className="hover:bg-primary color_h2 hover:text-white cursor-pointer px-2 py-1">Logout
+                            </li>
+                            <li className="color_p">
+                                {auth._id}
                             </li>
                         </>
                     ) : (

@@ -251,7 +251,7 @@
 }
 
 .icon_feed, .icon_discover, .icon_group2, .icon_user, .icon_image, .icon_pen, .icon_edit, .icon_friends, .icon_friends_request, .icon_friends_suggestion,
-.icon_arrow-left, .icon_friends_all{
+.icon_arrow-left, .icon_friends_all, .icon_flag{
   background-image: url("src/assets/icon/47R6FPZVikW.png");
   background-position: 0px -897px;
   background-size: auto;
@@ -260,6 +260,12 @@
   background-repeat: no-repeat;
   display: inline-block;
 }
+.icon_flag{
+  background-image: url("src/assets/icon/hq3N1E1F2Yb.png");
+  background-position: 0px -292px;
+}
+
+
 .icon_friends{
   background-image: url("src/assets/icon/FYbzbEn5foK.png");
   background-position: 0px -218px;
