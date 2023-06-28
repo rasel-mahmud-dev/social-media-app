@@ -17,6 +17,7 @@ import FriendLayout from "layout/FriendLayout.jsx";
 import AllFriends from "pages/Friends/AllFriends.jsx";
 import PageLayout from "layout/PageLayout.jsx";
 import Page from "pages/Page/Page.jsx";
+import CreatePage from "pages/Page/CreatePage.jsx";
 
 
 const Homepage = lazy(() => import("pages/Homepage"));
@@ -82,7 +83,8 @@ const router = createBrowserRouter([
                 path: "pages",
                 element: <PrivateRoute> <PageLayout/> </PrivateRoute>,
                 children: [
-                    {path: "", element: <PrivateRoute> <Page/> </PrivateRoute>}
+                    {path: "", element: <PrivateRoute> <Page/> </PrivateRoute>},
+                    {path: "creation", element: <PrivateRoute> <CreatePage/> </PrivateRoute>}
                 ]
             }
         ]

@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import Sidebar from "components/Sidebar/Sidebar.jsx";
 import {openSidebarAction} from "src/store/slices/appSlice.js";
 import {GiGears} from "react-icons/gi";
@@ -13,6 +13,7 @@ import {createGroupAction, fetchMyGroupsAction} from "src/store/actions/groupAct
 import chooseImage from "src/utils/chooseImage.js";
 import resizeImageByMaxWidth from "src/utils/resizeImage.js";
 import {fetchPeoplesAction} from "src/store/actions/userAction.js";
+import apis from "src/apis/index.js";
 
 const WithPageSidebar = ({children}) => {
 
@@ -32,11 +33,15 @@ const WithPageSidebar = ({children}) => {
 
     const navigate = useNavigate()
 
+    const [myPages, setMyPages] = useState([])
 
     useEffect(() => {
-        dispatch(fetchMyGroupsAction())
+        apis.get("/page/my-pages").then(({status, data})=>{
+            if(status === 200){
+                setMyPages(data.pages)
+            }
+        })
     }, [])
-
 
     useEffect(() => {
         if (location.pathname === "/groups/create") {
@@ -102,27 +107,34 @@ const WithPageSidebar = ({children}) => {
                         </div>
 
 
-                        <Link to="/groups/feed" className="list-item mt-3">
+                        <Link to="/pages" className="list-item mt-3">
                             <div className="flex items-center gap-x-2">
                                 <div
                                     className="bg-blue  w-8 h-8 rounded-full relative flex items-center justify-center">
                                     <i className="png_filter_white icon_flag  absolute z-30"/>
                                 </div>
                                 <span>Your Pages</span>
-
                             </div>
                         </Link>
+
+                        <div>
+                            {myPages.map(page=>(
+                                <div>
+                                    <h4>{page.name}</h4>
+                                </div>
+                            ))}
+                        </div>
 
 
                         <Button
                             className="btn btn-primary2 w-full justify-center flex items-center gap-x-1 font-medium mt-3"
-                            onClick={() => navigate("/groups/create")}>
+                            onClick={() => navigate("/pages/creation")}>
                             <i className="icon_plus_16 png_filter_primary"></i>
                             <span>Create new Page</span>
                         </Button>
 
 
-                        <Link to="/groups/discover" className="list-item mt-3">
+                        <Link to="/pages?type=discover" className="list-item mt-3">
                             <div className="flex items-center gap-x-2">
                                 <div
                                     className="bg-blue  w-8 h-8 rounded-full relative flex items-center justify-center">
@@ -133,7 +145,7 @@ const WithPageSidebar = ({children}) => {
                         </Link>
 
 
-                        <Link to="/groups/joins?ordering=viewer_added" className="list-item mt-3">
+                        <Link to="/pages?type=liked" className="list-item mt-3">
                             <div className="flex items-center gap-x-2">
                                 <div
                                     className="bg-blue  w-8 h-8 rounded-full relative flex items-center justify-center">
@@ -144,7 +156,7 @@ const WithPageSidebar = ({children}) => {
                             </div>
                         </Link>
 
-                        <Link to="/groups/discover" className="list-item mt-3">
+                        <Link to="/pages?type=invited" className="list-item mt-3">
                             <div className="flex items-center gap-x-2">
                                 <div
                                     className="bg-blue  w-8 h-8 rounded-full relative flex items-center justify-center">
