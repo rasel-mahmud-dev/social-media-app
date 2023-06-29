@@ -15,6 +15,17 @@ const Page = () => {
     const {pageSlug} = useParams()
 
 
+    const [myPages, setMyPages] = useState([])
+
+    useEffect(() => {
+        apis.get("/page/my-pages").then(({status, data}) => {
+            if (status === 200) {
+                setMyPages(data.pages)
+            }
+        })
+    }, [])
+
+
     const [getSearchParams] = useSearchParams()
 
     const {auth} = useSelector(state => state.authState)
@@ -71,7 +82,7 @@ const Page = () => {
     return (
         <div>
 
-            <WithPageSidebar>
+            <WithPageSidebar myPages={myPages}>
 
                 <div className=" w-full">
 

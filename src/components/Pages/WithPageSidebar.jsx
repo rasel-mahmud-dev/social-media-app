@@ -15,7 +15,7 @@ import resizeImageByMaxWidth from "src/utils/resizeImage.js";
 import {fetchPeoplesAction} from "src/store/actions/userAction.js";
 import apis from "src/apis/index.js";
 
-const WithPageSidebar = ({children}) => {
+const WithPageSidebar = ({children, myPages = []}) => {
 
 
     const [state, setState] = useCustomReducer({
@@ -33,15 +33,6 @@ const WithPageSidebar = ({children}) => {
 
     const navigate = useNavigate()
 
-    const [myPages, setMyPages] = useState([])
-
-    useEffect(() => {
-        apis.get("/page/my-pages").then(({status, data}) => {
-            if (status === 200) {
-                setMyPages(data.pages)
-            }
-        })
-    }, [])
 
     useEffect(() => {
         if (location.pathname === "/groups/create") {

@@ -4,7 +4,6 @@ import Avatar from "components/Shared/Avatar/Avatar.jsx";
 import AvatarGroup from "components/Shared/Avatar/AvatarGroup.jsx";
 import {useNavigate, useParams} from "react-router-dom";
 import useCustomReducer from "src/hooks/useReducer.jsx";
-import PostSection from "components/Profile/PostSection.jsx";
 import MediaSection from "components/Profile/MediaSection.jsx";
 import {useSelector} from "react-redux";
 import apis from "src/apis/index.js";
@@ -13,8 +12,8 @@ import Button from "components/Shared/Button/Button.jsx";
 import "../Profile/profile.scss"
 import Intro from "components/Pages/Intro.jsx";
 
-const PageDetail = (props) => {
 
+const PageDetail = (props) => {
 
     const {auth} = useSelector(state => state.authState)
 
@@ -32,6 +31,7 @@ const PageDetail = (props) => {
         friends: [],
         pageDetail: null,
         isLoading: false,
+        likes: [],
         showSectionName: "Posts",
         currentUserFollowing: null // {}
     })
@@ -55,13 +55,21 @@ const PageDetail = (props) => {
                 setState({
                     pageDetail: data.page
                 })
+
+                apis.get("/page/likes?pageId=" + data.page._id).then(({data, status}) => {
+                    if (status === 200) {
+                        setState({
+                            likes: data.likes
+                        })
+                    }
+                })
+
             }
         })
     }, [pageName])
 
     function handleSelectSection(sectionName) {
         if (isNotOpenFromProfile) {
-
             navigate("/profile/" + user._id)
             return;
         }
@@ -70,8 +78,27 @@ const PageDetail = (props) => {
         })
     }
 
-    function handleUploadAvatar(){}
+    function handleUploadAvatar() {
+    }
 
+    function handleAddLike(pageId) {
+        apis.post("/page/toggle-like", {pageId}).then(({data, status}) => {
+            if (status !== 201) return;
+            if (data.removed) {
+                setState(prev => ({
+                    likes: prev.likes.filter(like => like.pageId !== pageId)
+                }))
+            } else {
+                setState(prev => ({
+                    likes: [...prev.likes, data.like]
+                }))
+            }
+        })
+    }
+
+    function isLiked(pageId) {
+        return state.likes.findIndex(like => like.pageId === pageId) !== -1
+    }
 
     return (
         <div>
@@ -95,7 +122,8 @@ const PageDetail = (props) => {
 
                                 {state.pageDetail.ownerId === auth._id && (
                                     <div className="mt-2">
-                                        <Button onClick={handleUploadAvatar} className="btn text-xs font-medium">Change Photo
+                                        <Button onClick={handleUploadAvatar} className="btn text-xs font-medium">Change
+                                            Photo
                                         </Button>
                                     </div>
                                 )}
@@ -123,15 +151,21 @@ const PageDetail = (props) => {
                                         <div className="ml-2 md:ml-4 flex w-full justify-between items-center">
                                             <div>
                                                 <h4 className="text-2xl font-semibold color_h1">{state.pageDetail.name}</h4>
-                                                <span className="text-md font-medium color_h3">123 likes</span>
+                                                <span className="text-md font-medium color_h3">{state.likes.length} likes</span>
                                             </div>
                                             <div className="flex items-center justify-between gap-x-2">
 
                                                 <Button
                                                     className="btn-primary">Learn More</Button>
 
-                                                <Button
-                                                    className="btn-dark2">Likes</Button>
+                                                {
+                                                    state?.pageDetail?.ownerId === auth._id
+                                                        ? <Button className="btn-dark2">Likes</Button>
+                                                        : <Button className="btn-dark2"
+                                                                  onClick={() => handleAddLike(state?.pageDetail._id)}>
+                                                            {isLiked(state.pageDetail._id) ? "Remove Like" : "Like"}
+                                                        </Button>
+                                                }
 
                                                 <Button
                                                     className="btn-dark2">Message</Button>
@@ -164,11 +198,9 @@ const PageDetail = (props) => {
                                 {sectionNavs[state.showSectionName] && sectionNavs[state.showSectionName]({
                                     authId: auth._id,
                                     page: state.pageDetail,
-
                                 })}
                             </div>
                         </div>
-
                     </>)}
             </div>
         </div>

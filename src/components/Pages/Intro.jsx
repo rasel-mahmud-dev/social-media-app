@@ -11,38 +11,32 @@ const Intro = ({page}) => {
     const [posts, setPosts] = useState([])
 
     useEffect(() => {
-        apis.get("/page/posts/" + pageName).then(({data})=>{
+        apis.get("/page/posts/" + pageName).then(({data}) => {
             setPosts(data.posts)
         })
     }, []);
 
-    console.log(posts)
 
 
     return (
-            <div className=" grid grid-cols-12 mt-4">
+        <div className=" grid grid-cols-12 mt-4">
 
+            <div className="col-span-4 card">
+                <h2 className="font-medium text-2xl color_h1">Intro</h2>
+                <p className="color_h2 text-sm mt-2">{page?.bio}</p>
 
-                   <div className="col-span-4 card">
+                <h4 className="color_h3">Page · App page</h4>
 
-                       <h2 className="font-medium text-2xl color_h1">Intro</h2>
-                       <p className="color_h2 text-sm mt-2">{page?.bio}</p>
-
-
-                       <h4 className="color_h3">Page · App page</h4>
-
-                   </div>
-                   <div className="col-span-8">
-                       <AddPostDemo />
-                       <div className="">
-                           {posts?.map(post=>(
-                               <FeedCard type="page" feed={post} />
-                           ))}
-
-                       </div>
-                   </div>
             </div>
-
+            <div className="col-span-8">
+                <AddPostDemo/>
+                <div className="mt-4">
+                    {posts?.map(post => (
+                        <FeedCard key={post._id} type="page" feed={post}/>
+                    ))}
+                </div>
+            </div>
+        </div>
     );
 };
 

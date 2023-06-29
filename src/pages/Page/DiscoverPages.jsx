@@ -30,7 +30,7 @@ const DiscoverPages = () => {
 
     return (
 
-        <div className="">
+        <div className="group-content">
 
             <div className="mb-4">
                 <h2 className="color_h1 text-xl font-medium">Discover Pages</h2>
@@ -49,7 +49,7 @@ const DiscoverPages = () => {
                             <div className="p-3">
 
                                 <div className="flex items-center gap-x-1">
-                                    <Avatar src={page.logo} className="!w-7 !h-7" />
+                                    <Avatar src={page.logo} className="!w-7 !h-7"/>
                                     <div>
                                         <h2 className="color_h2 font-semibold text-base">{page.name}</h2>
                                         <h2 className="color_h2 font-semibold text-base">{page.category}</h2>
