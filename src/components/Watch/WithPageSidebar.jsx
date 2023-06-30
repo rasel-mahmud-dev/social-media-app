@@ -102,7 +102,6 @@ const WithPageSidebar = ({children, myPages = []}) => {
                         </div>
 
 
-
                         <Link to="/watch" className="list-item mt-3 px-2">
                             <div className="flex items-center gap-x-2">
                                 <div
@@ -138,9 +137,9 @@ const WithPageSidebar = ({children, myPages = []}) => {
                     </div>
                 </Sidebar>
 
-                <div className="">
+
                     {children}
-                </div>
+
             </div>
         </div>
     );

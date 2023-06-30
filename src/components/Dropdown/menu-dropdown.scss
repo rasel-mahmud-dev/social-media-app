@@ -1,4 +1,4 @@
-
+@import "src/mixin";
 
 .menu-dropdown{
     .menu-dropdown-content{
@@ -10,5 +10,11 @@
         border: none;
         z-index: 10;
         box-shadow: var(--box-shadow-1);
+    }
+
+    @include dark(){
+        .menu-dropdown-content {
+            @apply bg-dark-600;
+        }
     }
 }

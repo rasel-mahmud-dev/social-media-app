@@ -1,11 +1,17 @@
 import blobToBase64 from "src/utils/blobToBase64.js";
 
-function chooseImage() {
+function chooseImage(mimeType = "") {
     return new Promise((resolve, _reject) => {
         try {
             let input = document.createElement("input")
             input.setAttribute("type", "file")
-            input.setAttribute("accept", "image/*")
+            if (mimeType) {
+                input.setAttribute("accept", mimeType)
+
+            } else {
+                input.setAttribute("accept", "image/*")
+
+            }
             input.addEventListener("change", async (e) => {
                 let file = e.target.files[0]
                 let base64 = await blobToBase64(file)

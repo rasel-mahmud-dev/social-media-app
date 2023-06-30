@@ -55,7 +55,6 @@ const FeedCard = ({feed, authId, dispatch, type = "user"}) => {
     });
 
     useEffect(() => {
-        console.log(inView)
         if (inView === true) {
             videoref.current.play();
         }

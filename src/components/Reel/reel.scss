@@ -1,0 +1,50 @@
+@import "src/mixin";
+.reel {
+  max-height: calc(100vh - (var(--header-height) + 40px));
+  min-height: 500px;
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+  //display: flex;
+  //justify-content: center;
+  //margin: 20px 0px;
+
+  .reel-header{
+    position: relative;
+
+    .reel-author{
+      width: calc(100% - 20px);
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+
+
+  }
+
+  .reel-video-root {
+    cursor: pointer;
+    video {
+      object-fit: contain;
+      width: 100%;
+      max-height: calc(100vh - var(--header-height));
+      min-height: 500px;
+      border-radius: 12px;
+    }
+  }
+
+
+  .bottom-meta{
+    position: absolute;
+    bottom: 0;
+    display: flex;
+    //left: 20px;
+    @apply text-white text-sm gap-x-2;
+    padding: 10px 10px;
+  }
+
+
+}
