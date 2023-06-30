@@ -7,6 +7,8 @@ import apis from "src/apis/index.js";
 import {useNavigate, useParams, useSearchParams} from "react-router-dom";
 import WithPageSidebar from "components/Pages/WithPageSidebar.jsx";
 import DiscoverPages from "pages/Page/DiscoverPages.jsx";
+import MyLikesAndFollwerPage from "pages/Page/MyLikesAndFollwerPage.jsx";
+
 
 const Page = () => {
 
@@ -34,7 +36,7 @@ const Page = () => {
         profile: {},
     })
 
-    const [path, setPath] = useState( "")
+    const [path, setPath] = useState("")
 
     function fetchFollowerInfo(userId) {
         apis.get("/follow/status/?userId=" + userId).then(({status, data}) => {
@@ -88,8 +90,10 @@ const Page = () => {
 
                     {
                         path === "discover"
-                            ? <DiscoverPages />
-                            : ""
+                            ? <DiscoverPages/>
+                            : path === "liked"
+                                ? <MyLikesAndFollwerPage/>
+                                : <DiscoverPages/>
                     }
 
 

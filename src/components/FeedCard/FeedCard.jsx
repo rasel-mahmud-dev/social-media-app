@@ -1,4 +1,4 @@
-import React, {useEffect, useReducer, useState} from 'react';
+import React, {useEffect, useReducer, useRef, useState} from 'react';
 import {BiComment, BiLike, BiShare} from "react-icons/bi";
 import Avatar from "../Shared/Avatar/Avatar.jsx";
 import {
@@ -20,8 +20,21 @@ import {Link} from "react-router-dom";
 
 import "./feed-card.scss"
 import staticImage from "src/utils/staticImage.js";
+import {useInView} from "react-intersection-observer";
+
+
+const Video = React.memo(({src, videoRef})=>{
+
+    return (
+        <video ref={videoRef} controls={true} src={staticImage(src)}></video>
+    )
+})
 
 const FeedCard = ({feed, authId, dispatch, type = "user"}) => {
+
+    const settings = {
+        autoVideoPlay: true
+    }
 
     const [state, setState] = useReducer((prev, action) => ({
         ...prev,
@@ -32,6 +45,22 @@ const FeedCard = ({feed, authId, dispatch, type = "user"}) => {
         isShowComment: false,
         comments: []
     })
+
+
+    const videoref = useRef();
+
+
+    const {ref, inView} = useInView({
+        threshold: 0
+    });
+
+    useEffect(() => {
+        console.log(inView)
+        if (inView === true) {
+            videoref.current.play();
+        }
+    });
+
 
     function handleExpand(isExpand) {
         setState({isExpand: isExpand})
@@ -84,6 +113,15 @@ const FeedCard = ({feed, authId, dispatch, type = "user"}) => {
     }
 
     function fullName(feed) {
+        if (feed.type === "page") {
+            if (feed?.page) {
+                return feed?.page?.name
+
+            } else {
+                return feed?.page?.name
+            }
+        }
+
         if (type === "user") {
             return feed?.author?.fullName
         } else {
@@ -92,6 +130,15 @@ const FeedCard = ({feed, authId, dispatch, type = "user"}) => {
     }
 
     function avatar(feed) {
+        if (feed.type === "page") {
+            if (feed?.page) {
+                return feed?.page?.logo
+
+            } else {
+                return feed?.page?.logo
+            }
+        }
+
         if (type === "user") {
             return feed?.author?.avatar
         } else {
@@ -148,7 +195,17 @@ const FeedCard = ({feed, authId, dispatch, type = "user"}) => {
                                 : ""}
                         </div>
 
-                        {feed.images.length > 0 && (
+                        {/**** if video post */}
+
+
+                        {feed?.video && (
+                            <div ref={ref}>
+                                <Video src={feed?.video.url} videoRef={videoref}/>
+                            </div>
+                        )}
+
+
+                        {!feed?.video && feed.images.length > 0 && (
                             <div className={`feed-media image-${feed.images.length > 4 ? 4 : feed.images.length}`}>
                                 {feed?.images.slice(0, feed?.images.length >= 4 ? 4 : undefined).map((image, index) => (
                                     <div key={index} className="relative">

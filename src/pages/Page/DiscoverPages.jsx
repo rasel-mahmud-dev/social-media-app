@@ -11,7 +11,6 @@ import Avatar from "components/Shared/Avatar/Avatar.jsx";
 
 
 const DiscoverPages = () => {
-
     const [state, setState] = useCustomReducer({
         pages: []
     })
@@ -24,8 +23,29 @@ const DiscoverPages = () => {
                 })
             }
         })
-
     }, []);
+
+    function addLikePage(pageId){
+        apis.post("/page/add-like", {pageId}).then(({data, status}) => {
+            if (status === 201) {
+                setState(prev => ({
+                    pages: prev.pages.filter(page=>page._id !== pageId)
+                }))
+            }
+
+            // if (data.removed) {
+            //     setState(prev => ({
+            //         likes: prev.likes.filter(like => like.pageId !== pageId),
+            //         totalLikes: prev.totalLikes - 1
+            //     }))
+            // } else {
+            //     setState(prev => ({
+            //         likes: [...prev.likes, data.like],
+            //         totalLikes: prev.totalLikes + 1
+            //     }))
+            // }
+        })
+    }
 
 
     return (
@@ -58,7 +78,7 @@ const DiscoverPages = () => {
                                 </div>
 
                                 {/*<p>28K members • 10 posts a week</p>*/}
-                                <Button className="btn btn-dark2 w-full mt-3 relative z-20">Like Page</Button>
+                                <Button onClick={()=>addLikePage(page._id)} className="btn btn-dark2 w-full mt-3 relative z-20">Like Page</Button>
                             </div>
 
                             <Link className="card-link" to={`/pages/${page.name}`}></Link>
