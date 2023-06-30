@@ -31,7 +31,15 @@
   transition: margin-left .4s ease;
   padding-left: 16px;
 
+}
 
+.feed-container{
+  max-width: 700px;
+  margin: auto;
+
+  @include getDown(900px){
+    max-width: 500px;
+  }
 }
 
 .group-container-full {

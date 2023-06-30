@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import RenderProfile from "pages/Profile/RenderProfile.jsx";
 import Avatar from "components/Shared/Avatar/Avatar.jsx";
 import {useDispatch, useSelector} from "react-redux";
@@ -8,6 +8,10 @@ import {useNavigate, useParams, useSearchParams} from "react-router-dom";
 import WithPageSidebar from "components/Watch/WithPageSidebar.jsx";
 import DiscoverPages from "pages/Page/DiscoverPages.jsx";
 import MyLikesAndFollwerPage from "pages/Page/MyLikesAndFollwerPage.jsx";
+import {useVideoFeedsQuery} from "src/store/features/feedsApi.js";
+import {fetchPeoplesAction} from "src/store/actions/userAction.js";
+import InfiniteScroll from "components/InfiniteScroll/InfiniteScroll.jsx";
+import Feeds from "components/Feeds/Feeds.jsx";
 
 
 const Watch = () => {
@@ -15,6 +19,52 @@ const Watch = () => {
     const dispatch = useDispatch()
 
     const {pageSlug} = useParams()
+
+
+    const {auth} = useSelector(state => state.authState)
+
+    const [feedPageNumber, setFeedPageNumber] = useState(1)
+
+
+    let {feeds} = useVideoFeedsQuery({
+        pageNumber: feedPageNumber,
+        query: "?pageNumber=" + feedPageNumber
+    }, {
+        // transform data model
+        selectFromResult: ({data, isLoading, isFetching, isError}) => ({
+            feeds: data?.feeds,
+            isLoadingGoods: isLoading,
+            isFetchingGoods: isFetching,
+        }),
+    })
+
+    const queries = useSelector((state) => state.feedApi.queries);
+
+    const combinedResults = useMemo(() => {
+        let results = [];
+        for (const key in queries) {
+            if (key.startsWith("videoFeeds")) {
+                let item = queries[key]
+                if (item.status === "fulfilled") {
+                    if (item.data.feeds) {
+                        results.push(...item.data.feeds)
+                    }
+                }
+            }
+        }
+        return results;
+    }, [queries, feedPageNumber]);
+
+
+    useEffect(() => {
+        dispatch(fetchPeoplesAction())
+    }, [dispatch])
+
+    function handleLoadMoreFeed({pageNumber}) {
+        if (feeds.length > 0) {
+            setFeedPageNumber(pageNumber)
+        }
+    }
 
 
     const [myPages, setMyPages] = useState([])
@@ -30,7 +80,6 @@ const Watch = () => {
 
     const [getSearchParams] = useSearchParams()
 
-    const {auth} = useSelector(state => state.authState)
 
     const [state, setState] = useCustomReducer({
         profile: {},
@@ -78,25 +127,26 @@ const Watch = () => {
         setPath(type)
     }, [type]);
 
-    console.log(path)
 
 
     return (
-        <div>
+        <WithPageSidebar myPages={myPages}>
+            <div className="group-content w-full mt-4">
+                <div className="feed-container">
+                    <div className="color_h1 mb-4 px-2">
+                        <h4>Watch Videos</h4>
+                    </div>
 
-            <WithPageSidebar myPages={myPages}>
-
-                <div className=" w-full">
-
-                   sdfsdf
-
+                    {/**** all feed */}
+                    <InfiniteScroll pageNumber={feedPageNumber} onLoadMore={handleLoadMoreFeed}>
+                        <Feeds feeds={combinedResults || []}/>
+                    </InfiniteScroll>
 
                 </div>
 
-            </WithPageSidebar>
+            </div>
 
-
-        </div>
+        </WithPageSidebar>
     );
 };
 
