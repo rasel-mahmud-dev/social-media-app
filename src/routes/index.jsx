@@ -19,13 +19,16 @@ import PageLayout from "layout/PageLayout.jsx";
 import Page from "pages/Page/Page.jsx";
 import CreatePage from "pages/Page/CreatePage.jsx";
 import PageDetail from "pages/Page/PageDetail.jsx";
+import WatchLayout from "layout/WatchLayout.jsx";
+import Watch from "pages/Watch/Watch.jsx";
+import Reels from "pages/Watch/Reels.jsx";
 
 
 const Homepage = lazy(() => import("pages/Homepage"));
 const PrivateRoute = lazy(() => import("src/middleware/PrivateRoute.jsx"));
 const MyFriendList = lazy(() => import("pages/MyFriendList/MyFriendList.jsx"));
 const RequestForYou = lazy(() => import("pages/RequestForYou/RequestForYou.jsx"));
-const WatchVideos = lazy(() => import("pages/WatchVideos/WatchVideos.jsx"));
+const WatchVideos = lazy(() => import("pages/Watch/WatchVideos.jsx"));
 const OnlineFriends = lazy(() => import("pages/OnlineFriends/OnlineFriends.jsx"));
 const RequestSend = lazy(() => import("pages/RequestSend/RequestSend.jsx"));
 const Saved = lazy(() => import("pages/Saved/Saved.jsx"));
@@ -60,10 +63,15 @@ const router = createBrowserRouter([
                     {path: "suggestions", element: <PrivateRoute> <FriendsSuggestions/> </PrivateRoute>},
                 ]
             },
+            {
+                path: "watch",
+                element: <PrivateRoute> <WatchLayout/> </PrivateRoute>,
+                children: [
+                    {path: "", element: <PrivateRoute> <Watch/> </PrivateRoute>},
+                    {path: "reels", element: <PrivateRoute> <Reels/> </PrivateRoute>}
+                ]
+            },
 
-            // {path: "friend-request-send", element: <PrivateRoute> <RequestSend/> </PrivateRoute>},
-            {path: "online-friend", element: <PrivateRoute> <OnlineFriends/> </PrivateRoute>},
-            {path: "watch", element: <PrivateRoute> <WatchVideos/> </PrivateRoute>},
             {path: "saved", element: <PrivateRoute> <Saved/> </PrivateRoute>},
             {path: "join", element: <AuthExcludeRoute><Login/></AuthExcludeRoute>},
             {path: "messenger", element: <Messenger/>},
@@ -88,7 +96,8 @@ const router = createBrowserRouter([
                     {path: "creation", element: <PrivateRoute> <CreatePage/> </PrivateRoute>},
                     {path: ":pageName", element: <PrivateRoute> <PageDetail/> </PrivateRoute>}
                 ]
-            }
+            },
+
         ]
     }
 ])

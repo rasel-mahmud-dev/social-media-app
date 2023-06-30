@@ -50,6 +50,41 @@ export const feedsApi = createApi({
                         ],
 
             }),
+            videoFeeds: builder.query({
+                // invalidatesTags: ["feeds"],
+                query(query) {
+                    const {
+                        // perPage = 10,
+                        pageNumber = 1,
+                        orderBy = "createdAt",
+                        orderDirection = "desc",
+                    } = query
+
+                    //  fetch feeds
+                    return "/feed/video" + `?pageNumber=${pageNumber}&orderBy=${orderBy}&orderDirection=${orderDirection}`
+
+                },
+
+                transformResponse: function (response, _, query) {
+                    return {
+                        feeds: response,
+                        pageNumber: query.pageNumber,
+                    }
+                },
+
+                providesTags: (result) =>
+                    result?.feeds
+                        ? [
+                            ...result.feeds.map(feed => ({type: 'feeds', id: feed._id})),
+                            {type: 'feeds', id: 'LIST'},
+                            {type: 'feeds', id: 'PARTIAL-FEEDS'},
+                        ]
+                        : [
+                            {type: 'feeds', id: 'LIST'},
+                            {type: 'feeds', id: 'PARTIAL-FEEDS'},
+                        ],
+
+            }),
 
             groupFeeds: builder.query({
                 // invalidatesTags: ["feeds"],
@@ -166,4 +201,4 @@ export const feedsApi = createApi({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const {useFeedsQuery, useGroupFeedsQuery, useAddFeedMutation} = feedsApi
+export const {useFeedsQuery, useVideoFeedsQuery, useGroupFeedsQuery, useAddFeedMutation} = feedsApi

@@ -1,18 +1,27 @@
-import React, {memo, useEffect, useMemo, useState} from "react";
-
-import {fetchFeedsAction} from "src/store/actions/feedAction.js";
-import {useDispatch, useSelector} from "react-redux";
-import {fetchPeoplesAction} from "src/store/actions/userAction.js";
+import React, {useEffect, useMemo, useState} from 'react';
 import HomeLayout from "layout/HomeLayout.jsx";
-import Stories from "src/components/Story/Stories.jsx";
-import AddPostDemo from "components/AddPost/AddPostDemo.jsx";
 import Feeds from "components/Feeds/Feeds.jsx";
+import {useDispatch, useSelector} from "react-redux";
+import {useVideoFeedsQuery} from "src/store/features/feedsApi.js";
+import {fetchPeoplesAction} from "src/store/actions/userAction.js";
 import InfiniteScroll from "components/InfiniteScroll/InfiniteScroll.jsx";
-import {feedsApi, useFeedsQuery} from "src/store/features/feedsApi.js";
-import apis from "src/apis/index.js";
-import {useInfiniteQuery, useQuery} from "@tanstack/react-query";
 
-const Homepage = () => {
+const WatchVideos = () => {
+
+    // const [state, setState] = useCustomReducer({
+    //     feeds: []
+    // })
+    //
+    // useEffect(() => {
+    //     apis.get("/feed/video").then(({data, status}) => {
+    //         if (status === 200) {
+    //             setState({
+    //                 feeds: data.feeds
+    //             })
+    //         }
+    //     })
+    // }, []);
+
 
     const dispatch = useDispatch()
 
@@ -22,7 +31,7 @@ const Homepage = () => {
     const [feedPageNumber, setFeedPageNumber] = useState(1)
 
 
-    let {feeds} = useFeedsQuery({
+    let {feeds} = useVideoFeedsQuery({
         pageNumber: feedPageNumber,
         query: "?pageNumber=" + feedPageNumber
     }, {
@@ -39,7 +48,7 @@ const Homepage = () => {
     const combinedResults = useMemo(() => {
         let results = [];
         for (const key in queries) {
-            if (key.startsWith("feeds")) {
+            if (key.startsWith("videoFeeds")) {
                 let item = queries[key]
                 if (item.status === "fulfilled") {
                     if (item.data.feeds) {
@@ -64,29 +73,21 @@ const Homepage = () => {
 
 
     return (
-        <div className="">
+        <HomeLayout>
+            <div className="">
 
-            <HomeLayout>
-                <div className="flex gap-x-4">
-                    <div className='w-full'>
-
-                        <div className="stories-container">
-                            <Stories auth={auth}></Stories>
-                        </div>
-
-                        <AddPostDemo className="mb-4"/>
-
-                        {/**** all feed */}
-                        <InfiniteScroll pageNumber={feedPageNumber} onLoadMore={handleLoadMoreFeed}>
-                            <Feeds feeds={combinedResults || []}/>
-                        </InfiniteScroll>
-
-                    </div>
+                <div className="color_h1 mb-4 px-2">
+                    <h4>Watch Videos</h4>
                 </div>
-            </HomeLayout>
-        </div>
+
+                {/**** all feed */}
+                <InfiniteScroll pageNumber={feedPageNumber} onLoadMore={handleLoadMoreFeed}>
+                    <Feeds feeds={combinedResults || []}/>
+                </InfiniteScroll>
+
+            </div>
+        </HomeLayout>
     );
 };
 
-
-export default Homepage;
+export default WatchVideos;
