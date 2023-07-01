@@ -93,11 +93,10 @@ const WithGroupHomeSidebar = ({children}) => {
                     onClose={() => dispatch(openSidebarAction(""))}>
 
                     <div>
-
                         <div className="flex items-center justify-between">
                             <h2 className="font-medium color_h2">Groups</h2>
-                            <div className="rounded_circle color_p">
-                                <GiGears/>
+                            <div className="rounded_circle">
+                                <i className="icon_gear png_filter_white"/>
                             </div>
                         </div>
 

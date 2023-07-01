@@ -28,7 +28,7 @@ const Reels = () => {
 
     return (
 
-        <WithPageSidebar myPages={[]}>
+        <WithPageSidebar>
             <div className="group-content w-full">
 
                 <div className="relative">
@@ -63,7 +63,6 @@ const Reels = () => {
 
 
 const ReelsParent = memo(({auth, reel}) => {
-
 
     const videoref = useRef();
     const navigate = useNavigate()

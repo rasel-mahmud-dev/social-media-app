@@ -1,83 +1,18 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import Sidebar from "components/Sidebar/Sidebar.jsx";
 import {openSidebarAction} from "src/store/slices/appSlice.js";
 import {GiGears} from "react-icons/gi";
 import Search from "components/Shared/Input/Search.jsx";
-import {Link, useLocation, useNavigate} from "react-router-dom";
-import Button from "components/Shared/Button/Button.jsx";
-import Avatar from "components/Shared/Avatar/Avatar.jsx";
-import staticImage from "src/utils/staticImage.js";
-import useCustomReducer from "src/hooks/useReducer.jsx";
+import {Link} from "react-router-dom";
+
 import {useDispatch, useSelector} from "react-redux";
-import {createGroupAction, fetchMyGroupsAction} from "src/store/actions/groupAction.js";
-import chooseImage from "src/utils/chooseImage.js";
-import resizeImageByMaxWidth from "src/utils/resizeImage.js";
-import {fetchPeoplesAction} from "src/store/actions/userAction.js";
-import apis from "src/apis/index.js";
-
-const WithPageSidebar = ({children, myPages = []}) => {
 
 
-    const [state, setState] = useCustomReducer({
-        name: "",
-        description: "",
-        groupCoverPhoto: null,
-        createNewGroup: false,
-        isPublic: true,
-        members: []
-    })
-
+const WithPageSidebar = ({children}) => {
 
     const dispatch = useDispatch()
-    const location = useLocation()
-
-    const navigate = useNavigate()
-
-
-    useEffect(() => {
-        if (location.pathname === "/groups/create") {
-            setState({
-                createNewGroup: true
-            })
-
-        } else if (location.pathname === "/groups") {
-            setState({
-                createNewGroup: false
-            })
-        }
-    }, [location.pathname])
-
 
     const {openSidebar} = useSelector(state => state.appState)
-    const {auth, groups} = useSelector(state => state.authState)
-    const {peoples} = useSelector(state => state.feedState)
-
-
-    function handleCreateGroup() {
-        const payload = new FormData()
-        payload.append("name", state.name)
-        payload.append("description", state?.description)
-        if (state.groupCoverPhoto && state.groupCoverPhoto.blob) {
-            payload.append("coverPhoto", state.groupCoverPhoto.blob, "group-cover")
-        }
-        if (state.members && state.members.length > 0) {
-            payload.append("members", JSON.stringify(state.members.map(m => m._id)))
-        }
-        dispatch(createGroupAction(payload))
-    }
-
-    async function handleChooseGroupCoverPhoto() {
-        let file = await chooseImage()
-        if (!file || !file?.base64) return;
-        let newFile = await resizeImageByMaxWidth(file.base64, 920)
-        setState({
-            groupCoverPhoto: newFile
-        })
-    }
-
-    function handleFetchPeople() {
-        dispatch(fetchPeoplesAction())
-    }
 
 
     return (
@@ -138,7 +73,7 @@ const WithPageSidebar = ({children, myPages = []}) => {
                 </Sidebar>
 
 
-                    {children}
+                {children}
 
             </div>
         </div>

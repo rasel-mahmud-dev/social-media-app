@@ -92,7 +92,7 @@ const Reel = ({reel, onRefReady}) => {
                             <div className=" flex items-center gap-x-2 ">
                                 <Avatar username={reel?.author.fullName} src={reel?.author.avatar}
                                         className="!w-8 !h-8  rounded-full " imgClass="!w-8 !h-8 !text-xs"/>
-                                <h4 className="color_h1 font-medium">{reel?.author.fullName}</h4>
+                                <h4 className="text-white font-medium">{reel?.author.fullName}</h4>
                             </div>
 
 

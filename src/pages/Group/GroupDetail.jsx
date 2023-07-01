@@ -59,7 +59,7 @@ const categories = [
             {
                 label: "Group Settings",
                 subLabel: "Manage discussions, permissions and roles",
-                icon: <GoGear className="text-2xl color_p"/>,
+                icon: <i className="icon_gear png_filter_white"/>,
             },
             {
                 label: "Add features",

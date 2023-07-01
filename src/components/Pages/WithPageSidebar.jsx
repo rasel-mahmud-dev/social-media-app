@@ -163,9 +163,9 @@ const WithPageSidebar = ({children, myPages = []}) => {
                     </div>
                 </Sidebar>
 
-                <div className="">
-                    {children}
-                </div>
+
+                {children}
+
             </div>
         </div>
     );

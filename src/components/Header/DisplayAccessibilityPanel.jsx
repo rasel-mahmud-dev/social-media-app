@@ -18,9 +18,9 @@ const DisplayAccessibilityPanel = (props) => {
 
   return (
       <div className="px-3 pt-3">
-        <div className="flex items-center mb-4 cursor-pointer"  onClick={()=>onSubItemOpen(0)}>
-          <span className="h-8 w-8 hover:bg-dark-900/10 cursor-pointer rounded-full flex items-center justify-center">
-            <i className="png_icon icon_arrow_left"></i>
+        <div className="flex items-center mb-4 cursor-pointer"  onClick={(e)=>onSubItemOpen(e, 0)}>
+          <span className="circle-hover-btn">
+            <i className="png_icon icon_arrow-left"></i>
           </span>
           <h2 className="color_h1 text-xl font-bold ml-2">Display & accessibility</h2>
         </div>
@@ -32,8 +32,8 @@ const DisplayAccessibilityPanel = (props) => {
              </div>
            </div>
             <div className="ml-2">
-              <h4 className="color_h2 text-lg font-medium">Dark Mode</h4>
-              <p className="font-normal color_p">
+              <h4 className="color_h2 text-base mb-1 font-medium">Dark Mode</h4>
+              <p className="font-normal text-sm color_p">
                 Dark Mode
                 Adjust the appearance of Facebook to reduce glare and give your eyes a break.</p>
               <ul className="mt-4">
@@ -49,15 +49,15 @@ const DisplayAccessibilityPanel = (props) => {
             </div>
         </div>
 
-        <div className="flex items-start">
+        <div className="flex items-start mt-5">
            <div className="">
              <div className="rounded_circle">
                <i className="png_icon icon_moon"></i>
              </div>
            </div>
             <div className="ml-2">
-              <h4 className="color_h2 text-lg font-medium">Compact Mode</h4>
-              <p className="font-normal color_p">
+              <h4 className="color_h2 text-base mb-1 font-medium">Compact Mode</h4>
+              <p className="font-normal color_p text-sm">
                 Make your font size smaller so more content can fit on the screen.
               </p>
               <ul className="mt-4">

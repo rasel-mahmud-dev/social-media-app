@@ -50,12 +50,16 @@ const DiscoverPages = () => {
 
     return (
 
-        <div className="group-content">
+        <div className="">
 
-            <div className="mb-4">
+            <div className="my-4">
                 <h2 className="color_h1 text-xl font-medium">Discover Pages</h2>
                 <p className="color_p text-sm">Suggested for you</p>
             </div>
+
+            {state.pages && state.pages.length === 0 && <div>
+                <h2 className="color_h1 text-xl font-medium">No new page found.</h2>
+            </div> }
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                 {

@@ -82,12 +82,11 @@ const Page = () => {
 
 
     return (
-        <div>
+
 
             <WithPageSidebar myPages={myPages}>
 
-                <div className=" w-full">
-
+                <div className="group-content w-full">
                     {
                         path === "discover"
                             ? <DiscoverPages/>
@@ -95,14 +94,12 @@ const Page = () => {
                                 ? <MyLikesAndFollwerPage/>
                                 : <DiscoverPages/>
                     }
-
-
                 </div>
 
             </WithPageSidebar>
 
 
-        </div>
+
     );
 };
 

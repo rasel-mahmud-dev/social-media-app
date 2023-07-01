@@ -20,9 +20,9 @@ const CreateReel = () => {
 
     const [state, setState] = useCustomReducer({
         author: auth,
-        videoUrl: "public/video/Snapsave_774bf77d95afe78b6bfcd467fef64f6c_1080p.mp4",
+        videoUrl: "",
         videoUrlBlob: null,
-        caption: "হরতাল চলছে।",
+        caption: "Some caption",
         tags: ["#short", "#viral", "#new", "#funny"]
     })
 

@@ -10,6 +10,8 @@ import {CSSTransition} from "react-transition-group"
 
 import staticImage from "src/utils/staticImage.js";
 import Loading from "components/Shared/Loading/Loading.jsx";
+import Avatar from "components/Shared/Avatar/Avatar.jsx";
+import {logoutAction} from "src/store/slices/authSlice.js";
 
 
 // interface Props {
@@ -21,17 +23,7 @@ const MoreDropdown = (props) => {
 
     const {appState, authState} = useSelector((state) => state)
 
-
     const {isShow, onSetExpandDropdown} = props;
-
-
-    function logoutRoutePush(url) {
-
-    }
-
-    function pushRoute(url) {
-
-    }
 
     const items = [
         {id: 1, label: "Setting & Privacy", icon_class: "icon_gear", hasSubMenu: true},
@@ -41,16 +33,17 @@ const MoreDropdown = (props) => {
         {id: 5, label: "Log Out", icon_class: "icon_logout", hasSubMenu: false},
     ]
 
-    const [openItem, setOpenItem] = React.useState(3);
+    const [openItem, setOpenItem] = React.useState(0);
 
 
-    function handleSubItemOpen(subItemId) {
+    function handleSubItemOpen(e, subItemId) {
+        e.stopPropagation();
         setOpenItem(subItemId)
     }
 
 
     return (
-        <div className="absolute top-10 right-0 ">
+        <div className="absolute top-12 right-0 ">
             <div className="min-w-[350px] menu_panel_card overflow-hidden">
 
                 {/*********** More menu panel ***********/}
@@ -58,7 +51,7 @@ const MoreDropdown = (props) => {
                     <div>
                         <Suspense fallback={<Loading/>}>
                             <Index onSetExpandDropdown={onSetExpandDropdown} onSubItemOpen={handleSubItemOpen}
-                                   items={items} authState={authState}/>
+                                   items={items} auth={authState.auth}/>
                         </Suspense>
                     </div>
                 </CSSTransition>
@@ -68,8 +61,9 @@ const MoreDropdown = (props) => {
                 <CSSTransition unmountOnExit={true} in={openItem === 3} timeout={400} classNames="menu_content">
                     <div>
                         <Suspense fallback={<Loading/>}>
-                            <DisplayAccessibilityPanel onSubItemOpen={handleSubItemOpen}
-                                                       isDarkMode={appState.isDarkMode}/>
+                            <DisplayAccessibilityPanel
+                                onSubItemOpen={handleSubItemOpen}
+                                isDarkMode={appState.isDarkMode}/>
                         </Suspense>
                     </div>
                 </CSSTransition>
@@ -79,49 +73,51 @@ const MoreDropdown = (props) => {
     )
 };
 
-const Index = ({authState, items, onSubItemOpen, onSetExpandDropdown}) => {
+const Index = ({auth, items = [], onSubItemOpen, onSetExpandDropdown}) => {
 
     const dispatch = useDispatch()
-    const navigator = useNavigate()
 
     function logOutHandler() {
-        // dispatch(loginOutHandlerAction(()=> {
-        //   onSetExpandDropdown("")
-        //   navigator("/")
-        // }))
+        dispatch(logoutAction())
+
+        /// remove caching to reload browser
+        location.reload()
     }
+
 
     return (
         <div className="bg-white dark:bg-dark-700">
-            {authState._id &&
+            {auth && auth._id &&
                 <div>
 
                     <div className="px-3 pt-3">
-                        <div className="flex items-center">
-                            <div className="w-14">
-                                <img className="w-full rounded-full" src={staticImage(authState.avatar)} alt=""/>
-                            </div>
-                            <div className="ml-2">
-                                <h4 className="color_h2 text-lg font-medium">{authState.firstName}</h4>
-                                <p className="color_p text-sm font-normal">
-                                    <Link to="/">
-                                        See your profile
-                                    </Link>
-                                </p>
+                        <Link to={`/profile/${auth._id}`}>
+                            <div className="list-item">
+                                <Avatar username={auth.fullName} src={staticImage(auth.avatar)} className="!w-10 !h-10"
+                                        imgClass="!w-10 !h-10"/>
 
+                                <div className="ml-2">
+                                    <h4 className="color_h2 text-lg font-medium">{auth.fullName}</h4>
+                                    <p className="color_p text-sm font-normal">See your profile</p>
+                                </div>
                             </div>
-                        </div>
+                        </Link>
 
 
                     </div>
 
                     <div className="border_b"></div>
 
-                    <div className="py-5 px-2">
+                    <div className="pt-0 pb-4 px-2">
 
                         {items.map((item) => (
-                            <li className='list_item'
-                                onClick={() => item.hasSubMenu ? onSubItemOpen(item.id) : logOutHandler()}>
+                            <li key={item.id} className='list_item'
+                                onClick={(e) => item.hasSubMenu
+                                    ? onSubItemOpen(e, item.id)
+                                    : item.id === 5
+                                        ? logOutHandler()
+                                        : null
+                            }>
                                 <div className="flex items-center">
                             <span className="rounded_circle">
                               <i className={["png_icon", item.icon_class].join(" ")}></i>

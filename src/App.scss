@@ -24,6 +24,11 @@
   margin-left: 300px;
   padding-left: 50px;
   padding-right: 25px;
+  @include getDown(900px){
+    margin-left: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
 }
 
 .content-full {

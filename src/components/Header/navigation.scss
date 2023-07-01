@@ -76,7 +76,7 @@
 
         .active_nav {
           svg {
-            fill: rgb(119 34 226 / 1);
+            fill: var(--primary-400);
           }
         }
       }
@@ -186,9 +186,7 @@
   background-position: 0px -393px;
 }
 
-.icon_gear {
-  background-position: -147px -92px;
-}
+
 
 .icon_comment {
   background-image: url("src/assets/icon/icon_thumb_up.png");
@@ -254,7 +252,8 @@
 .icon_edit, .icon_friends, .icon_friends_request, .icon_friends_suggestion,
 .icon_arrow-left, .icon_friends_all, .icon_flag, .icon_video,
 .icon_reels,
-.icon_bookmark{
+.icon_gear,
+.icon_bookmark {
   background-image: url("src/assets/icon/47R6FPZVikW.png");
   background-position: 0px -897px;
   background-size: auto;
@@ -263,54 +262,66 @@
   background-repeat: no-repeat;
   display: inline-block;
 }
-.icon_bookmark{
+
+.icon_bookmark {
   background-image: url("src/assets/icon/7RTlYB9IfTF.png");
   background-position: 0px -247px;
 }
-.icon_flag{
+
+.icon_flag {
   background-image: url("src/assets/icon/hq3N1E1F2Yb.png");
   background-position: 0px -292px;
 }
-
-.icon_video{
+.icon_gear {
+  background-image: url("src/assets/icon/t-ajeQDpHFq.png");
+  background-position: -105px -105px;
+}
+.icon_video {
   background-image: url("src/assets/icon/7RTlYB9IfTF.png");
   background-position: 0px -856px;
 }
-.icon_reels{
+
+.icon_reels {
   background-image: url("src/assets/icon/7RTlYB9IfTF.png");
   background-position: 0px -121px;
 }
 
-.icon_friends{
+.icon_friends {
   background-image: url("src/assets/icon/FYbzbEn5foK.png");
   background-position: 0px -218px;
-}.icon_arrow-left{
-   background-image: url("src/assets/icon/Z_p9oYVUuFW.png");
-   background-position: -50px -59px;
 }
-.icon_friends_request{
+
+.icon_arrow-left {
+  background-image: url("src/assets/icon/Z_p9oYVUuFW.png");
+  background-position: -50px -59px;
+}
+
+.icon_friends_request {
   background-image: url("src/assets/icon/TI5rPo2AqMN.png");
   background-position: 0px -105px;
 }
-.icon_friends_suggestion{
-   background-image: url("src/assets/icon/TI5rPo2AqMN.png");
-   background-position: 0px -42px;
+
+.icon_friends_suggestion {
+  background-image: url("src/assets/icon/TI5rPo2AqMN.png");
+  background-position: 0px -42px;
 }
-.icon_friends_all{
-   background-image: url("src/assets/icon/Fc1VqfS43xb.png");
-   background-position: 0px -155px;
+
+.icon_friends_all {
+  background-image: url("src/assets/icon/Fc1VqfS43xb.png");
+  background-position: 0px -155px;
 }
+
 .icon_discover {
   background-image: url("src/assets/icon/pK4bB6p7OS2.png");
   background-position: 0px -33px;
 }
 
 .icon_group2 {
-    background-image: url("src/assets/icon/pK4bB6p7OS2.png");
-    background-position: 0px -54px;
+  background-image: url("src/assets/icon/pK4bB6p7OS2.png");
+  background-position: 0px -54px;
 }
 
-.icon_plus_16{
+.icon_plus_16 {
   background-image: url("src/assets/icon/47R6FPZVikW.png");
   background-position: 0px -1332px;
   background-size: auto;
@@ -320,27 +331,28 @@
   display: inline-block;
 }
 
-.icon_user{
+.icon_user {
   background-image: url("src/assets/icon/DDr4AnxwLFW.png");
   background-position: 0px -302px;
 }
 
-.icon_image{
+.icon_image {
   background-image: url("src/assets/icon/47R6FPZVikW.png");
   background-position: 0px -434px
 }
 
-.icon_pen{
+.icon_pen {
   background-image: url("src/assets/icon/47R6FPZVikW.png");
   background-position: -0px -918px;
 }
-.icon_edit{
+
+.icon_edit {
   background-position: 0px -540px;
   background-image: url("src/assets/icon/47R6FPZVikW.png");
 
 }
 
-.icon_check_24{
+.icon_check_24 {
   background-image: url("src/assets/icon/Z_p9oYVUuFW.png");
 
   background-position: -58px -26px;
@@ -351,7 +363,7 @@
   display: inline-block;
 }
 
-.icon_group2_16{
+.icon_group2_16 {
   background-image: url("src/assets/icon/ibVpKGoRo9x.png");
   background-position: 0px -425px;
   background-size: auto;
@@ -360,7 +372,6 @@
   background-repeat: no-repeat;
   display: inline-block;
 }
-
 
 
 .png_filter_accent {
