@@ -9,10 +9,14 @@ import {openChatUserAction, closeChatUserAction} from "src/store/slices/chatSlic
 import channelName from "src/utils/channelName.js";
 import Chat from "components/ChatWithFriend/Chat.jsx";
 import {fetchPrivateMessageAction, sendPrivateMessageAction} from "src/store/actions/chatAction.js";
+import playSound from "src/notification/sound.js";
 
 const OnlineFriends = () => {
 
     const dispatch = useDispatch()
+
+
+
 
     useEffect(()=>{
         dispatch(fetchPeoplesAction())
@@ -42,7 +46,11 @@ const OnlineFriends = () => {
             recipientId: openChatUser._id,
             message,
             channelName: openChatUser.channelName
-        }))
+        })).unwrap().then(()=>{
+            playSound("/send-messenger.mp3")
+        }).catch(ex=>{
+            console.log(ex)
+        })
     }
 
     useEffect(() => {

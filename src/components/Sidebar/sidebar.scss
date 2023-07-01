@@ -32,7 +32,7 @@
       @apply dark:bg-dark-650 bg-white;
       z-index: 1002;
       left: -100%;
-      padding: 0 !important;
+      padding: 10px !important;
       .card {
         box-shadow: none !important;
         padding-left: 0;
@@ -84,9 +84,9 @@
   &.group-sidebar{
     width: 320px;
     box-sizing: border-box;
-    //background: #282828 !important;
     height: calc(100vh - var(--header-height));
     overflow-y: auto;
+    padding: 16px;
   }
 
   &.chats-sidebar, &.group-sidebar{

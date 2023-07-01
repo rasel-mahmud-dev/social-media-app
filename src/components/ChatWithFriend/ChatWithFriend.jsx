@@ -10,6 +10,7 @@ import {
 } from "src/store/actions/chatAction.js";
 
 import Chat from "components/ChatWithFriend/Chat.jsx";
+import playSound from "src/notification/sound.js";
 
 const ChatWithFriend = ({openChatUser, auth, friend}) => {
 
@@ -24,7 +25,9 @@ const ChatWithFriend = ({openChatUser, auth, friend}) => {
         dispatch(sendPrivateMessageAction({
             message,
             roomId: openChatUser.roomId
-        }))
+        })).unwrap().then(()=>{
+            playSound("/send-messenger.mp3")
+        })
     }
 
     useEffect(() => {

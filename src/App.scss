@@ -459,7 +459,6 @@
 }
 
 .list-item {
-  background: rgba(56, 56, 56, 0);
   list-style: none;
   padding: 10px 20px;
   border-radius: 6px;
@@ -469,14 +468,15 @@
 
   &:hover {
     background: #383838;
+    @apply dark:bg-dark-600 bg-light-800;
   }
 
   &.active{
-      background: #383838;
+    @apply dark:bg-dark-600 bg-light-800;
   }
 
   & > * {
-    color: #e8e8e8;
+    @apply dark:text-dark-10 text-dark-400;
     font-size: 14px;
     font-weight: 500;
   }

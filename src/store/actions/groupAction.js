@@ -3,6 +3,9 @@ import apis from "../../apis";
 import errorResponse from "src/utils/errorResponse.js";
 
 
+
+
+
 // fetch groups action
 export const fetchMyGroupsAction = createAsyncThunk("fetch-my-groups", async (payload, thunkAPI) => {
     try {
@@ -73,7 +76,7 @@ export const acceptJoinGroupInvitationAction = createAsyncThunk("accept-group-in
 })
 
 
-// accept group join group invitation action
+//  group feeds action
 export const fetchGroupFeedAction = createAsyncThunk("accept-group-invitation", async (payload, thunkAPI) => {
     try {
         const {query} = payload
@@ -83,6 +86,21 @@ export const fetchGroupFeedAction = createAsyncThunk("accept-group-invitation", 
         }
     } catch (ex) {
         // send error message with reject type in reducer
+        return thunkAPI.rejectWithValue(errorResponse(ex))
+    }
+})
+
+
+//  group feeds action
+export const fetchMyGroupFeedsAction = createAsyncThunk("fetch-groups", async (payload, thunkAPI) => {
+    try {
+        const {query} = payload
+        let {status, data} = await apis.get("/groups/my-feeds" + query)
+        if (status === 200) {
+            return data || []
+        }
+    } catch (ex) {
+        // send an error message with a reject type in reducer
         return thunkAPI.rejectWithValue(errorResponse(ex))
     }
 })

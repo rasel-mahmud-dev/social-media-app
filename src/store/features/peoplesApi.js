@@ -111,7 +111,7 @@ export const peoplesApi = createApi({
                                     return produce(draft, updatedDraft => {
                                         updatedDraft.peoples = updatedDraft.peoples.map(item => {
                                             if (item._id === _id) {
-                                                return { ...item, friend };
+                                                return {...item, friend};
                                             } else {
                                                 return item;
                                             }
@@ -124,6 +124,35 @@ export const peoplesApi = createApi({
 
                     }
                 }
+            }),
+            addPeopleCache: builder.mutation({
+                query(data) {
+                    return {
+                        method: "NONE",
+                    }
+                },
+                transformResponse: function (responseData, a, queryArgs) {
+                    return queryArgs
+                },
+                async onQueryStarted(postId, {queryFulfilled, dispatch}) {
+                    try {
+                        const {data} = await queryFulfilled;
+                        const {payload} = data
+
+                        console.log(data)
+
+                        //add new people in a Pessimistic way
+                        dispatch(
+                            peoplesApi.util.updateQueryData("fetchPeoples", {pageNumber: 1}, function (draft) {
+                                draft.peoples = draft.peoples.push(payload.people)
+                                return draft
+                            })
+                        );
+
+                    } catch (error) {
+
+                    }
+                }
             })
         }
     }
@@ -132,4 +161,9 @@ console.log(peoplesApi)
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const {useFetchPeoplesQuery, useRemovePeopleMutation, useUpdatePeopleFriendStatusMutation} = peoplesApi
+export const {
+    useFetchPeoplesQuery,
+    useRemovePeopleMutation,
+    useUpdatePeopleFriendStatusMutation,
+    useAddPeopleCacheMutation
+} = peoplesApi

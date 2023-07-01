@@ -2,7 +2,8 @@
   p {
     font-size: 14px;
   }
-;
+
+
 
   & > div {
     &:nth-child(1) {
@@ -57,6 +58,18 @@
       }
     }
   }
+
+  .feed-video{
+    video{
+      width: 100%;
+    }
+  }
+
+
+
+
+
+
 }
 
 .feed-liked{
@@ -65,3 +78,24 @@
      font-weight: 500;
    }
 }
+
+.feed-group-header{
+  position: relative;
+     .group-photo-thumb{
+       width: 45px;
+       height: 45px;
+       object-fit: cover;
+       border-radius: 10px;
+     }
+  .user-photo-thumb{
+    width: 25px;
+    height: 25px;
+    object-fit: cover;
+    position: absolute;
+    right: 0;
+    top: 50%;
+    border-radius: 30px;
+    transform: translateX(20%);
+    border: 2px solid #ffffff;
+  }
+   }

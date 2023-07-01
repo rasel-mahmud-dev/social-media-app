@@ -33,7 +33,6 @@ const DiscoverGroups = () => {
         <WithGroupHomeSidebar>
             <div className="group-content">
 
-
                 <div className="mb-4">
                     <h2 className="color_h1 text-xl font-medium">Suggested for you</h2>
                     <p className="color_p text-sm">Groups you might be interested in.</p>

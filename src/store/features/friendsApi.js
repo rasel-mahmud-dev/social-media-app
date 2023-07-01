@@ -65,11 +65,11 @@ export const friendsApi = createApi({
                         const {data} = await queryFulfilled;
                         const {
                             friendId,
-                            friendQueries,
+                            queries,
                             update,
                         } = data
 
-                        const cacheKey = findOriginalArgs(friendQueries, friendId)
+                        const cacheKey = findOriginalArgs(queries, friendId)
 
                         if (friendId && cacheKey) {
                             dispatch(
@@ -106,16 +106,46 @@ export const friendsApi = createApi({
                         const {data} = await queryFulfilled;
                         const {
                             friendId,
-                            friendQueries,
+                            queries,
                         } = data
 
                         // find args for pagination
-                        const cacheKey = findOriginalArgs(friendQueries, friendId)
+                        const cacheKey = findOriginalArgs(queries, friendId)
 
                         if (friendId && cacheKey) {
                             dispatch(
                                 friendsApi.util.updateQueryData("fetchFriends", cacheKey, function (draft) {
                                     draft.friends = draft.friends.filter(item => item._id !== friendId)
+                                    return draft
+                                })
+                            );
+                        }
+                    } catch (error) {
+
+                    }
+                }
+            }),
+
+            addFriendCache: builder.mutation({
+                query(data) {
+                    return {
+                        method: "NONE",
+                    }
+                },
+                transformResponse: function (responseData, a, queryArgs) {
+                    return queryArgs
+                },
+                async onQueryStarted(postId, {queryFulfilled, dispatch}) {
+                    try {
+                        const {data} = await queryFulfilled;
+                        const {
+                            friend
+                        } = data
+
+                        if (friend && friend._id) {
+                            dispatch(
+                                friendsApi.util.updateQueryData("fetchFriends", {pageNumber: 1}, function (draft) {
+                                    draft.friends.push(friend)
                                     return draft
                                 })
                             );
@@ -132,4 +162,9 @@ export const friendsApi = createApi({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const {useFetchFriendsQuery, useChangeFriendStatusMutation, useRemoveFriendCacheMutation} = friendsApi
+export const {
+    useFetchFriendsQuery,
+    useChangeFriendStatusMutation,
+    useRemoveFriendCacheMutation,
+    useAddFriendCacheMutation
+} = friendsApi

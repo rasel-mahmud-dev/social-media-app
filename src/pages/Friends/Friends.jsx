@@ -5,13 +5,13 @@ import {useDispatch, useSelector} from "react-redux";
 import "./style.scss"
 
 import {
-    addFriendAction, removeFriendAction,
+    addFriendAction, confirmFriendRequestAction, removeFriendAction,
 } from "src/store/actions/userAction.js";
 
 
 import {Link, useLocation} from "react-router-dom";
 import {
-    friendsApi,
+    friendsApi, useAddFriendCacheMutation,
     useChangeFriendStatusMutation,
     useFetchFriendsQuery,
     useRemoveFriendCacheMutation
@@ -29,7 +29,7 @@ import {
     useRemovePeopleMutation,
     useUpdatePeopleFriendStatusMutation
 } from "src/store/features/peoplesApi.js";
-import {useGetUsersQuery} from "src/store/services/usersApi.js";
+
 
 const Friends = () => {
     const dispatch = useDispatch()
@@ -37,9 +37,12 @@ const Friends = () => {
 
     const {data: friendsData} = useFetchFriendsQuery({pageNumber: 1})
 
+    const {openSidebar} = useSelector(state=>state.appState)
+
     const [updateFriend] = useChangeFriendStatusMutation()
 
     const [deleteFriendCache] = useRemoveFriendCacheMutation()
+    const [addFriendCache] = useAddFriendCacheMutation()
 
     const {auth} = useSelector(state => state.authState)
 
@@ -81,7 +84,7 @@ const Friends = () => {
         return friendsData?.friends?.filter(friend => friend.status === "pending" && friend.receiverId === auth._id)
     }, [friendsData]);
 
-    const openSidebar = "";
+
 
     const items = [
         {path: "/friends", label: "Home", icon: "icon_friends"},
@@ -107,16 +110,16 @@ const Friends = () => {
     }
 
     function acceptFriendRequest(friendId) {
-
-        // dispatch(addFriendAction(_id)).unwrap().then(() => {
-        //     removePeople(_id)
-        // })
-
-        deleteFriendCache({
-            friendId: friendId,
-            friendQueries: friendQueries
+        dispatch(confirmFriendRequestAction({friendId: friendId})).unwrap().then((data) => {
+            deleteFriendCache({
+                friendId: friendId,
+                queries: friendQueries
+            })
+            addFriendCache({
+                friend: data.friend,
+                queries: friendQueries
+            })
         })
-
     }
 
     function cancelFriendRequest(_id) {
@@ -132,9 +135,6 @@ const Friends = () => {
         const result = friend?.senderId === auth._id
         return result
     }
-
-    console.log(filterPendingFriends)
-
 
     return (
         <div className="flex justify-between">

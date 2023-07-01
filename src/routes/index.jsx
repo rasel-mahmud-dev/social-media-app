@@ -28,11 +28,6 @@ import SavesVideos from "pages/Watch/ SavesVideos.jsx";
 
 const Homepage = lazy(() => import("pages/Homepage"));
 const PrivateRoute = lazy(() => import("src/middleware/PrivateRoute.jsx"));
-const MyFriendList = lazy(() => import("pages/MyFriendList/MyFriendList.jsx"));
-const RequestForYou = lazy(() => import("pages/RequestForYou/RequestForYou.jsx"));
-const WatchVideos = lazy(() => import("pages/Watch/WatchVideos.jsx"));
-const OnlineFriends = lazy(() => import("pages/OnlineFriends/OnlineFriends.jsx"));
-const RequestSend = lazy(() => import("pages/RequestSend/RequestSend.jsx"));
 const Saved = lazy(() => import("pages/Saved/Saved.jsx"));
 const GroupHome = lazy(() => import("pages/Group/GroupHome.jsx"));
 const FeedDetail = lazy(() => import("src/components/FeedDetail/FeedDetail.jsx"));

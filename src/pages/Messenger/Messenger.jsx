@@ -16,6 +16,7 @@ import {FaEllipsisV} from "react-icons/fa";
 import MessageList from "components/MessageList/MessageList.jsx";
 import {useNavigate, useParams} from "react-router-dom";
 import Button from "components/Shared/Button/Button.jsx";
+import playSound from "src/notification/sound.js";
 
 
 const Messenger = () => {
@@ -119,7 +120,9 @@ const Messenger = () => {
         dispatch(sendPrivateMessageAction({
             message,
             roomId: openChatUser.roomId
-        }))
+        })).unwrap().then(()=>{
+            playSound("/send-messenger.mp3")
+        })
     }
 
     function handleChange(e) {

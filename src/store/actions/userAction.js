@@ -70,7 +70,7 @@ export const confirmFriendRequestAction = createAsyncThunk("authSlice/confirm-fr
         let {status, data} = await apis.post("/users/accept-request", {friendId: payload.friendId})
 
         if(status === 201){
-            thunkAPI.dispatch(removePeople(payload.userId))
+            // thunkAPI.dispatch(removePeople(payload.userId))
             return {...data, friendId: payload.friendId}
         }
     } catch (ex){

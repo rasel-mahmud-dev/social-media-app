@@ -98,13 +98,14 @@ export const authSlice = createSlice({
                 // state.pendingFriends = [...state.pendingFriends, action.payload.friend]
             }
         })
+
         // handle accept friend request
-        builder.addCase(confirmFriendRequestAction.fulfilled, (state, action) => {
-            if (action.payload) {
-                state.friends = [...state.friends, action.payload.friend]
-                state.pendingFriends = state.pendingFriends.filter(f => f._id !== action.payload.friendId)
-            }
-        })
+        // builder.addCase(confirmFriendRequestAction.fulfilled, (state, action) => {
+        //     if (action.payload) {
+        //         state.friends = [...state.friends, action.payload.friend]
+        //         state.pendingFriends = state.pendingFriends.filter(f => f._id !== action.payload.friendId)
+        //     }
+        // })
 
         // // handle remove friend
         // builder.addCase(removeFriendAction.fulfilled, (state, action) => {

@@ -28,7 +28,6 @@ const NotificationDropdown = ({onClose}) => {
     }
 
     function onClickNotificationItem() {
-
         onClose()
     }
 
@@ -36,18 +35,20 @@ const NotificationDropdown = ({onClose}) => {
 
     }
 
-    function notificationCommon(notification, body) {
+    function notificationCommon(notification, body ) {
         return (
-            <div className="flex items-start gap-x-2">
-                <Avatar
-                    src={staticImage(notification?.sender?.avatar)}
-                    className="!w-14 !h-14 "
-                    imgClass="!w-14 !h-14 !max-w-max"
-                    username="Sender"/>
+            <div className={`flex items-center gap-x-2 py-3 rounded-md mt-1 px-3 relative ${notification.isRead ? "bg-transparent" : "unread-notification dark:bg-dark-600 bg-light-800"}`} >
+                <div className="">
+                    <Avatar
+                        src={staticImage(notification?.sender?.avatar)}
+                        className="!w-10 !h-10 "
+                        imgClass="!w-10 !h-10"
+                        username="Sender"/>
+                </div>
 
-                <div>
+                <div className="">
                     {body}
-                    <p className="text-primary mt-2 text-xs">{getPassTime(notification?.createdAt)}</p>
+                    <p className="text-primary mt-0 text-xs">{getPassTime(notification?.createdAt)}</p>
                 </div>
             </div>)
     }
@@ -61,20 +62,32 @@ const NotificationDropdown = ({onClose}) => {
                         <p className="color_h2 text-sm">
                             {notification.sender.fullName} invite you to join {notification?.group?.name} group
 
-                        </p>
+                        </p>, true
                     )
                 }
             </Link>
 
         } else if (notification.notificationType === "friend-request") {
-            return <Link onClick={onClickNotificationItem} to="/friend-request-received">
+            return <Link className="" onClick={onClickNotificationItem} to="/friend-request-received">
                 {notificationCommon(notification,
                     <p className="color_h2 text-sm">
                         {notification.sender.fullName} send you a friend request
-                    </p>
+                    </p>, true
                 )
                 }
             </Link>
+        } else if (notification.notificationType === "friend-request-accepted") {
+            return  notificationCommon(notification,
+                <p className="color_h2 text-sm">
+                    {notification.sender.fullName} accepted your friend request
+                </p>
+            )
+        } else if (notification.notificationType === "unfriend") {
+            return notificationCommon(notification,
+                <p className="color_h2 text-sm">
+                    {notification.sender.fullName} remove you from friend list
+                </p>
+            )
         } else {
             return notificationCommon(notification, "ooooooooooooooooooo")
         }
@@ -93,7 +106,7 @@ const NotificationDropdown = ({onClose}) => {
     }
 
     return (
-        <div className="absolute top-10 right-0 dropdown-panel-list-parent  ">
+        <div className="notification-panel dropdown-panel-list-parent  ">
             <div className="min-w-[350px] menu_panel_card overflow-hidden">
                 <div className="flex items-center justify-between px-3 pt-3">
                     <h1 className="color_h1 font-semibold text-lg">Notification</h1>
@@ -107,7 +120,7 @@ const NotificationDropdown = ({onClose}) => {
 
                 <div className="dropdown-panel-list">
 
-                    <div className="flex items-center my-2 px-2">
+                    <div className="flex items-center px-1 mb-3">
                         <Button onClick={() => handleShowNotification(true)}
                                 className={isShowAll ? "btn-primary " : "dark:text-light-900 text-dark-950"}>All</Button>
                         <Button onClick={() => handleShowNotification(false)}

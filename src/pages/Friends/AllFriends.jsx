@@ -1,7 +1,7 @@
 import React, {useEffect, useMemo} from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {Link, useNavigate} from "react-router-dom";
-import {useFetchFriendsQuery} from "src/store/features/friendsApi.js";
+import {useFetchFriendsQuery, useRemoveFriendCacheMutation} from "src/store/features/friendsApi.js";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
 import {openSidebarAction} from "src/store/slices/appSlice.js";
 import Avatar from "components/Shared/Avatar/Avatar.jsx";
@@ -11,6 +11,11 @@ import Search from "components/Shared/Input/Search.jsx";
 import RenderProfile from "pages/Profile/RenderProfile.jsx";
 import useCustomReducer from "src/hooks/useReducer.jsx";
 import apis from "src/apis/index.js";
+import MenuDropdown from "components/Dropdown/MenuDropdown.jsx";
+import {BsHeartbreakFill} from "react-icons/bs";
+import {removeFriendAction} from "src/store/actions/userAction.js";
+import {useAddPeopleCacheMutation} from "src/store/features/peoplesApi.js";
+
 
 const AllFriends = () => {
 
@@ -20,8 +25,10 @@ const AllFriends = () => {
 
     const [state, setState] = useCustomReducer({
         profile: {},
-
     })
+
+    const [deleteFriendCache] = useRemoveFriendCacheMutation()
+    const [addPeopleCache] = useAddPeopleCacheMutation()
 
     function fetchFollowerInfo(userId) {
         apis.get("/follow/status/?userId=" + userId).then(({status, data}) => {
@@ -33,6 +40,7 @@ const AllFriends = () => {
         }).catch(() => {
         })
     }
+
 
     function fetchProfile(userId) {
         apis.get("/users/profile/" + userId).then(({status, data}) => {
@@ -50,10 +58,12 @@ const AllFriends = () => {
         })
     }
 
-
     const navigate = useNavigate()
 
     const {data: friendsData} = useFetchFriendsQuery({pageNumber: 1})
+
+    const friendQueries = useSelector((state) => state.friendsApi.queries);
+
 
     const filterFriends = useMemo(() => {
         return friendsData?.friends?.filter(friend => {
@@ -61,14 +71,41 @@ const AllFriends = () => {
         })
     }, [friendsData]);
 
-    const openSidebar = "";
+    const {openSidebar} = useSelector(state=>state.appState)
 
     function handleOpenProfile(friendId) {
         fetchProfile(friendId)
     }
 
-    return (
 
+    function handleUnFriend(friendId, friend) {
+        dispatch(removeFriendAction({friendId})).unwrap().then(()=>{
+            deleteFriendCache({
+                friendId,
+                queries: friendQueries,
+            })
+
+            let people = {
+                ...friend.sender,
+                _id: friend.senderId
+            }
+
+            if(auth._id === friend.senderId){
+                people = {
+                    ...friend.receiver,
+                    _id: friend.receiverId
+                }
+            }
+
+            addPeopleCache({
+                people: people,
+            })
+
+        })
+    }
+
+
+    return (
         <div>
             <div className="flex justify-between">
                 <Sidebar
@@ -108,8 +145,29 @@ const AllFriends = () => {
                                     </div>
                                 </div>
 
-                                <div className="circle-hover-btn">
-                                    <FaEllipsisH/>
+                                <div className="" onClick={(e) => e.stopPropagation()}>
+                                    <MenuDropdown contentClass="!-left-20 absolute w-[120px]" render={() => (
+                                        <div>
+
+                                            <div className="flex items-center gap-x-2" onClick={()=>handleUnFriend(friend._id, friend)}>
+                                                <span>
+                                                <BsHeartbreakFill className="color_p text-sm"/>
+                                                </span>
+                                                <span>UnFriend</span>
+                                            </div>
+
+                                            <div className="flex items-center gap-x-2 mt-2">
+                                                <span>
+                                                <BsHeartbreakFill className="color_p text-sm"/>
+                                                </span>
+                                                    <span>UnFollow</span>
+                                                </div>
+                                        </div>
+                                    )}>
+                                        <div className="circle-hover-btn">
+                                            <FaEllipsisH/>
+                                        </div>
+                                    </MenuDropdown>
                                 </div>
                             </div>
                         ))}

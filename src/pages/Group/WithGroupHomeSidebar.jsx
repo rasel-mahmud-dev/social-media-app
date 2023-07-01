@@ -170,9 +170,9 @@ const WithGroupHomeSidebar = ({children}) => {
                     </div>
                 </Sidebar>
 
-                <div className="">
-                    {children}
-                </div>
+
+                {children}
+
             </div>
         </div>
     );

@@ -32,7 +32,7 @@ const Main = () => {
     const dispatch = useDispatch()
 
     const {auth} = useSelector(state => state.authState)
-    const {groups, openChatUser} = useSelector(state => state.chatState)
+    const {rooms, openChatUser} = useSelector(state => state.chatState)
 
     useEffect(() => {
         dispatch(fetchCurrentAuthAction())
@@ -56,6 +56,7 @@ const Main = () => {
         // personal event to get notification like message notification, invitation noti
         channel.bind(auth._id, function (data) {
             playSound()
+            console.log(data)
             if (data.notification) {
                 dispatch(receivedNewNotification(data.notification))
             }
@@ -96,11 +97,12 @@ const Main = () => {
 
 
     useEffect(() => {
-        if (auth && groups) {
-            for (let i = 0; i < groups.length; i++) {
-                const group = groups[i]
-                const privateChannel = pusher.subscribe(`private-chat-${group._id}`);
+        if (auth && rooms) {
+            for (let i = 0; i < rooms.length; i++) {
+                const room = rooms[i]
+                const privateChannel = pusher.subscribe(`private-chat-${room._id}`);
                 privateChannel.bind("message", (data) => {
+                    console.log(data)
                     if (data.message) {
                         if (data.message?.senderId === auth._id) return;
                         playSound()
@@ -111,14 +113,14 @@ const Main = () => {
         }
 
         return () => {
-            if (auth && groups) {
-                for (let i = 0; i < groups.length; i++) {
-                    const group = groups[i]
-                    pusher.unsubscribe(`private-chat-${group._id}`)
+            if (auth && rooms) {
+                for (let i = 0; i < rooms.length; i++) {
+                    const room = rooms[i]
+                    pusher.unsubscribe(`private-chat-${room._id}`)
                 }
             }
         }
-    }, [auth, groups])
+    }, [auth, rooms])
 
 
     return (

@@ -6,8 +6,8 @@ import {useDispatch, useSelector} from "react-redux";
 import MoreDropdown from "src/components/header/MoreDropdown";
 import {HiBars3} from "react-icons/hi2";
 import staticImage from "src/utils/staticImage.js";
-import {BiPlus, BiUserCircle} from "react-icons/bi";
-import {logoutAction} from "src/store/slices/authSlice.js";
+import { BiUserCircle} from "react-icons/bi";
+
 import {openSidebarAction} from "src/store/slices/appSlice.js";
 import {FiSearch} from "react-icons/fi";
 import Avatar from "components/Shared/Avatar/Avatar.jsx";
@@ -213,7 +213,7 @@ const Navigation = (props) => {
 
 
                                 <NavLink onChange={handleNavChange} to="/"
-                                         className="cursor-pointer mr-3 hidden md:block">
+                                         className="cursor-pointer mr-3">
                                     <div className="logo">
                                         <svg viewBox="0 0 36 36" className="a8c37x1j ms05siws l3qrxjdp b7h9ocf4"
                                              fill="url(#jsc_s_2)"
@@ -234,9 +234,9 @@ const Navigation = (props) => {
 
 
                                 {/******** search icon  only for mobile devices ********/}
-                                <button className="flex items-center justify-center xl:hidden  rounded_circle  ">
-                                    <FiSearch className="text-dark-300 dark:text-light-500"/>
-                                </button>
+                                {/*<button className="flex items-center justify-center xl:hidden  rounded_circle  ">*/}
+                                {/*    <FiSearch className="text-dark-300 dark:text-light-500"/>*/}
+                                {/*</button>*/}
 
 
                                 <div
@@ -315,14 +315,14 @@ const Navigation = (props) => {
 
 
                                 {/******** Add post btn only for mobile devices ********/}
-                                <li className="ml-3 block md:hidden">
-                                    <div
-                                        onClick={() => handleExpandDropdown("allMenu")}
-                                        className={["rounded_circle", expandDropdown === "allMenu" ? "text-primary" : "text-body-dark dark:text-body-light"].join(" ")}>
-                                        {/*<FontAwesomeIcon icon={faPlus}/>*/}
-                                        <BiPlus/>
-                                    </div>
-                                </li>
+                                {/*<li className="ml-3 block md:hidden">*/}
+                                {/*    <div*/}
+                                {/*        onClick={() => handleExpandDropdown("allMenu")}*/}
+                                {/*        className={["rounded_circle", expandDropdown === "allMenu" ? "text-primary" : "text-body-dark dark:text-body-light"].join(" ")}>*/}
+                                {/*        /!*<FontAwesomeIcon icon={faPlus}/>*!/*/}
+                                {/*        <BiPlus/>*/}
+                                {/*    </div>*/}
+                                {/*</li>*/}
 
 
                                 {/******** all menu item ********/}

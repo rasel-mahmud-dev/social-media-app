@@ -79,7 +79,7 @@ export const chatSlice = createSlice({
         })
 
 
-        // send private message
+        // send a private message
         builder.addCase(sendPrivateMessageAction.fulfilled, (state, action) => {
             addNewMessage(state, action)
         })

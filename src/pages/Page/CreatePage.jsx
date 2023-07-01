@@ -9,12 +9,23 @@ import Button from "components/Shared/Button/Button.jsx";
 import {openSidebarAction} from "src/store/slices/appSlice.js";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
 import {useDispatch, useSelector} from "react-redux";
-import {createGroupAction, fetchMyGroupsAction} from "src/store/actions/groupAction.js";
 import chooseImage from "src/utils/chooseImage.js";
 import resizeImageByMaxWidth from "src/utils/resizeImage.js";
-import {fetchPeoplesAction} from "src/store/actions/userAction.js";
+
 import useCustomReducer from "src/hooks/useReducer.jsx";
 import apis from "src/apis/index.js";
+
+
+const pageCategories = [
+    "Software development",
+    "Nature",
+    "Company",
+    "Music",
+    "Fun",
+    "Blogging",
+    "Business",
+    "Newspaper",
+]
 
 const CreatePage = () => {
 
@@ -31,7 +42,6 @@ const CreatePage = () => {
     const location = useLocation()
 
     const navigate = useNavigate()
-
 
 
     useEffect(() => {
@@ -61,8 +71,8 @@ const CreatePage = () => {
             payload.append("coverPhoto", state.groupCoverPhoto.blob, "group-cover")
         }
 
-        apis.post("/page/create", payload).then(({status, data})=>{
-            if(status === 201){
+        apis.post("/page/create", payload).then(({status, data}) => {
+            if (status === 201) {
                 navigate("/pages")
             }
         })
@@ -115,8 +125,6 @@ const CreatePage = () => {
                         />
 
 
-
-
                         <InputGroup
                             className="mt-2"
                             as="select"
@@ -126,9 +134,10 @@ const CreatePage = () => {
                             defaultValue="1"
                             renderOption={() => (
                                 <>
-                                    <option value="1">Page Category</option>
-                                    <option value="0">Private</option>
-                                    <option value="1">Public</option>
+                                    <option value="">Page category</option>
+                                    {pageCategories.map(cat => (
+                                        <option key={cat} value={cat}>{cat}</option>
+                                    ))}
                                 </>
                             )}
                         />
@@ -143,14 +152,14 @@ const CreatePage = () => {
                         />
 
 
-                        <Button onClick={handleChooseGroupCoverPhoto} className="mt-6 btn-primary">Choose Pages Cover</Button>
+                        <Button onClick={handleChooseGroupCoverPhoto} className="btn-dark2">Choose Pages Cover</Button>
 
 
                     </div>
 
 
-                    <div className="left-0 px-4  w-full">
-                        <Button onClick={handleCreatePage} className="btn-primary w-full ">Create</Button>
+                    <div className="left-0   w-full mt-10">
+                        <Button onClick={handleCreatePage} className="btn-primary w-full ">Create Page</Button>
                     </div>
 
                 </div>

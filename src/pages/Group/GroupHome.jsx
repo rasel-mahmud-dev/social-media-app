@@ -1,24 +1,23 @@
 import React, {useContext, useEffect} from 'react';
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
-import {createGroupAction, fetchMyGroupsAction} from "src/store/actions/groupAction.js";
-import chooseImage from "src/utils/chooseImage.js";
-import resizeImageByMaxWidth from "src/utils/resizeImage.js";
-import {fetchPeoplesAction} from "src/store/actions/userAction.js";
+import {
+    createGroupAction,
+    fetchGroupFeedAction,
+    fetchMyGroupFeedsAction,
+    fetchMyGroupsAction
+} from "src/store/actions/groupAction.js";
+
 
 import useCustomReducer from "src/hooks/useReducer.jsx";
 import WithGroupHomeSidebar from "pages/Group/WithGroupHomeSidebar.jsx";
+import FeedCard from "components/FeedCard/FeedCard.jsx";
 
 
 const GroupHome = () => {
 
     const [state, setState] = useCustomReducer({
-        name: "",
-        description: "",
-        groupCoverPhoto: null,
-        createNewGroup: false,
-        isPublic: true,
-        members: []
+        feeds: []
     })
 
 
@@ -27,46 +26,28 @@ const GroupHome = () => {
 
     const navigate = useNavigate()
 
+
     useEffect(() => {
         dispatch(fetchMyGroupsAction())
     }, [])
 
     useEffect(() => {
-        if (location.pathname === "/groups/create") {
+        dispatch(fetchMyGroupFeedsAction({query: "?"})).unwrap().then((data)=>{
             setState({
-                createNewGroup: true
+                feeds: data
             })
-
-        } else if (location.pathname === "/groups") {
-            setState({
-                createNewGroup: false
-            })
-        }
-
-
-    }, [location.pathname])
-
-
+        })
+    }, [])
 
     return (
-
         <WithGroupHomeSidebar>
-            <div className="group-content">
-                <div className="card">
-                    sdasd
-                    <div className="card-meta">
-                        <h4>My Groups</h4>
-                    </div>
-
-                    <div className="mt-6">
-                        <p>This features will be implemented soon</p>
-
-
-                        Groups you've joined
-                        Recent activity
-
-                    </div>
-
+            <div className="group-content w-full">
+                <div className="feed-container">
+                    {state.feeds.map(feed=>(
+                        <div className="mt-4">
+                            <FeedCard key={feed._id} feed={feed}  />
+                        </div>
+                    ))}
                 </div>
             </div>
 

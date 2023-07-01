@@ -39,7 +39,7 @@ const FriendsRequests = () => {
         return friendsData?.friends?.filter(friend => friend.status === "pending" && friend.senderId === auth._id)
     }, [friendsData]);
 
-    const openSidebar = "";
+    const {openSidebar} = useSelector(state=>state.appState)
 
 
 

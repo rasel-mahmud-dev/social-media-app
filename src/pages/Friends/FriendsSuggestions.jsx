@@ -36,7 +36,7 @@ const FriendsSuggestions = () => {
     //     return friendsData?.friends?.filter(friend => friend.status === "pending")
     // }, [friendsData]);
 
-    const openSidebar = "";
+    const {openSidebar} = useSelector(state=>state.appState)
 
     function removePeople(peopleId) {
         deletePeople({
@@ -51,7 +51,7 @@ const FriendsSuggestions = () => {
         <div>
             <Sidebar
                 className="white left-sidebar group-sidebar"
-                isOpen={false}
+                isOpen={openSidebar === "left-sidebar"}
                 onClose={() => dispatch(openSidebarAction(""))}>
 
                 <div className="flex items-center gap-x-4 border-b border-dark-600 pb-4 mb-3">

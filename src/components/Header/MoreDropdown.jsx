@@ -43,7 +43,7 @@ const MoreDropdown = (props) => {
 
 
     return (
-        <div className="absolute top-12 right-0 ">
+        <div className="more-dropdown-menu">
             <div className="min-w-[350px] menu_panel_card overflow-hidden">
 
                 {/*********** More menu panel ***********/}

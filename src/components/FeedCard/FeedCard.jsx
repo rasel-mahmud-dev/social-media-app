@@ -23,7 +23,7 @@ import staticImage from "src/utils/staticImage.js";
 import {useInView} from "react-intersection-observer";
 
 
-const Video = React.memo(({src, videoRef})=>{
+const Video = React.memo(({src, videoRef}) => {
 
     return (
         <video ref={videoRef} controls={true} src={staticImage(src)}></video>
@@ -148,22 +148,53 @@ const FeedCard = ({feed, authId, dispatch, type = "user"}) => {
         }
     }
 
+    function isGroup(feed) {
+        return feed.type === "group"
+    }
+
     return (
         <div className="feed">
             <div className="bg-white card p-0">
                 <div className="">
 
                     <div className="flex justify-between p-4">
-                        <div className="flex items-center">
-                            <Avatar className="!w-9 !h-9" imgClass="!w-9 !h-9" username={fullName(feed)}
-                                    src={avatar(feed)}/>
-                            <div className="ml-3">
-                                <Link to={`/profile/${feed?.userId}`}><h3
-                                    className="dark:text-light-950 text-dark-850 text-lg font-bold">{fullName(feed)}</h3>
-                                </Link>
-                                <p className="dark:text-dark-100 text-gray-600 text-xs">{getPassTime(feed.createdAt)}</p>
+
+                        {isGroup(feed) ? (
+                            <div className="flex items-center">
+                                <div className="relative feed-group-header">
+                                    <img className="group-photo-thumb" src={feed.group?.coverPhoto}/>
+                                    <img className="user-photo-thumb" src={avatar(feed)}/>
+                                </div>
+
+                                <div className="ml-3">
+                                    <div>
+                                        <Link to={`/group/${feed?.group.slug}`}
+                                              className="dark:text-light-950 text-dark-850 text-lg font-bold hover:!text-primary">
+                                            {feed?.group.name}
+                                        </Link>
+                                        <div className="flex gap-x-2 items-center -mt-1  ">
+                                            <Link to={`/profile/${feed?.userId}`}><h3
+                                                className="hover:!text-primary dark:text-light-950 text-dark-850 text-sm ">{fullName(feed)}</h3>
+                                            </Link>
+                                            <p className="dark:text-dark-100 text-gray-600 text-xs">{getPassTime(feed.createdAt)}</p>
+                                        </div>
+                                    </div>
+
+                                </div>
                             </div>
-                        </div>
+                        ) : (
+                            <div className="flex items-center">
+                                <Avatar className="!w-9 !h-9" imgClass="!w-9 !h-9" username={fullName(feed)}
+                                        src={avatar(feed)}/>
+                                <div className="ml-3">
+                                    <Link to={`/profile/${feed?.userId}`}><h3
+                                        className="dark:text-light-950 text-dark-850 text-lg font-bold">{fullName(feed)}</h3>
+                                    </Link>
+                                    <p className="dark:text-dark-100 text-gray-600 text-xs">{getPassTime(feed.createdAt)}</p>
+                                </div>
+                            </div>
+                        )}
+
                         <MenuDropdown contentClass="right-0 w-40" render={() => (
                             <div className="">
                                 <li onClick={() => handelDeleteFeed(feed._id)} className={`cursor-pointer flex items-center gap-x-1 list-none
@@ -201,7 +232,7 @@ const FeedCard = ({feed, authId, dispatch, type = "user"}) => {
 
 
                         {feed?.video && (
-                            <div ref={ref}>
+                            <div ref={ref} className="feed-video">
                                 <Video src={feed?.video.url} videoRef={videoref}/>
                             </div>
                         )}
