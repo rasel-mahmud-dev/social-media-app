@@ -9,7 +9,7 @@ const iconUrl = {
 
 const Intro = ({profile}) => {
     return (
-        <div className="card">
+        <div className="card h-max">
            <div className="card-meta">
                <h1 className="text-xl font-semibold color_h1">Intro</h1>
            </div>

@@ -9,9 +9,9 @@ import {useFetchFriendsQuery} from "src/store/features/friendsApi.js";
 import {useFetchPeoplesQuery} from "src/store/features/peoplesApi.js";
 import Avatar from "components/Shared/Avatar/Avatar.jsx";
 import ModalWithBackdrop from "components/ModalWithBackdrop/ModalWithBackdrop.jsx";
-import Checkbox from "components/Shared/Input/Checkbox.jsx";
+
 import useCustomReducer from "src/hooks/useReducer.jsx";
-import {TiTimes} from "react-icons/ti";
+
 
 const FriendsRequests = () => {
 
@@ -28,7 +28,7 @@ const FriendsRequests = () => {
     const [state, setState] = useCustomReducer({
         isOpenSendRequestModal: false
     })
-
+    console.log(friendsData)
 
     const filterPendingFriends = useMemo(() => {
         return friendsData?.friends?.filter(friend => friend.status === "pending" && friend.senderId !== auth._id)
@@ -41,7 +41,7 @@ const FriendsRequests = () => {
 
     const openSidebar = "";
 
-    console.log(filterPendingFriends)
+
 
     return (
         <div>
@@ -53,10 +53,7 @@ const FriendsRequests = () => {
                     backdropClass="bg-dark-900/60"
                     onClose={() => setState({isOpenSendRequestModal: false})}
                     title="Send Request"
-
                 >
-
-
 
                     <div className="mt-2">
 

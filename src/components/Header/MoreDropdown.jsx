@@ -92,7 +92,7 @@ const Index = ({auth, items = [], onSubItemOpen, onSetExpandDropdown}) => {
 
                     <div className="px-3 pt-3">
                         <Link to={`/profile/${auth._id}`}>
-                            <div className="list-item">
+                            <div className="list_item">
                                 <Avatar username={auth.fullName} src={staticImage(auth.avatar)} className="!w-10 !h-10"
                                         imgClass="!w-10 !h-10"/>
 
@@ -117,7 +117,7 @@ const Index = ({auth, items = [], onSubItemOpen, onSetExpandDropdown}) => {
                                     : item.id === 5
                                         ? logOutHandler()
                                         : null
-                            }>
+                                }>
                                 <div className="flex items-center">
                             <span className="rounded_circle">
                               <i className={["png_icon", item.icon_class].join(" ")}></i>

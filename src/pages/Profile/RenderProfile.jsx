@@ -7,10 +7,11 @@ import AvatarGroup from "components/Shared/Avatar/AvatarGroup.jsx";
 
 import "./profile.scss"
 import {useNavigate} from "react-router-dom";
+import FriendsSection from "components/Profile/FriendsSection.jsx";
 
 function RenderProfile(props) {
 
-    const {auth, user, onSelectImageChooser, isNotOpenFromProfile = false} = props
+    const {auth, user, totalFriends, friends, onSelectImageChooser, isNotOpenFromProfile = false} = props
 
     const navigate = useNavigate()
 
@@ -24,8 +25,7 @@ function RenderProfile(props) {
 
     const sectionNavs = {
         Posts: (params) => <PostSection {...params} />,
-        Friends: (params) => "Working",
-        Timeline: (params) => "Working",
+        Friends: (params) => <FriendsSection userId={user} {...params}  />,
         Photos: (params) => <MediaSection  {...params} />,
         Follower: (params) => "Working"
     }
@@ -41,6 +41,15 @@ function RenderProfile(props) {
         })
     }
 
+    function getFriend(friends) {
+        return friends && friends?.map(friend => {
+            if (friend.receiverId === auth._id) {
+                return friend?.sender
+            } else {
+                return friend?.receiver
+            }
+        })
+    }
 
     return (
         <div className="profile-page">
@@ -85,27 +94,18 @@ function RenderProfile(props) {
 
                                     <div className="ml-2 md:ml-4">
                                         <h4 className="text-2xl font-semibold color_h1">{user.fullName}</h4>
-                                        <span className="text-md font-medium color_h3">123 Friends</span>
-                                        <AvatarGroup imgClass="!w-10 !h-10" className="!w-10 !h-10" data={[{
-                                            avatar: auth.avatar,
-                                            fullName: "Rasel mahmud"
-                                        }, {avatar: auth.avatar, fullName: "Rasel mahmud"}, {
-                                            avatar: auth.avatar,
-                                            fullName: "Rasel mahmud"
-                                        }, {avatar: auth.avatar, fullName: "Rasel mahmud"}, {
-                                            avatar: auth.avatar,
-                                            fullName: "Rasel mahmud"
-                                        }, {avatar: auth.avatar, fullName: "Rasel mahmud"}, {
-                                            avatar: auth.avatar,
-                                            fullName: "Rasel mahmud"
-                                        }, {avatar: auth.avatar, fullName: "Rasel mahmud"}, {
-                                            avatar: auth.avatar,
-                                            fullName: "Rasel mahmud"
-                                        },]}/>
+                                        <span className="text-md font-medium color_h3">{totalFriends} Friends</span>
+                                        <div>
+
+                                            <AvatarGroup imgClass="!w-10 !h-10" className="!w-10 !h-10"
+                                                         data={getFriend(friends)}/>
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div className="flex items-enter justify-between ">
+                                <div className="border-1px mt-6"></div>
+
+                                <div className="flex items-enter justify-between mt-4">
                                     <div className="profile-section-nav flex mt-2">
                                         {Object.keys(sectionNavs).map((name) => (
                                             <li key={name} onClick={() => handleSelectSection(name)}

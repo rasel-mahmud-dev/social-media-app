@@ -4,10 +4,9 @@ import {openSidebarAction} from "src/store/slices/appSlice.js";
 import staticImage from "src/utils/staticImage.js";
 import Button from "components/Shared/Button/Button.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
-import {useDispatch} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
-import {useFetchPeoplesQuery} from "src/store/features/peoplesApi.js";
-
+import {useRemovePeopleMutation} from "src/store/features/peoplesApi.js";
 
 const FriendsSuggestions = () => {
 
@@ -15,10 +14,23 @@ const FriendsSuggestions = () => {
 
     const navigate = useNavigate()
 
-    // const {data: peoplesData} = useFetchFriendsQuery({pageNumber: 1})
+    const [deletePeople] = useRemovePeopleMutation()
 
-    const {data: peoplesData} = useFetchPeoplesQuery({pageNumber: 1})
-
+    const queries = useSelector((state) => state.peoplesApi.queries);
+    const combinedPeoples = useMemo(() => {
+        let results = [];
+        for (const key in queries) {
+            if (key.startsWith("fetchPeoples")) {
+                let item = queries[key]
+                if (item.status === "fulfilled") {
+                    if (item.data.peoples) {
+                        results.push(...item.data.peoples)
+                    }
+                }
+            }
+        }
+        return results;
+    }, [queries]);
 
     // const filterPendingFriends = useMemo(() => {
     //     return friendsData?.friends?.filter(friend => friend.status === "pending")
@@ -26,8 +38,14 @@ const FriendsSuggestions = () => {
 
     const openSidebar = "";
 
+    function removePeople(peopleId) {
+        deletePeople({
+            peopleId: peopleId,
+            queries
+        })
+    }
 
-    console.log(peoplesData)
+    console.log(combinedPeoples)
 
     return (
         <div>
@@ -47,7 +65,7 @@ const FriendsSuggestions = () => {
                 </div>
 
                 <div>
-                    {peoplesData?.peoples?.map(people => (
+                    {combinedPeoples?.map(people => (
                         <div key={people._id} className="relative !p-0  !m-0 items-start list-item">
 
                             <div className="mt-4">
@@ -61,7 +79,8 @@ const FriendsSuggestions = () => {
                                 <p className="color_p font-normal text-xs">28K mutual friends</p>
                                 <div className="flex gap-x-2 mt-2">
                                     <Button className="btn btn-primary w-full relative z-20">Add</Button>
-                                    <Button className="btn btn-primary2 w-full relative z-20">Remove</Button>
+                                    <Button className="btn btn-primary2 w-full relative z-20"
+                                            onClick={() => removePeople(people._id)}>Remove</Button>
                                 </div>
                             </div>
                         </div>

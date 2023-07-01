@@ -6,6 +6,7 @@ import {
     getAllCommentsAction
 } from "src/store/actions/feedAction.js";
 import {fetchPeoplesAction} from "src/store/actions/userAction.js";
+import {act} from "react-dom/test-utils";
 
 
 const initialState = {
@@ -78,6 +79,10 @@ export const feedSlice = createSlice({
         removeLocalFeedAction(state, action) {
             console.log(action.payload)
             state.feeds = state.feeds.filter(f => f._id !== action.payload._id)
+        },
+
+        peoplesRemoveAction(state, action){
+            state.peoples = state.peoples.filter(people=>people._id !== action.payload)
         }
     },
 
@@ -144,7 +149,8 @@ export const {
     removeLocalFeedAction,
     removePeople,
     addPeople,
-    updateLocalFeedAction
+    updateLocalFeedAction,
+    peoplesRemoveAction
 } = feedSlice.actions
 
 export default feedSlice.reducer

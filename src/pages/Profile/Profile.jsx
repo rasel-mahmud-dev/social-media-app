@@ -34,7 +34,13 @@ const Profile = () => {
     const {groups} = useSelector(state => state.chatState)
 
     const [state, setState] = useCustomReducer({
-        feeds: [], friends: [], user: null, isLoading: false, showSectionName: "Posts", currentUserFollowing: null // {}
+        feeds: [],
+        friends: [],
+        totalFriends: 0,
+        user: null,
+        isLoading: false,
+        showSectionName: "Posts",
+        currentUserFollowing: null // {}
     })
 
     const [updateProfile, setUpdateState] = useCustomReducer({
@@ -58,7 +64,12 @@ const Profile = () => {
         if (userId) {
             apis.get("/users/profile/" + userId).then(({status, data}) => {
                 if (status === 200) {
-                    setState(data)
+                    setState({
+                        feeds: data.feeds,
+                        totalFriends: data.totalFriends,
+                        friends: data.friends,
+                        user: data.user,
+                    })
 
                     // if view current logged user profile
                     if (auth._id === data.user._id) return;
@@ -255,7 +266,13 @@ const Profile = () => {
         }
 
         {state?.user && (
-            <RenderProfile onSelectImageChooser={handleSelectImageChooser} auth={auth} user={state.user} />
+            <RenderProfile
+               onSelectImageChooser={handleSelectImageChooser}
+               auth={auth}
+               totalFriends={state.totalFriends}
+               friends={state.friends}
+               user={state.user}
+            />
         )}
 
     </>);

@@ -39,7 +39,7 @@ export const fetchProfileMediaAction = createAsyncThunk("fetch-media", async (pa
 //  get all friends and pending friends
 export const fetchAuthFriendsAction = createAsyncThunk("authSlice/fetchAuthFriends", async (payload, thunkAPI)=>{
     try{
-        let {status, data} = await apis.get("/users/friends")
+        let {status, data} = await apis.get("/users/friends?userId=" + payload)
         if(status === 200){
             return data
         }
@@ -51,12 +51,10 @@ export const fetchAuthFriendsAction = createAsyncThunk("authSlice/fetchAuthFrien
 
 
 
-
 export const addFriendAction = createAsyncThunk("authSlice/add-friend", async (payload, thunkAPI)=>{
     try{
         let {status, data} = await apis.post("/users/add-friend", {friendId: payload})
         if(status === 201){
-            thunkAPI.dispatch(removePeople(payload))
             return data
         }
     } catch (ex){
@@ -86,7 +84,7 @@ export const removeFriendAction = createAsyncThunk("authSlice/remove-friend", as
     try{
         let {status} = await apis.post("/users/remove-friend", {friendId: payload.friendId})
         if(status === 201){
-            thunkAPI.dispatch(addPeople(payload.user))
+            // thunkAPI.dispatch(addPeople(payload.user))
             return payload
         }
     } catch (ex){
