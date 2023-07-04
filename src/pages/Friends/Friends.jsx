@@ -36,6 +36,8 @@ const Friends = () => {
     const location = useLocation()
 
     const {data: friendsData} = useFetchFriendsQuery({pageNumber: 1})
+    const {data} = useFetchPeoplesQuery({pageNumber: 1})
+
 
     const {openSidebar} = useSelector(state => state.appState)
 
@@ -51,7 +53,6 @@ const Friends = () => {
     const [updatePeopleFriendStatus] = useUpdatePeopleFriendStatusMutation()
 
 
-    const {data} = useFetchPeoplesQuery({pageNumber: 1})
 
 
     const queries = useSelector((state) => state.peoplesApi.queries);

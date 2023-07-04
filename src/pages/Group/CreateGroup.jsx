@@ -21,6 +21,7 @@ const CreateGroup = () => {
         name: "",
         description: "",
         groupCoverPhoto: null,
+        accent: "",
         createNewGroup: false,
         isPublic: true,
         members: []
@@ -60,6 +61,7 @@ const CreateGroup = () => {
         const payload = new FormData()
         payload.append("name", state.name)
         payload.append("description", state?.description)
+        payload.append("accent", state?.accent)
         if (state.groupCoverPhoto && state.groupCoverPhoto.blob) {
             payload.append("coverPhoto", state.groupCoverPhoto.blob, "group-cover")
         }
@@ -129,6 +131,16 @@ const CreateGroup = () => {
                             placeholder="Group Description"
                         />
 
+                        <InputGroup
+                            label="Choose acent color"
+                            labelClass="color_p text-sm"
+                            type="color"
+                            className="mt-2"
+                            inputClass="w-full"
+                            onChange={(e) => setState({accent: e.target.value})}
+                            placeholder="Group Description"
+                        />
+
 
                         <InputGroup
                             className="mt-2"
@@ -173,14 +185,14 @@ const CreateGroup = () => {
                             )}
                         />
 
-                        <Button onClick={handleChooseGroupCoverPhoto} className="mt-6 btn-primary">Choose
+                        <Button onClick={handleChooseGroupCoverPhoto} className="mt-2 btn-dark2 w-full">Choose
                             Group Cover</Button>
 
 
                     </div>
 
 
-                    <div className="left-0 px-4  w-full">
+                    <div className="mt-10 w-full">
                         <Button onClick={handleCreateGroup} className="btn-primary w-full ">Create</Button>
                     </div>
 
@@ -189,7 +201,7 @@ const CreateGroup = () => {
             </Sidebar>
 
 
-            <div className="group-content">
+            <div className="group-content w-full">
                 <div className="card">
                     <h2 className="color_h1">Desktop Preview</h2>
 

@@ -6,13 +6,18 @@ import Button from "components/Shared/Button/Button.jsx";
 import Sidebar from "components/Sidebar/Sidebar.jsx";
 import {useDispatch, useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
-import {useRemovePeopleMutation} from "src/store/features/peoplesApi.js";
+import {useFetchPeoplesQuery, useRemovePeopleMutation} from "src/store/features/peoplesApi.js";
+import {addFriendAction} from "src/store/actions/userAction.js";
+import {useFetchFriendsQuery} from "src/store/features/friendsApi.js";
 
 const FriendsSuggestions = () => {
 
     const dispatch = useDispatch()
 
     const navigate = useNavigate()
+
+    const {data: friendsData} = useFetchFriendsQuery({pageNumber: 1})
+    const {data} = useFetchPeoplesQuery({pageNumber: 1})
 
     const [deletePeople] = useRemovePeopleMutation()
 
@@ -45,7 +50,11 @@ const FriendsSuggestions = () => {
         })
     }
 
-    console.log(combinedPeoples)
+    function addSendFriendRequest(_id) {
+        dispatch(addFriendAction(_id)).unwrap().then(() => {
+            removePeople(_id)
+        })
+    }
 
     return (
         <div>
@@ -78,7 +87,7 @@ const FriendsSuggestions = () => {
                                 <h2 className="color_h2 font-semibold text-base">{people.fullName}</h2>
                                 <p className="color_p font-normal text-xs">28K mutual friends</p>
                                 <div className="flex gap-x-2 mt-2">
-                                    <Button className="btn btn-primary w-full relative z-20">Add</Button>
+                                    <Button onClick={() => addSendFriendRequest(people._id)} className="btn btn-primary w-full relative z-20">Add</Button>
                                     <Button className="btn btn-primary2 w-full relative z-20"
                                             onClick={() => removePeople(people._id)}>Remove</Button>
                                 </div>

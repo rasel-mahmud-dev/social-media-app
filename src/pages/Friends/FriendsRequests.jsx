@@ -10,12 +10,16 @@ import {
     useFetchFriendsQuery,
     useRemoveFriendCacheMutation
 } from "src/store/features/friendsApi.js";
-import {useFetchPeoplesQuery} from "src/store/features/peoplesApi.js";
+import {useFetchPeoplesQuery, useUpdatePeopleFriendStatusMutation} from "src/store/features/peoplesApi.js";
 import Avatar from "components/Shared/Avatar/Avatar.jsx";
 import ModalWithBackdrop from "components/ModalWithBackdrop/ModalWithBackdrop.jsx";
 
 import useCustomReducer from "src/hooks/useReducer.jsx";
-import {confirmFriendRequestAction, rejectFriendRequestAction} from "src/store/actions/userAction.js";
+import {
+    confirmFriendRequestAction,
+    rejectFriendRequestAction,
+    removeFriendAction
+} from "src/store/actions/userAction.js";
 
 
 const FriendsRequests = () => {
@@ -27,12 +31,13 @@ const FriendsRequests = () => {
     const {auth} = useSelector(state => state.authState)
 
     const {data: friendsData} = useFetchFriendsQuery({pageNumber: 1})
-
     const {data} = useFetchPeoplesQuery({pageNumber: 1})
+
 
     const [deleteFriendCache] = useRemoveFriendCacheMutation()
     const [addFriendCache] = useAddFriendCacheMutation()
 
+    const queries = useSelector((state) => state.peoplesApi.queries);
     const friendQueries = useSelector((state) => state.friendsApi.queries);
 
     const [state, setState] = useCustomReducer({
@@ -77,6 +82,16 @@ const FriendsRequests = () => {
     }
 
 
+    const [updatePeopleFriendStatus] = useUpdatePeopleFriendStatusMutation()
+    function cancelFriendRequest(_id) {
+        dispatch(removeFriendAction(_id)).unwrap().then(() => {
+            updatePeopleFriendStatus({
+                _id, queries,
+                friend: {senderId: null, receiverId: null}
+            })
+        })
+    }
+
     return (
         <div>
 
@@ -109,7 +124,7 @@ const FriendsRequests = () => {
                                 </div>
 
                                 <div className="flex gap-x-2 mt-2">
-                                    <Button className="btn btn-primary w-full relative z-20">Cancel request</Button>
+                                    <Button onClick={()=>cancelFriendRequest(pendingPeople.senderId)} className="btn btn-primary w-full relative z-20">Cancel request</Button>
                                 </div>
 
                             </div>
@@ -159,7 +174,7 @@ const FriendsRequests = () => {
                                     <p className="color_p font-normal text-xs">28K mutual friends</p>
                                     <div className="flex gap-x-2 mt-2">
                                         <Button className="btn btn-primary w-full relative z-20"
-                                                onClick={() => acceptFriendRequest(pendingPeople.senderId)}>Confirm</Button>
+                                                onClick={() => acceptFriendRequest(pendingPeople._id)}>Confirm</Button>
                                         <Button onClick={() => handleRejectRequest(pendingPeople)}
                                                 className="btn btn-dark2 w-full relative z-20">Delete</Button>
                                     </div>
