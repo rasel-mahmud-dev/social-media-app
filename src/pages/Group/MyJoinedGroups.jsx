@@ -7,7 +7,6 @@ import {Link} from "react-router-dom";
 
 import "./group.scss"
 import Button from "components/Shared/Button/Button.jsx";
-import AvatarGroup from "components/Shared/Avatar/AvatarGroup.jsx";
 import {FaEllipsisH} from "react-icons/fa";
 import WithGroupHomeSidebar from "pages/Group/WithGroupHomeSidebar.jsx";
 

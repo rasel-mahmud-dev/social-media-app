@@ -5,12 +5,17 @@ import {useNavigate} from "react-router-dom";
 import staticImage from "src/utils/staticImage.js";
 import Button from "components/Shared/Button/Button.jsx";
 import {useDispatch, useSelector} from "react-redux";
-import {useFetchFriendsQuery} from "src/store/features/friendsApi.js";
+import {
+    useAddFriendCacheMutation,
+    useFetchFriendsQuery,
+    useRemoveFriendCacheMutation
+} from "src/store/features/friendsApi.js";
 import {useFetchPeoplesQuery} from "src/store/features/peoplesApi.js";
 import Avatar from "components/Shared/Avatar/Avatar.jsx";
 import ModalWithBackdrop from "components/ModalWithBackdrop/ModalWithBackdrop.jsx";
 
 import useCustomReducer from "src/hooks/useReducer.jsx";
+import {confirmFriendRequestAction, rejectFriendRequestAction} from "src/store/actions/userAction.js";
 
 
 const FriendsRequests = () => {
@@ -25,10 +30,14 @@ const FriendsRequests = () => {
 
     const {data} = useFetchPeoplesQuery({pageNumber: 1})
 
+    const [deleteFriendCache] = useRemoveFriendCacheMutation()
+    const [addFriendCache] = useAddFriendCacheMutation()
+
+    const friendQueries = useSelector((state) => state.friendsApi.queries);
+
     const [state, setState] = useCustomReducer({
         isOpenSendRequestModal: false
     })
-    console.log(friendsData)
 
     const filterPendingFriends = useMemo(() => {
         return friendsData?.friends?.filter(friend => friend.status === "pending" && friend.senderId !== auth._id)
@@ -39,8 +48,33 @@ const FriendsRequests = () => {
         return friendsData?.friends?.filter(friend => friend.status === "pending" && friend.senderId === auth._id)
     }, [friendsData]);
 
-    const {openSidebar} = useSelector(state=>state.appState)
+    const {openSidebar} = useSelector(state => state.appState)
 
+    function handleRejectRequest(friend) {
+        if (friend["status"] === "pending") {
+            dispatch(rejectFriendRequestAction({
+                friendCollectionId: friend._id
+            })).unwrap().then((data) => {
+                deleteFriendCache({
+                    friendId: friend._id,
+                    queries: friendQueries
+                })
+            })
+        }
+    }
+
+    function acceptFriendRequest(friendId) {
+        dispatch(confirmFriendRequestAction({friendId: friendId})).unwrap().then((data) => {
+            deleteFriendCache({
+                friendId: friendId,
+                queries: friendQueries
+            })
+            addFriendCache({
+                friend: data.friend,
+                queries: friendQueries
+            })
+        })
+    }
 
 
     return (
@@ -57,7 +91,7 @@ const FriendsRequests = () => {
 
                     <div className="mt-2">
 
-                        { sendMyFriendRequest?.map(pendingPeople => (
+                        {sendMyFriendRequest?.map(pendingPeople => (
                             <div key={pendingPeople._id} className="relative  items-start justify-between list-item">
 
                                 <div className="flex items-center gap-x-4">
@@ -67,10 +101,10 @@ const FriendsRequests = () => {
                                                 src={staticImage(pendingPeople.receiver.avatar)}/>
                                     </div>
 
-                                   <div>
-                                       <h2 className="color_h2 font-semibold text-base">{pendingPeople.receiver.fullName}</h2>
-                                       <p className="color_p font-normal text-xs">28K mutual friends</p>
-                                   </div>
+                                    <div>
+                                        <h2 className="color_h2 font-semibold text-base">{pendingPeople.receiver.fullName}</h2>
+                                        <p className="color_p font-normal text-xs">28K mutual friends</p>
+                                    </div>
 
                                 </div>
 
@@ -105,10 +139,10 @@ const FriendsRequests = () => {
 
                     <h2 className="font-semibold text-base color_h2">{(filterPendingFriends?.length || 0) ? (filterPendingFriends?.length || 0) : "No "} Friend
                         Requests</h2>
-                        <p className="text-xs text-primary font-medium cursor-pointer mt-1"
-                           onClick={() => setState({isOpenSendRequestModal: true})}>
-                            View send requests
-                        </p>
+                    <p className="text-xs text-primary font-medium cursor-pointer mt-1"
+                       onClick={() => setState({isOpenSendRequestModal: true})}>
+                        View send requests
+                    </p>
                     <div>
 
                         {filterPendingFriends?.map(pendingPeople => (
@@ -124,8 +158,10 @@ const FriendsRequests = () => {
                                     <h2 className="color_h2 font-semibold text-base">{pendingPeople.sender.fullName}</h2>
                                     <p className="color_p font-normal text-xs">28K mutual friends</p>
                                     <div className="flex gap-x-2 mt-2">
-                                        <Button className="btn btn-primary w-full relative z-20">Confirm</Button>
-                                        <Button className="btn btn-dark2 w-full relative z-20">Delete</Button>
+                                        <Button className="btn btn-primary w-full relative z-20"
+                                                onClick={() => acceptFriendRequest(pendingPeople.senderId)}>Confirm</Button>
+                                        <Button onClick={() => handleRejectRequest(pendingPeople)}
+                                                className="btn btn-dark2 w-full relative z-20">Delete</Button>
                                     </div>
                                 </div>
                             </div>

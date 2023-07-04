@@ -37,7 +37,7 @@ const Friends = () => {
 
     const {data: friendsData} = useFetchFriendsQuery({pageNumber: 1})
 
-    const {openSidebar} = useSelector(state=>state.appState)
+    const {openSidebar} = useSelector(state => state.appState)
 
     const [updateFriend] = useChangeFriendStatusMutation()
 
@@ -85,7 +85,6 @@ const Friends = () => {
     }, [friendsData]);
 
 
-
     const items = [
         {path: "/friends", label: "Home", icon: "icon_friends"},
         {path: "/friends/requests", label: "Friends Request", icon: "icon_friends_request"},
@@ -123,11 +122,11 @@ const Friends = () => {
     }
 
     function cancelFriendRequest(_id) {
-        // dispatch(removeFriendAction(_id)).unwrap().then(() => {
-        updatePeopleFriendStatus({
-            _id, queries, friend: {senderId: null, receiverId: null}
+        dispatch(removeFriendAction(_id)).unwrap().then(() => {
+            updatePeopleFriendStatus({
+                _id, queries, friend: {senderId: null, receiverId: null}
+            })
         })
-        // })
     }
 
 

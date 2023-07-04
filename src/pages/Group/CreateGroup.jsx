@@ -66,7 +66,9 @@ const CreateGroup = () => {
         if (state.members && state.members.length > 0) {
             payload.append("members", JSON.stringify(state.members.map(m => m._id)))
         }
-        dispatch(createGroupAction(payload))
+        dispatch(createGroupAction(payload)).unwrap().then(()=>{
+            navigate("/groups")
+        })
     }
 
     async function handleChooseGroupCoverPhoto() {

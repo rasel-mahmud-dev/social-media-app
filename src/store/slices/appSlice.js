@@ -4,7 +4,7 @@ import {createSlice} from '@reduxjs/toolkit';
 const initialState = {
     openSidebar: "",  // "left-sidebar" // "right-sidebar"
     lang: "en",
-    isDarkMode: false
+    isDarkMode: true
 };
 
 export const appSlice = createSlice({
@@ -21,22 +21,27 @@ export const appSlice = createSlice({
         toggleDarkMode(state, action) {
             let isDarkMode = action.payload
             let html = document.documentElement
+
             if (isDarkMode === undefined) {
-                isDarkMode = localStorage.getItem("darkMode") === "true"
-                html.classList.add(isDarkMode ? "dark" : "light")
-                state.isDarkMode = isDarkMode
+                let isLightMode = localStorage.getItem("isLightMode") === "true"
+                html.classList.add(isLightMode ? "light" : "dark")
+                state.isDarkMode = !isLightMode
+
             } else {
-                localStorage.setItem("darkMode", isDarkMode);
-                if (isDarkMode) {
+                if (!isDarkMode) {
+                    localStorage.setItem("isLightMode", "true");
+                    html.classList.remove("dark")
+                    html.classList.add("light")
+                    state.isDarkMode = true
+                } else {
+                    localStorage.setItem("isLightMode", "false");
                     html.classList.remove("light")
                     html.classList.add("dark")
                     state.isDarkMode = true
-                } else {
-                    html.classList.remove("dark")
-                    html.classList.add("light")
-                    state.isDarkMode = false
                 }
             }
+
+            console.log(isDarkMode)
         }
     }
 });

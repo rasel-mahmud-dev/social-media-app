@@ -135,7 +135,6 @@ const FeedCard = ({feed, authId, dispatch, type = "user"}) => {
         if (feed.type === "page") {
             if (feed?.page) {
                 return feed?.page?.logo
-
             } else {
                 return feed?.page?.logo
             }
@@ -168,9 +167,9 @@ const FeedCard = ({feed, authId, dispatch, type = "user"}) => {
 
                                 <div className="ml-3">
                                     <div>
-                                        <Link to={`/group/${feed?.group.slug}`}
+                                        <Link to={`/groups/${feed?.group?.slug}`}
                                               className="dark:text-light-950 text-dark-850 text-lg font-bold hover:!text-primary">
-                                            {feed?.group.name}
+                                            {feed?.group?.name}
                                         </Link>
                                         <div className="flex gap-x-2 items-center -mt-1  ">
                                             <Link to={`/profile/${feed?.userId}`}><h3
@@ -179,11 +178,11 @@ const FeedCard = ({feed, authId, dispatch, type = "user"}) => {
                                             <p className="dark:text-dark-100 text-gray-600 text-xs">{getPassTime(feed.createdAt)}</p>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         ) : (
                             <div className="flex items-center">
+
                                 <Avatar className="!w-9 !h-9" imgClass="!w-9 !h-9" username={fullName(feed)}
                                         src={avatar(feed)}/>
                                 <div className="ml-3">

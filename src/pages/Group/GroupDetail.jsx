@@ -109,9 +109,9 @@ const GroupDetail = () => {
                     activeTab: data.isYouMember ? "Discussion" : "About"
                 })
 
-                if (data.group?.meta) {
+                if (data.group?.meta?.accentColor) {
                     const root = document.documentElement
-                    root.style.setProperty("--accent", data.group?.meta.accentColor)
+                    root.style.setProperty("--accent", data.group?.meta?.accentColor)
                 }
 
             }
@@ -129,9 +129,6 @@ const GroupDetail = () => {
         groupId: state?.group?._id,
         pageNumber: 1
     })
-
-    console.log(members)
-
 
     function handleSendInvitation() {
 
@@ -247,7 +244,7 @@ const GroupDetail = () => {
                                         <div className="text-sm font-normal flex gap-x-2 mt-1">
                                         <span
                                             className="flex gap-x-1 items-center"> <CgLock/> {state.group.isPublic ? "Public" : "Private"}</span>
-                                            <span>{members?.totalMembers} members</span>
+                                            <span>{state?.group?.totalMember} members</span>
                                         </div>
                                     </div>
                                 </div>
@@ -271,7 +268,7 @@ const GroupDetail = () => {
                             <Link to={`/groups/${state.group.slug}`}>
                                 <Button
                                     className="w-full mt-3 flex items-center gap-x-1 text-accent"
-                                    style={{backgroundColor: addAlpha(state.group.meta.accentColor, 0.2)}}>
+                                    style={{backgroundColor: addAlpha(state?.group?.meta?.accentColor, 0.2)}}>
                                     <TiHome className="text-xl"/>
                                     <span className="font-medium">Community Home</span>
                                 </Button>
@@ -331,7 +328,7 @@ const GroupDetail = () => {
                 </Sidebar>
 
 
-                <div className="group-content">
+                <div className="group-content w-full">
                     <div>
                         {state.group && (
                             <>

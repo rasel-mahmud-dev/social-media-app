@@ -1,8 +1,6 @@
-
 // fetch
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import apis from "src/apis/index.js";
-import {addPeople, removePeople} from "src/store/slices/feedSlice.js";
 import errorResponse from "src/utils/errorResponse.js";
 
 
@@ -17,7 +15,6 @@ export const fetchPeoplesAction = createAsyncThunk("authSlice/fetchPeoples", asy
         return thunkAPI.rejectWithValue( errorResponse(ex))
     }
 })
-
 
 
 export const fetchProfileMediaAction = createAsyncThunk("fetch-media", async (payload, thunkAPI)=>{
@@ -50,7 +47,6 @@ export const fetchAuthFriendsAction = createAsyncThunk("authSlice/fetchAuthFrien
 })
 
 
-
 export const addFriendAction = createAsyncThunk("authSlice/add-friend", async (payload, thunkAPI)=>{
     try{
         let {status, data} = await apis.post("/users/add-friend", {friendId: payload})
@@ -62,7 +58,6 @@ export const addFriendAction = createAsyncThunk("authSlice/add-friend", async (p
         return thunkAPI.rejectWithValue( errorResponse(ex))
     }
 })
-
 
 
 export const confirmFriendRequestAction = createAsyncThunk("authSlice/confirm-friend", async (payload, thunkAPI)=>{
@@ -80,6 +75,23 @@ export const confirmFriendRequestAction = createAsyncThunk("authSlice/confirm-fr
 })
 
 
+
+export const rejectFriendRequestAction = createAsyncThunk("authSlice/remove-friend", async (payload, thunkAPI)=>{
+    try{
+        let {status, data} = await apis.post("/users/reject-friend-request", {friendCollectionId: payload.friendCollectionId})
+        if(status === 201){
+            // thunkAPI.dispatch(addPeople(payload.user))
+            return data
+        }
+    } catch (ex){
+        // send error message with reject type in reducer
+        return thunkAPI.rejectWithValue( errorResponse(ex))
+    }
+})
+
+
+
+
 export const removeFriendAction = createAsyncThunk("authSlice/remove-friend", async (payload, thunkAPI)=>{
     try{
         let {status} = await apis.post("/users/remove-friend", {friendId: payload.friendId})
@@ -92,8 +104,6 @@ export const removeFriendAction = createAsyncThunk("authSlice/remove-friend", as
         return thunkAPI.rejectWithValue( errorResponse(ex))
     }
 })
-
-
 
 
 export const addInToSaveAction = createAsyncThunk("authSlice/remove-friend", async (payload, thunkAPI)=>{
@@ -120,7 +130,6 @@ export const fetchAllSavedAction = createAsyncThunk("authSlice/remove-friend", a
         return thunkAPI.rejectWithValue( errorResponse(ex))
     }
 })
-
 
 
 

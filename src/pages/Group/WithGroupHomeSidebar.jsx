@@ -32,57 +32,15 @@ const WithGroupHomeSidebar = ({children}) => {
 
     const navigate = useNavigate()
 
-
     useEffect(() => {
         dispatch(fetchMyGroupsAction())
     }, [])
 
-
-    useEffect(() => {
-        if (location.pathname === "/groups/create") {
-            setState({
-                createNewGroup: true
-            })
-
-        } else if (location.pathname === "/groups") {
-            setState({
-                createNewGroup: false
-            })
-        }
-    }, [location.pathname])
-
-
     const {openSidebar} = useSelector(state => state.appState)
+
     const {auth, groups} = useSelector(state => state.authState)
-    const {peoples} = useSelector(state => state.feedState)
 
-
-    function handleCreateGroup() {
-        const payload = new FormData()
-        payload.append("name", state.name)
-        payload.append("description", state?.description)
-        if (state.groupCoverPhoto && state.groupCoverPhoto.blob) {
-            payload.append("coverPhoto", state.groupCoverPhoto.blob, "group-cover")
-        }
-        if (state.members && state.members.length > 0) {
-            payload.append("members", JSON.stringify(state.members.map(m => m._id)))
-        }
-        dispatch(createGroupAction(payload))
-    }
-
-    async function handleChooseGroupCoverPhoto() {
-        let file = await chooseImage()
-        if (!file || !file?.base64) return;
-        let newFile = await resizeImageByMaxWidth(file.base64, 920)
-        setState({
-            groupCoverPhoto: newFile
-        })
-    }
-
-    function handleFetchPeople() {
-        dispatch(fetchPeoplesAction())
-    }
-
+    console.log(groups)
 
     return (
         <div>
@@ -144,9 +102,7 @@ const WithGroupHomeSidebar = ({children}) => {
                             className="btn btn-primary2 w-full justify-center flex items-center gap-x-1 font-medium mt-3"
                             onClick={() => navigate("/groups/create")}>
                             <i className="icon_plus_16 png_filter_primary"></i>
-                            <span>
-                                     Create Group
-                                    </span>
+                            <span>Create Group</span>
                         </Button>
 
 
@@ -162,7 +118,10 @@ const WithGroupHomeSidebar = ({children}) => {
                                         <Avatar className="!w-12 !h-12"
                                                 imgClass="object-cover !rounded-lg !w-12 !h-12"
                                                 src={staticImage(group?.coverPhoto)}/>
-                                        <h2 className="color_h2 text-sm">{group.name}</h2>
+                                        <div>
+                                            <h2 className="color_h2 text-sm">{group.name}</h2>
+                                            <p className="text-xs color_p">{group.totalMembers} members</p>
+                                        </div>
                                     </div>
                                 </Link>
                             ))}
