@@ -90,8 +90,10 @@ const ReelsParent = memo(({auth, reel}) => {
     }, [inView]);
 
     return (
-        <div className="reels" ref={ref}>
-            <Reel onRefReady={getRef} reel={reel} auth={auth}/>
+        <div className="reels-parent">
+            <div className="reels" ref={ref}>
+                <Reel onRefReady={getRef} reel={reel} auth={auth}/>
+            </div>
         </div>
 
     )

@@ -10,6 +10,7 @@ import Reel from "components/Reel/Reel.jsx";
 import useCustomReducer from "src/hooks/useReducer.jsx";
 import apis from "src/apis/index.js";
 import chooseImage from "src/utils/chooseImage.js";
+import axios from "axios";
 
 const CreateReel = () => {
 
@@ -45,10 +46,10 @@ const CreateReel = () => {
         const payload = new FormData()
         payload.append("caption", state.caption)
 
-        // if (state.members && state.members.length > 0) {
-        //     payload.append("members", JSON.stringify(state.members.map(m => m._id)))
-        // }
-        // apis.post("/reels/create", payload)
+        if (state.members && state.members.length > 0) {
+            payload.append("members", JSON.stringify(state.members.map(m => m._id)))
+        }
+        apis.post("/reels/create", payload)
 
         const URL = "https://upload.imagekit.io/api/v1/files/upload"
         const publicKey = "public_TDgAXBicsFrQWIQfkAygwf13Ku0="
@@ -60,9 +61,15 @@ const CreateReel = () => {
         const folder = "social-app/reels"
 
         const video = state.videoUrlBlob
-        if(!video) return alert("Please Choose video file")
+        if (!video) return alert("Please Choose video file")
+
+        if(video.size > (1024 * 4024)){
+            alert("please select video less than 1 mb")
+            return;
+        }
+
         const fileName = video.name
-        // payload.append("file", video)
+        payload.append("file", video)
         payload.append("publicKey", publicKey)
 
         payload.append("useUniqueFileName", "true")
@@ -70,10 +77,10 @@ const CreateReel = () => {
         payload.append("fileName", fileName)
 
 
-        try{
-            const {data, status}  = await apis.get("/auth/imagekit-authenticationEndpoint")
-            if(status !== 200){
-                return  alert("error")
+        try {
+            const {data, status} = await apis.get("/auth/imagekit-authenticationEndpoint")
+            if (status !== 200) {
+                return alert("error")
             }
 
             signature = data.signature
@@ -86,24 +93,23 @@ const CreateReel = () => {
             payload.append("token", token)
 
 
-            // let response  = await axios.post(URL, payload, {
-            //     onUploadProgress: function(progressEvent) {
-            //
-            //         console.log(progressEvent)
-            //         var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
-            //         console.log(percentCompleted)
-            //
-            //     }
-            // })
+            let response = await axios.post(URL, payload, {
+                onUploadProgress: function (progressEvent) {
+                    console.log(progressEvent)
+                    var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+                    console.log(percentCompleted)
 
-            let response = {data: {}}
+                }
+            })
 
-            // if(response.status !== 200){
-            //     return alert("fail upload video")
-            // }
+            // let response = {data: {}}
 
-            const videoPath = response.data.url || "https://ik.imagekit.io/rwx12mtuk/social-app/reels/Tension_out_now_____browntok__browntiktok_5_JyZpz8jqM.mp4"
-            const size = response.data?.size || 690831
+            if(response.status !== 200){
+                return alert("fail upload video")
+            }
+
+            const videoPath = response.data.url
+            const size = response.data?.size
 
             const newReel = {
                 hashtags: [],
@@ -114,24 +120,27 @@ const CreateReel = () => {
                 videoUrl: videoPath
             }
 
-            response = apis.post("/reels/create",  newReel)
+            response = await apis.post("/reels/create", newReel)
 
-            if(response.status === 201){
+            if (response.status === 201) {
                 navigate("/watch/reels")
             }
 
-        } catch(ex){
-            console.log(ex)
+        } catch (ex) {
+            alert("video upload fail please, try again")
         }
 
 
     }
 
 
-
     async function handleChooseGroupCoverPhoto() {
         let file = await chooseImage("video/*")
         if (!file || !file?.base64) return;
+        if(file.blob.size > (1024 * 4024)){
+            alert("please select video less than 4 mb")
+            return;
+        }
         setState({
             videoUrl: file.base64,
             videoUrlBlob: file.blob
@@ -154,7 +163,7 @@ const CreateReel = () => {
                     <div>
                         <div className="flex items-center justify-between">
                             <div className="flex items-center gap-x-2">
-                                <div className="rounded_circle" onClick={()=>navigate("/watch/reels")} >
+                                <div className="rounded_circle" onClick={() => navigate("/watch/reels")}>
                                     <i className="png_filter_white icon_arrow-left "></i>
                                 </div>
                                 <h2 className="font-medium color_h2">Create Reel</h2>

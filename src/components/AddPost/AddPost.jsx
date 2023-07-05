@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import Avatar from "../Shared/Avatar/Avatar.jsx";
 import {createFeedAction} from "src/store/actions/feedAction.js";
 import {useDispatch, useSelector} from "react-redux";
@@ -12,10 +12,87 @@ import {BiChevronLeft, BiPlus} from "react-icons/bi";
 import resizeImageByMaxWidth from "src/utils/resizeImage.js";
 import {useParams} from "react-router-dom";
 import {feedsApi, useAddFeedMutation} from "src/store/features/feedsApi.js";
-import page from "pages/Page/Page.jsx";
+import apis from "src/apis/index.js";
+import axios from "axios";
+import Video from "components/Video/Video.jsx";
 
+
+function uploadVideo(video) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const URL = "https://upload.imagekit.io/api/v1/files/upload"
+            const publicKey = "public_TDgAXBicsFrQWIQfkAygwf13Ku0="
+            let signature = ""
+            let expire = ""
+            let token = ""
+
+            const useUniqueFileName = true
+            const folder = "social-app/reels"
+
+
+            if (!video) return alert("Please Choose video file")
+
+            if (video.size > (1024 * 6024)) {
+                alert("please select video less than 6 mb")
+                return;
+            }
+
+            const payload = new FormData()
+            const fileName = video.name
+            payload.append("file", video)
+            payload.append("publicKey", publicKey)
+
+            payload.append("useUniqueFileName", "true")
+            payload.append("folder", folder)
+            payload.append("fileName", fileName)
+
+
+            const {data, status} = await apis.get("/auth/imagekit-authenticationEndpoint")
+            if (status !== 200) {
+                return alert("video file upload error")
+            }
+
+            signature = data.signature
+            expire = data.expire
+            token = data.token
+
+            payload.append("signature", signature)
+            payload.append("expire", expire)
+            payload.append("token", token)
+
+            let response = await axios.post(URL, payload, {
+                onUploadProgress: function (progressEvent) {
+                    // console.log(progressEvent)
+                    // var percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total)
+                }
+            })
+
+            // let response = {data: {}}
+
+            if (response.status !== 200) {
+                return alert("fail upload video")
+            }
+
+            resolve(response?.data)
+
+        } catch (ex) {
+            reject(ex)
+        }
+
+    })
+
+}
 
 const AddPost = ({onClose}) => {
+
+
+    const videoref = useRef();
+
+
+    useEffect(() => {
+        videoref.current?.play();
+    }, [videoref.current]);
+
 
     const dispatch = useDispatch()
 
@@ -25,56 +102,82 @@ const AddPost = ({onClose}) => {
 
     const [state, setState] = useCustomReducer({
         images: [],
-        addFeedLoading: false
+        addFeedLoading: false,
+        videoUrl: null,
+        videoUrlBlob: null
     })
 
     const [addFeed, data] = useAddFeedMutation()
 
 
-    function handlePost(e) {
-        e.preventDefault()
+    async function handlePost(e) {
 
-        const content = e.target.content.value
+        try {
 
-        let payload = new FormData()
-        payload.append("content", content)
-        if (state.images && state.images.length > 0) {
-            state.images.forEach(image => {
-                payload.append("image", image.blob, image.blob.name)
+            e.preventDefault()
+
+            const content = e.target.content.value
+
+            let payload = new FormData()
+            payload.append("content", content)
+
+            if (state.images && state.images.length > 0) {
+                state.images.forEach(image => {
+                    payload.append("image", image.blob, image.blob.name)
+                })
+            }
+
+            setState({
+                addFeedLoading: true
             })
-        }
-
-        // setState({
-        //     addFeedLoading: true
-        // })
 
 
-        if (groupSlug) {
-            // add group post
-            payload.append("groupSlug", groupSlug)
+            if (groupSlug) {
+                // add group post
+                payload.append("groupSlug", groupSlug)
 
-        } else if (pageName) {
-            payload.append("pageName", pageName)
-        }
+            } else if (pageName) {
+                payload.append("pageName", pageName)
+            }
+
+            const video = state.videoUrlBlob
+            if (video) {
+                if (video.size > (1024 * 6024)) {
+                    alert("please select video less than 6 mb")
+                    return;
+                }
+                let a = await uploadVideo(state.videoUrlBlob)
+                if (a) {
+                    payload.videoUrl = a.url
+                }
+            }
+
+            dispatch(createFeedAction(payload)).unwrap().then((data) => {
+                onClose()
+                e.target.content.value = ""
+                setState({
+                    images: [],
+                    videoUrl: null,
+                    videoUrlBlob: null
+                })
 
 
-
-        dispatch(createFeedAction(payload)).unwrap().then((data) => {
-            // onClose()
-            // e.target.content.value = ""
-            // setState({
-            //     images: []
-            // })
-
-            console.log(data)
-
-        }).catch((message) => {
-            alert(message)
-        }).finally(() => {
+            }).catch((message) => {
+                alert(message)
+            }).finally(() => {
+                setState({
+                    addFeedLoading: false
+                })
+            })
+        } catch (ex) {
+            console.log(ex)
+            alert("Post adding fail")
             setState({
                 addFeedLoading: false
             })
-        })
+
+            videoref?.current?.pause();
+        }
 
 
     }
@@ -84,8 +187,6 @@ const AddPost = ({onClose}) => {
         if (file && file.base64) {
             const newFile = await resizeImageByMaxWidth(file.base64, 1000, 0.6)
 
-
-            console.log(newFile)
 
             if (newFile && newFile.blob && newFile.base64) {
                 setState(prevState => {
@@ -104,6 +205,19 @@ const AddPost = ({onClose}) => {
                 ...prevState,
                 images: prevState.images.filter((_, i) => i !== imageIndex)
             }
+        })
+    }
+
+    async function handleChooseVideo() {
+        let file = await chooseImage("video/*")
+        if (!file || !file?.base64) return;
+        if (file.blob.size > (1024 * 6024)) {
+            alert("please select video less than 6 mb")
+            return;
+        }
+        setState({
+            videoUrl: file.base64,
+            videoUrlBlob: file.blob
         })
     }
 
@@ -139,8 +253,16 @@ const AddPost = ({onClose}) => {
                             rows="10">
                         </textarea>
 
+
+                        {state.videoUrl && (
+                            <div className="add-feed-video">
+                                <Video src={state.videoUrl} videoRef={videoref}/>
+                            </div>
+                        )}
+
+
                         {/* post media */}
-                        {state.images.length > 0 && <div className="media-preview">
+                        {!state.videoUrl && state.images.length > 0 && <div className="media-preview">
                             {state.images.slice(0, state.images.length >= 4 ? 4 : undefined).map((image, index) => (
                                 <div className="relative group " key={index}>
                                     <img src={image.base64} alt=""/>
@@ -170,7 +292,7 @@ const AddPost = ({onClose}) => {
                 </div>
 
                 <div className="flex items-center justify-around text-sm font-medium color_h3">
-                    <li className="list-none flex items-center gap-x-1">
+                    <li onClick={handleChooseVideo} className="list-none flex items-center gap-x-1">
                         <i className="icon2 video-icon"></i>
                         <span>Videos</span>
                     </li>

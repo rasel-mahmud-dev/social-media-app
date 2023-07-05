@@ -21,14 +21,10 @@ import {Link} from "react-router-dom";
 import "./feed-card.scss"
 import staticImage from "src/utils/staticImage.js";
 import {useInView} from "react-intersection-observer";
+import Video from "components/Video/Video.jsx";
 
 
-const Video = React.memo(({src, videoRef}) => {
 
-    return (
-        <video ref={videoRef} controls={true} src={staticImage(src)}></video>
-    )
-})
 
 const FeedCard = ({feed, authId, dispatch, type = "user"}) => {
 
