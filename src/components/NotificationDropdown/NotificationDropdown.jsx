@@ -36,7 +36,10 @@ const NotificationDropdown = ({onClose}) => {
     }
 
     function notificationCommon(notification, body ) {
-        return (
+
+        console.log(notification.createdAt)
+
+                return (
             <div className={`flex items-center gap-x-2 py-3 rounded-md mt-1 px-3 relative ${notification.isRead ? "bg-transparent" : "unread-notification dark:bg-dark-600 bg-light-800"}`} >
                 <div className="">
                     <Avatar
@@ -48,7 +51,7 @@ const NotificationDropdown = ({onClose}) => {
 
                 <div className="">
                     {body}
-                    <p className="text-primary mt-0 text-xs">{getPassTime(notification?.createdAt)}</p>
+                    <p className="text-primary mt-0 text-xs">{getPassTime(notification?.timestamp)}</p>
                 </div>
             </div>)
     }

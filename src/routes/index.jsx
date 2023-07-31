@@ -23,7 +23,7 @@ import WatchLayout from "layout/WatchLayout.jsx";
 import Watch from "pages/Watch/Watch.jsx";
 import Reels from "pages/Watch/Reels.jsx";
 import CreateReel from "pages/Watch/CreateReel.jsx";
-import SavesVideos from "pages/Watch/ SavesVideos.jsx";
+import SavesVideos from "pages/Watch/SavesVideos.jsx";
 
 
 const Homepage = lazy(() => import("pages/Homepage"));
