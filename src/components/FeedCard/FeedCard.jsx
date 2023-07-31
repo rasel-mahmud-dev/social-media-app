@@ -5,9 +5,8 @@ import {
     deleteCommentAction,
     deleteFeedAction,
     getAllCommentsAction,
-    toggleLikeAction
 } from "src/store/actions/feedAction.js";
-import {localToggleFeedReactionAction, updateLocalFeedAction} from "src/store/slices/feedSlice.js";
+
 import Comments from "src/components/Comments/Comments.jsx";
 import AddComment from "src/components/AddComment/AddComment.jsx";
 import Loading from "src/components/Shared/Loading/Loading.jsx";
@@ -22,15 +21,12 @@ import "./feed-card.scss"
 import staticImage from "src/utils/staticImage.js";
 import {useInView} from "react-intersection-observer";
 import Video from "components/Video/Video.jsx";
+import {useUpdateFeedMutation}  from "src/store/features/feedsApi.js"
 
 
 
 
 const FeedCard = ({feed, authId, dispatch, type = "user"}) => {
-
-    const settings = {
-        autoVideoPlay: true
-    }
 
     const [state, setState] = useReducer((prev, action) => ({
         ...prev,
@@ -41,6 +37,8 @@ const FeedCard = ({feed, authId, dispatch, type = "user"}) => {
         isShowComment: false,
         comments: []
     })
+
+    const [updatedFeed] =  useUpdateFeedMutation()
 
 
     const videoref = useRef();
@@ -64,17 +62,23 @@ const FeedCard = ({feed, authId, dispatch, type = "user"}) => {
         setState({isExpand: isExpand})
     }
 
+
+
     function toggleLikeHandler(feedId) {
-        setState({isLikeActionLoading: true})
 
-        dispatch(toggleLikeAction({feedId})).unwrap().then((data) => {
-            if (!data) return;
-
-            dispatch(localToggleFeedReactionAction(data.like))
-
-        }).finally(() => {
-            setState({isLikeActionLoading: false})
+        updatedFeed({
+            feedId: feedId
         })
+
+        // setState({isLikeActionLoading: true})
+        // dispatch(toggleLikeAction({feedId})).unwrap().then((data) => {
+        //     if (!data) return;
+        //
+        //     dispatch(localToggleFeedReactionAction(data.like))
+        //
+        // }).finally(() => {
+        //     setState({isLikeActionLoading: false})
+        // })
     }
 
     function handleShowComment() {

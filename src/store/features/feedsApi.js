@@ -1,6 +1,27 @@
 import {createApi} from "@reduxjs/toolkit/query/react";
 import apis from "src/apis/index.js";
 import {func} from "prop-types";
+import produce from "immer";
+
+
+function findOriginalArgs(queries, friendId) {
+    let cacheKey = undefined
+
+    // find args for pagination
+    for (let queriesKey in queries) {
+        let query = queries[queriesKey]
+        if (query.status === "fulfilled") {
+            if (query?.data?.friends && Array.isArray(query.data.friends)) {
+                if (query.data.friends.findIndex(fri => fri._id === friendId) !== -1) {
+                    cacheKey = query.originalArgs
+                    break;
+                }
+            }
+        }
+    }
+    return cacheKey
+}
+
 
 
 export const feedsApi = createApi({
@@ -85,7 +106,6 @@ export const feedsApi = createApi({
                         ],
 
             }),
-
             groupFeeds: builder.query({
                 // invalidatesTags: ["feeds"],
                 query(query) {
@@ -124,7 +144,6 @@ export const feedsApi = createApi({
 
             }),
 
-
             addFeed: builder.mutation({
                 query: (query) => {
                     return {
@@ -133,6 +152,52 @@ export const feedsApi = createApi({
                     }
                 },
                 invalidatesTags: [{type: 'groupFeeds', id: 'LIST'}],
+
+            }),
+
+            updateFeed: builder.mutation({
+                query: (query) => {
+                    return {
+                        type: "update_local_cache",
+                        data: query
+                    }
+                },
+                invalidatesTags: [{type: 'feeds', id: 'LIST'}],
+
+
+                async onQueryStarted(postId, {queryFulfilled, dispatch}) {
+                    try {
+                        const {data} = await queryFulfilled;
+                        const {
+                            friendId,
+                            queries,
+                            update,
+                        } = data
+
+                        const cacheKey = findOriginalArgs(queries, friendId)
+
+                        if (friendId && cacheKey) {
+                            dispatch(
+                                friendsApi.util.updateQueryData("fetchFriends", cacheKey, function (draft) {
+                                    return produce(draft, updatedDraft => {
+                                        updatedDraft.friends = updatedDraft.friends.map(item => {
+                                            if (item._id === friendId) {
+                                                return {...item, ...update};
+                                            } else {
+                                                return item;
+                                            }
+                                        });
+                                    });
+                                })
+                            );
+                        }
+                    } catch (error) {
+
+                    }
+                }
+
+
+
                 // async onQueryStarted({ id, ...patch }, { dispatch, queryFulfilled }) {
                 //
                 //     // const patchResult = dispatch(
@@ -201,4 +266,10 @@ export const feedsApi = createApi({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const {useFeedsQuery, useVideoFeedsQuery, useGroupFeedsQuery, useAddFeedMutation} = feedsApi
+export const {
+    useFeedsQuery,
+    useVideoFeedsQuery,
+    useGroupFeedsQuery,
+    useAddFeedMutation,
+    useUpdateFeedMutation
+} = feedsApi
